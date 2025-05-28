@@ -15,10 +15,10 @@ public class E_Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, length = 30)
+    @Column(length = 30)
     private String name;
 
-    @Column(unique = true, length = 18)
+    @Column(unique = true, length = 14)
     private String cpf_cnpj;
 
     @Column(columnDefinition = "DECIMAL(10,3)")

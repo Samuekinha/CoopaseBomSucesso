@@ -2,11 +2,11 @@ package com.example.moinho.Service.S_Cliente;
 
 import com.example.moinho.Entities.E_Cliente;
 import com.example.moinho.Repository.R_Cliente;
+import com.example.moinho.Service.S_TelaInicial;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Objects;
 import java.util.Scanner;
 
 @Service
@@ -14,9 +14,10 @@ public class S_Cadastro {
     private final R_Cliente r_cliente;  // Adicionado final para injeção
     private final Scanner scanner;
 
-    public S_Cadastro(R_Cliente r_cliente, Scanner scanner) {
-        this.r_cliente = r_cliente; //injeção via construtor
-        this.scanner = scanner;
+    // Construtor recebe apenas R_Cliente (Spring injeta) e cria o Scanner internamente
+    public S_Cadastro(R_Cliente r_cliente) {
+        this.r_cliente = r_cliente;
+        this.scanner = new Scanner(System.in); // Cria o Scanner aqui
     }
 
     public String cadastrarCliente() {
@@ -31,13 +32,13 @@ public class S_Cadastro {
             LocalDate dataNascimento = solicitarDataNascimento();
             if (dataNascimento == null) return "Cadastro cancelado.";
 
-            boolean cooperado = solicitarCooperado();
-            if (!cooperado) return "Cadastro cancelado";
+            Boolean cooperado = solicitarCooperado();
+            if (cooperado == null) return "Cadastro cancelado";
 
-            LocalDate validadeCaf = solicitarValidadeCaf();
+            LocalDate validadeCaf = solicitarValidadeCaf(cooperado);
             if (validadeCaf == null) return "Cadastro cancelado";
 
-            String codigoCaf = solicitarCodigoCaf();
+            String codigoCaf = solicitarCodigoCaf(cooperado);
             if (codigoCaf == null) return "Cadastro cancelado";
 
             // ... salvar os dados
@@ -55,27 +56,32 @@ public class S_Cadastro {
 
         while (true) {
             System.out.println("Digite o nome do cliente (ou '" + COMANDO_PARADA + "' para cancelar):");
-            String nome = scanner.nextLine().trim();
+            String input = scanner.nextLine().trim();
 
             // Verifica se está vazio
-            if (nome.isEmpty()) {
-                System.out.println("Erro: Nome não pode ser vazio.");
+            if (input.isEmpty()) {
+                System.out.println("Erro: Nome não pode ser vazio. Tente novamente.");
                 continue;
             }
 
             // Verifica comando de parada
-            if (nome.equalsIgnoreCase(COMANDO_PARADA)) {
+            if (input.equalsIgnoreCase(COMANDO_PARADA)) {
                 System.out.println("Cadastro cancelado pelo usuário.");
                 return null;
             }
 
+            if (input.length() > 40) {
+                System.out.println("Erro: O nome deve ter menos que 40 caracteres. Tente novamente.");
+                continue;
+            }
+
             // Validação do nome
-            if (contemNumeros(nome)) {
+            if (contemNumeros(input)) {
                 System.out.println("Erro: Nomes não podem conter números. Tente novamente.");
                 continue;
             }
 
-            return nome;
+            return input;
         }
     }
 
@@ -89,7 +95,7 @@ public class S_Cadastro {
 
             // Verifica se está vazio
             if (input.isEmpty()) {
-                System.out.println("Erro: Cpf ou Cnpj não podem ser vazios.");
+                System.out.println("Erro: Cpf ou Cnpj não podem ser vazios. Tente novamente.");
                 continue;
             }
 
@@ -99,14 +105,16 @@ public class S_Cadastro {
                 return null;
             }
 
-            // Validação do nome
+            // Validação da identificação
             if (contemLetras(input)) {
                 System.out.println("Erro: Cpf ou Cnpj não podem conter letras. Tente novamente.");
                 continue;
             }
 
-            if (input.length() != 14 || input.length() != 11){
-                System.out.println("Erro: O Cpf e Cnpj apenas podem ter 11 ou 14 números.");
+            // Validação do tamanho
+            if (input.length() != 14 && input.length() != 11){
+                System.out.println("Erro: O Cpf e Cnpj apenas podem ter 11 ou 14 números. Tente novamente.");
+                continue;
             }
 
             return input;
@@ -124,22 +132,24 @@ public class S_Cadastro {
             String input = scanner.nextLine().trim();
 
             if (input.isEmpty()) {
+                System.out.println("Erro: Data de nascimento não pode ser vazia. Tente novamente.");
                 continue;
             }
 
             if (input.equalsIgnoreCase(COMANDO_PARADA)) {
+                System.out.println("Cadastro cancelado pelo usuário.");
                 return null;
             }
 
             try {
                 if (input.length() != 8) {
-                    throw new IllegalArgumentException("Data deve ter exatamente 8 dígitos");
+                    throw new IllegalArgumentException("Data deve ter exatamente 8 dígitos.");
                 }
 
                 LocalDate data = LocalDate.parse(input, FORMATO);
 
                 if (data.isAfter(LocalDate.now())) {
-                    throw new IllegalArgumentException("Data não pode ser futura");
+                    throw new IllegalArgumentException("Data não pode ser futura.");
                 }
 
                 return data;
@@ -147,9 +157,112 @@ public class S_Cadastro {
             } catch (DateTimeParseException e) {
                 System.out.println("Erro: Formato de data inválido. Use ddMMyyyy.");
             } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
+                System.out.println("Erro: " + e.getMessage() + " Tente novamente.");
             }
         }
+    }
+
+    private Boolean solicitarCooperado() {
+        final String COMANDO_PARADA = "stop";
+
+        while (true) {
+            System.out.println("Digite 'sim' se for cooperado, se negativo digite qualquer coisa (ou '"
+                    + COMANDO_PARADA + "' para cancelar):");
+            String input = scanner.nextLine().trim();
+
+            // Verifica se está vazio
+            if (input.isEmpty()) {
+                System.out.println("Erro: O campo não pode ser vazio. Tente novamente.");
+                continue;
+            }
+
+            // Verifica comando de parada
+            if (input.equalsIgnoreCase(COMANDO_PARADA)) {
+                System.out.println("Cadastro cancelado pelo usuário.");
+                return null;
+            }
+
+            // Validação de cooperado
+            if (input.equalsIgnoreCase("sim")){
+                System.out.println("Cooperado ativado com sucesso!");
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    // Validação da data de nascimento
+    private LocalDate solicitarValidadeCaf(Boolean cooperado) {
+        final String COMANDO_PARADA = "stop";
+        final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("ddMMyyyy");
+
+        while (cooperado) {
+            System.out.println("Digite a data de vencimento da CAF (ddMMyyyy) ou '" + COMANDO_PARADA +
+                    "' para cancelar:");
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("Erro: Data de vencimento da CAF não pode ser vazia. Tente novamente.");
+                continue;
+            }
+
+            if (input.equalsIgnoreCase(COMANDO_PARADA)) {
+                System.out.println("Cadastro cancelado pelo usuário.");
+                return null;
+            }
+
+            try {
+                if (input.length() != 8) {
+                    throw new IllegalArgumentException("Data de vencimento deve ter exatamente 8 dígitos.");
+                }
+
+                LocalDate data = LocalDate.parse(input, FORMATO);
+
+                if (data.isBefore(LocalDate.now())) {
+                    throw new IllegalArgumentException("Data de vencimento não pode ser passado.");
+                }
+
+                return data;
+
+            } catch (DateTimeParseException e) {
+                System.out.println("Erro: Formato de data inválido. Use ddMMyyyy.");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Erro: " + e.getMessage() + " Tente novamente.");
+            }
+        }
+        return null;
+    }
+
+    // Validação do código de CAF
+    private String solicitarCodigoCaf(Boolean cooperado) {
+        final String COMANDO_PARADA = "stop";
+
+        while (cooperado) {
+            System.out.println("Digite o código da CAF do cliente (ou '" + COMANDO_PARADA +
+                    "' para cancelar):");
+            String input = scanner.nextLine().trim();
+
+            // Verifica se está vazio
+            if (input.isEmpty()) {
+                System.out.println("Erro: Código de CAF não pode ser vazio.");
+                continue;
+            }
+
+            if (input.length() > 40) {
+                System.out.println("Erro: O código da CAF não pode conter mais que 40 caracteres. Tente novamente");
+                continue;
+            }
+
+            // Verifica comando de parada
+            if (input.equalsIgnoreCase(COMANDO_PARADA)) {
+                System.out.println("Cadastro cancelado pelo usuário.");
+                return null;
+            }
+
+            return input;
+        }
+        return null;
     }
 
     // auxiliares (arrumar explicação e deixá-los em ordem no fim)
@@ -161,120 +274,7 @@ public class S_Cadastro {
         return texto.matches(".*[a-zA-Zá-úÁ-Ú].*");
     }
 
-
-
-
-
-
-    // Garantir que se pode injetar em um E_Cliente
-    private static boolean podeCadastrar = true;
-    // Nome e cpf/cnpj
-    private String name = "", identification = "";
-    // Se é ou não cooperado
-    private static boolean coop = false;
-    // Data nascimento
-    private LocalDate localBornDate = null;
-    // Vencimento da DAP
-    private static LocalDate localMaturityCAF = null;
-    // Código da CAF
-    private static String CAF = "";
-
-    public String cadastrarCliente() {
-
-            // Nome
-
-
-            // CPF/CNPJ
-            System.out.println("CNPJ ou CPF do cliente (type stop)");
-            while (true) {
-                identification = scanner.nextLine().trim();
-                if (verifyIfHasCharacter(identification)){
-                    System.out.println("Identification has lyrics, type again or 'stop' to end");
-                } else {
-                    if (stopper(identification)) {
-                        System.out.println("Aborting process...");
-                        break;
-                    }
-                }
-            }
-
-            // Data de nascimento
-        System.out.println("DIA, MÊS e ANO de nascimento do cliente (ddMMyyyy) (type stop)");
-
-        try {
-                String inputBirth = scanner.nextLine().trim(); // Usa nextLine() em vez de next()
-
-                if (inputBirth.equalsIgnoreCase("stop")) {
-                    System.out.println("Aborting process...");
-                }
-
-                // Usando DateTimeFormatter (Java 8+)
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
-                localBornDate = LocalDate.parse(inputBirth, formatter);
-                System.out.println("data válida");
-            } catch (DateTimeParseException e) {
-                return "Erro: Data inválida. Use o formato ddMMyyyy (ex: 29012008).";
-            } catch (Exception e) {
-                return "Erro inesperado: " + e.getMessage();
-            }
-
-            // Cooperado
-            System.out.println("É cooperado? if yes 'y'. Type 'stop' to end");
-            String inputCoop = scanner.nextLine().trim();
-            if (inputCoop.equalsIgnoreCase("stop")) {
-                System.out.println("Aborting process...");
-            }
-            if (inputCoop.equalsIgnoreCase("s")){
-                coop = true;
-                System.out.println("É cooperado!");
-            }
-
-
-            cooperado();
-
-            // Se chegou aqui, cadastra o cliente
-            injecaoDeDados();
-
-        return "Cadastramento encerrado;";
-    }
-
-    // Metodo para informações cooperadas
-    public String cooperado() {
-        if (coop) {
-            try {
-                System.out.println("DIA, MÊS e ANO de vencimento da CAF (ddMMyyyy)");
-                String inputCAF = scanner.nextLine().trim();
-
-                if (inputCAF.equalsIgnoreCase("stop")) {
-                    return "Cadastro cancelado.";
-                }
-
-                // Usando DateTimeFormatter (Java 8+)
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
-                localMaturityCAF = LocalDate.parse(inputCAF, formatter);
-                System.out.println("data válida");
-
-            } catch (DateTimeParseException e) {
-
-                return "Erro: Data inválida. Use o formato ddMMyyyy (ex: 29012008).";
-            } catch (Exception e) {
-
-                return "Erro inesperado: " + e.getMessage();
-            }
-
-            // Código da CAF
-            System.out.println("Qual o número/código da DAP/CAF? (n para cancelar)");
-
-            if (CAF.equalsIgnoreCase("n")){
-                return null;
-            } else {
-                CAF = scanner.nextLine().trim();
-            }
-        }
-        return null;
-    }
-
-    //
+    // Salva os dados no banco
     public void salvarCliente(String nome, String documento, LocalDate dataNascimento, boolean cooperado,
                               LocalDate validadeCaf, String codigoCaf){
         E_Cliente e_cliente = new E_Cliente();
@@ -282,30 +282,11 @@ public class S_Cadastro {
         e_cliente.setCpf_cnpj(documento);
         e_cliente.setBirthDate(dataNascimento);
         e_cliente.setCooperated(cooperado);
-        e_cliente.setMaturity_caf(validadeCaf);
-        e_cliente.setCaf(codigoCaf);
-    }
-
-    public boolean verifyIfHasNumber(String input) {
-        for (char c : input.toCharArray()) {
-            if (Character.isDigit(c)) {
-                return true; // Se algum caractere for dígito (número), retorna falso.
-            }
+        if (cooperado) {
+            e_cliente.setMaturity_caf(validadeCaf);
+            e_cliente.setCaf(codigoCaf);
         }
-        return false; // Se passou por todos, é válido.
-    }
-
-    public boolean verifyIfHasCharacter(String input) {
-        for (char c : input.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                return true; // Se algum caractere não for dígito (número), retorna falso.
-            }
-        }
-        return false; // Se passou por todos, é válido.
-    }
-
-    public boolean stopper(String input){
-        return input.equalsIgnoreCase("stop");
+        r_cliente.save(e_cliente);
     }
 
 }
