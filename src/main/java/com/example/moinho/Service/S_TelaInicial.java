@@ -80,7 +80,7 @@ public class S_TelaInicial {
         switch (area){
             case 1:
                 switch (servico){
-                    case 1: s_cliente.cadastrarCliente();
+                    case 1: System.out.println(s_cliente.cadastrarCliente());
                     case 2: //s_cliente.editarCliente();
                     case 3: //1
                     case 4: //2

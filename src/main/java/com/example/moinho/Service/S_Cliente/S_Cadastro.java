@@ -2,7 +2,6 @@ package com.example.moinho.Service.S_Cliente;
 
 import com.example.moinho.Entities.E_Cliente;
 import com.example.moinho.Repository.R_Cliente;
-import com.example.moinho.Service.S_TelaInicial;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -35,11 +34,15 @@ public class S_Cadastro {
             Boolean cooperado = solicitarCooperado();
             if (cooperado == null) return "Cadastro cancelado";
 
-            LocalDate validadeCaf = solicitarValidadeCaf(cooperado);
-            if (validadeCaf == null) return "Cadastro cancelado";
+            LocalDate validadeCaf = null; 
+            if (cooperado) {
+                if ((validadeCaf = solicitarValidadeCaf())== null) return "Cadastro cancelado";
+            }
 
-            String codigoCaf = solicitarCodigoCaf(cooperado);
-            if (codigoCaf == null) return "Cadastro cancelado";
+            String codigoCaf = "";
+            if (cooperado) {
+                if ((codigoCaf = solicitarCodigoCaf()) == null) return "Cadastro cancelado";
+            }
 
             // ... salvar os dados
 
@@ -114,6 +117,11 @@ public class S_Cadastro {
             // Validação do tamanho
             if (input.length() != 14 && input.length() != 11){
                 System.out.println("Erro: O Cpf e Cnpj apenas podem ter 11 ou 14 números. Tente novamente.");
+                continue;
+            }
+
+            if (validaDocumento(input)) {
+                System.out.println("Erro: O Cpf já está cadastrado na base de dados. Tente novamente.");
                 continue;
             }
 
@@ -193,11 +201,11 @@ public class S_Cadastro {
     }
 
     // Validação da data de nascimento
-    private LocalDate solicitarValidadeCaf(Boolean cooperado) {
+    private LocalDate solicitarValidadeCaf() {
         final String COMANDO_PARADA = "stop";
         final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("ddMMyyyy");
 
-        while (cooperado) {
+        while (true) {
             System.out.println("Digite a data de vencimento da CAF (ddMMyyyy) ou '" + COMANDO_PARADA +
                     "' para cancelar:");
             String input = scanner.nextLine().trim();
@@ -231,14 +239,13 @@ public class S_Cadastro {
                 System.out.println("Erro: " + e.getMessage() + " Tente novamente.");
             }
         }
-        return null;
     }
 
     // Validação do código de CAF
-    private String solicitarCodigoCaf(Boolean cooperado) {
+    private String solicitarCodigoCaf() {
         final String COMANDO_PARADA = "stop";
 
-        while (cooperado) {
+        while (true) {
             System.out.println("Digite o código da CAF do cliente (ou '" + COMANDO_PARADA +
                     "' para cancelar):");
             String input = scanner.nextLine().trim();
@@ -262,7 +269,6 @@ public class S_Cadastro {
 
             return input;
         }
-        return null;
     }
 
     // auxiliares (arrumar explicação e deixá-los em ordem no fim)
@@ -274,12 +280,19 @@ public class S_Cadastro {
         return texto.matches(".*[a-zA-Zá-úÁ-Ú].*");
     }
 
+    private boolean validaDocumento(String input) {
+        if (r_cliente.findByDocumento(input).isPresent()) {
+            return true;
+        }
+        return false;
+    }
+
     // Salva os dados no banco
     public void salvarCliente(String nome, String documento, LocalDate dataNascimento, boolean cooperado,
                               LocalDate validadeCaf, String codigoCaf){
         E_Cliente e_cliente = new E_Cliente();
         e_cliente.setName(nome);
-        e_cliente.setCpf_cnpj(documento);
+        e_cliente.setDocumento(documento);
         e_cliente.setBirthDate(dataNascimento);
         e_cliente.setCooperated(cooperado);
         if (cooperado) {

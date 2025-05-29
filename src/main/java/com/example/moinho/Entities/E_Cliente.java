@@ -19,7 +19,7 @@ public class E_Cliente {
     private String name;
 
     @Column(unique = true, length = 14)
-    private String cpf_cnpj;
+    private String documento;
 
     @Column(columnDefinition = "DECIMAL(10,3)")
     private double balance_kg;
