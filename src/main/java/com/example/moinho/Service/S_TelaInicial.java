@@ -1,6 +1,6 @@
 package com.example.moinho.Service;
 
-import com.example.moinho.Service.S_Cliente.S_Cadastro;
+import com.example.moinho.Service.S_Cliente.S_CadastroCliente;
 import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
@@ -9,15 +9,17 @@ import java.util.Scanner;
 public class S_TelaInicial {
 
     private final Scanner scanner;
-    private final S_Cadastro s_cliente;
+    private final S_CadastroCliente s_cadastroCliente;
+    private final S_CadastroDespesa s_cadastroDespesa;
 
     // Injeção das dependências
-    public S_TelaInicial(S_Cadastro s_cliente) {
+    public S_TelaInicial(S_CadastroCliente s_cadastroCliente, S_cadastroDespesa s_cadastroDespesa) {
         this.scanner = new Scanner(System.in);
-        this.s_cliente = s_cliente;
+        this.s_cadastroCliente = s_cadastroCliente;
+        this.s_cadastroDespesa = s_cadastroDespesa;
     }
 
-    private static final String[] nomeArea = {"Área", "Cliente", "Venda", "Despesa", "Cofre", "Funcionário"};
+    private static final String[] nomeArea = {"Área", "Cliente", "Venda", "Despesa", "Pode volta more", "Funcionário"};
     private static final String[] nomeServico = {"Serviço", "Cadastrar", "Consultar", "Excluir", "Editar"};
 
     public String TelaInicial(){
@@ -25,7 +27,7 @@ public class S_TelaInicial {
 
         System.out.println("São: " +escolhas[0] + ", " + escolhas[1]);
 
-        
+
 
         return null;
     }
@@ -33,7 +35,7 @@ public class S_TelaInicial {
     public int escolherOpcao(String[] opcoes) {
         while (true) {
             System.out.println("Escolha um(a) dos(as) " + opcoes[0] +
-                    " a seguir (apenas o número correspondente): ");
+                    "s a seguir (apenas o número correspondente): ");
             for (int i = 1; i < opcoes.length; i++) {
                 System.out.println(i + ". " + opcoes[0] + " de " + opcoes[i] + ". ");
             }
@@ -50,7 +52,8 @@ public class S_TelaInicial {
     public boolean validaEscolha(int input, int quantidadeEscolhas) {
         try {
             if ((input  > 0 ) && (input <= quantidadeEscolhas)) return true;
-            else { throw new Exception("Erro: O campo deve ser preenchido com apenas uma das " +
+            else {
+                throw new Exception("Erro: O campo deve ser preenchido com apenas uma das " +
                         quantidadeEscolhas + " opções!");
             }
         }
@@ -61,8 +64,48 @@ public class S_TelaInicial {
     }
 
     public String direcionador(int[] escolhas){
-
-
+        switch (escolhas[0]) {
+            case 1:
+                switch (escolhas[1]) {
+                    case 1: System.out.println(s_cliente.cadastrarCliente());
+                    case 2: ;
+                    case 3: ;
+                    case 4: ;
+                    case 5: ;
+                }
+            case 2: ;
+                switch (escolhas[1]) {
+                    case 1: ;
+                    case 2: ;
+                    case 3: ;
+                    case 4: ;
+                    case 5: ;
+                }
+            case 3: ;
+                switch (escolhas[1]) {
+                    case 1: ;
+                    case 2: ;
+                    case 3: ;
+                    case 4: ;
+                    case 5: ;
+                }
+            case 4: ;
+                switch (escolhas[1]) {
+                    case 1: System.out.println(s_cofre.cadastrarEntrada());
+                    case 2: ;
+                    case 3: ;
+                    case 4: ;
+                    case 5: ;
+                }
+            case 5: ;
+                switch (escolhas[1]) {
+                    case 1: ;
+                    case 2: ;
+                    case 3: ;
+                    case 4: ;
+                    case 5: ;
+                }
+        }
 
         return "Fim";
     }

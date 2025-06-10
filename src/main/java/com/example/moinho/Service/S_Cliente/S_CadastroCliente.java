@@ -10,12 +10,12 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 @Service
-public class S_Cadastro implements AutoCloseable {
+public class S_CadastroCliente implements AutoCloseable {
     private final R_Cliente r_cliente;  // Adicionado final para injeção
     private final Scanner scanner;
 
     // Construtor recebe apenas R_Cliente (Spring injeta) e cria o Scanner internamente
-    public S_Cadastro(R_Cliente r_cliente) {
+    public S_CadastroCliente(R_Cliente r_cliente) {
         this.r_cliente = r_cliente;
         this.scanner = new Scanner(System.in); // Cria o Scanner aqui
     }
