@@ -1,4 +1,4 @@
-package com.example.moinho.Entities;
+package com.example.moinho.Model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "clientes") // Define o nome da tabela no banco
+@Table(name = "cliente") // Define o nome da tabela no banco
 @Data
 public class E_Cliente {
 
@@ -19,7 +19,7 @@ public class E_Cliente {
     private String name;
 
     @Column(unique = true, length = 14)
-    private String documento;
+    private String document; // CPF ou CNPJ
 
     @Column(columnDefinition = "DECIMAL(10,3)")
     private double balance_kg;
@@ -32,6 +32,9 @@ public class E_Cliente {
 
     @Column(columnDefinition = "BOOLEAN", nullable = false)
     private boolean cooperated;
+
+    @Column(columnDefinition = "BOOLEAN", nullable = false)
+    private boolean seller;
 
     @Column(unique = true, length = 40)
     private String caf;

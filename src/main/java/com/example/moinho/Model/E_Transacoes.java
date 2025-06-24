@@ -1,4 +1,4 @@
-package com.example.moinho.Entities;
+package com.example.moinho.Model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "deposito_transacoes") // Define o nome da tabela no banco
 @Data
-public class E_DepositoCaixaTransacoes {
+public class E_Transacoes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,29 +18,27 @@ public class E_DepositoCaixaTransacoes {
 
     public enum TypeTransaction { // Define as opções do ENUM
         DEPOSIT,
-        WITHDRAW
+        WITHDRAW,
+        TRANSFER
     }
 
     @Enumerated(EnumType.STRING)  // Armazena o nome do enum como texto
     @Column(length = 20)
-    private TypeTransaction type;
+    private TypeTransaction typeTransaction;
 
     @Column(columnDefinition = "DECIMAL(10,3)")
-    private BigDecimal value;
-
-    @ManyToOne
-    @JoinColumn(name = "id")  // Nome da coluna FK
-    private E_DepositoCaixa vault_id;
+    private BigDecimal value; // Valor da transação
 
     @ManyToOne
     @JoinColumn(name = "name")  // Nome da coluna FK
+    private E_DepositoDinheiro vault_id;
+
+    @ManyToOne
+    @JoinColumn(name = "name_client")  // Nome da coluna FK
     private E_Cliente translaction_operator;
 
     @Column(updatable = false)
     @CreationTimestamp
-    private LocalDateTime time;
-
-    @Column(length = 40, nullable = false)
-    private String description;
+    private LocalDateTime time; // Define um timestamp pro momento da transação
 
 }

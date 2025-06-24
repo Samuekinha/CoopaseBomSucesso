@@ -1,6 +1,6 @@
 package com.example.moinho.Service.S_Cliente;
 
-import com.example.moinho.Entities.E_Cliente;
+import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Repository.R_Cliente;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -77,13 +77,13 @@ public class S_CadastroCliente implements AutoCloseable {
     }
 
     private boolean validaDocumento(String input) {
-        if (r_cliente.findByDocumento(input).isPresent()) {
+        if (r_cliente.findByDocument(input).isPresent()) {
             return true;
         }
         return false;
     }
 
-    // Validações
+    // Validações //
 
     // Validação do nome
     private String solicitarNome() {
@@ -302,7 +302,7 @@ public class S_CadastroCliente implements AutoCloseable {
         try {
             E_Cliente e_cliente = new E_Cliente();
             e_cliente.setName(nome);
-            e_cliente.setDocumento(documento);
+            e_cliente.setDocument(documento);
             e_cliente.setBirthDate(dataNascimento);
             e_cliente.setCooperated(cooperado);
             if (cooperado) {
