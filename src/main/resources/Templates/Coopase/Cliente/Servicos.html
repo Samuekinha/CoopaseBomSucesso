@@ -50,27 +50,50 @@
 
   <div class="blocos-container">
     <!-- Bloco Cadastro -->
-    <a th:href="@{/Coopase/AreaCliente/CadastroView}" class="bloco">
-      <h3>Cadastrar</h3>
+    <a href="" data-action="Cadastrar" class="bloco-link">
+      <div class="bloco">
+        <h3>Cadastrar</h3>
+        <p>Cadastrar cliente</p>
+      </div>
     </a>
 
     <!-- Bloco Edição -->
-    <a th:href="@{/cliente/editar}" class="bloco">
-      <h3>Editar</h3>
+    <a href="" data-action="Editar" class="bloco-link">
+      <div class="bloco">
+        <h3>Editar</h3>
+        <p>Editar cliente</p>
+      </div>
     </a>
 
     <!-- Bloco Consulta -->
-    <a th:href="@{/cliente/consulta}" class="bloco">
-      <h3>Consultar</h3>
+    <a href="" data-action="Consultar" class="bloco-link">
+      <div class="bloco">
+        <h3>Consultar</h3>
+        <p>Consultar cliente</p>
+      </div>
+    </a>
+
+    <!-- Bloco Deleção -->
+    <a href="" data-action="Deletar" class="bloco-link">
+      <div class="bloco">
+        <h3>Deletar</h3>
+        <p>Deletar cliente</p>
+      </div>
     </a>
   </div>
 
   <!-- Container da View (Onde o conteúdo será carregado) -->
-  <div th:insert="~{/Coopase/Cliente/CadastroView :: Cadastro}"></div>
+  <div id="dynamic-content">
+    <!-- Conteúdo inicial será carregado via JavaScript -->
+  </div>
 
 </container>
 
-<script src="Index.js" defer></script> <!-- defer = executa após o HTML -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="/Index.js" defer></script> <!-- defer = executa após o HTML -->
+<script src="/Cliente/RequisicoesAjax.js" defer></script> <!-- defer = executa após o HTML -->
 
 </body>
 </html>

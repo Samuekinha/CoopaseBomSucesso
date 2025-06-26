@@ -1,0 +1,12 @@
+<!-- Fragmento 2 -->
+<div th:fragment="Cadastrar">
+  <h2>Cadastro de Cliente</h2>
+  <form th:action="@{/Coopase/Cliente/Servicos/Cadastrar}" method="post">
+    <!-- Campos do formulário -->
+    <input type="text" name="nome" placeholder="Nome do cliente">
+    <button type="submit">Salvar</button>
+  </form>
+</div>
+
+
+
