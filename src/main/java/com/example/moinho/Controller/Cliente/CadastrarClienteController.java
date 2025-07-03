@@ -4,14 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/Coopase/Cliente/Servicos")
+@RequestMapping("/Coopase/Cliente")
 public class CadastrarClienteController {
 
     // Rotas para processar os formulários (POST)
-    @PostMapping("/Cadastrar")
+    @GetMapping("/CadastrarClienteView")
     public String cadastrarCliente(/* seus parâmetros */) {
         // Lógica de cadastro
-        return "redirect:/Coopase/Cliente?action=Cadastrar";
+        return "/Coopase/Cliente/CadastrarClienteView";
     }
 
 }

@@ -19,15 +19,4 @@ public class ServicosClienteController {
         return "Coopase/Cliente/Servicos"; // Sua página principal
     }
 
-    @GetMapping("/{action}")
-    @ResponseBody
-    public String getFragment(@PathVariable String action, Model model) {
-        // Garante que o retorno é APENAS o fragmento HTML
-        return templateEngine.process(
-                "Coopase/Cliente/" + action + "ClienteView :: " + action,
-                new Context(Locale.getDefault(), model.asMap())
-        );
-    }
-
-
 }

@@ -1,54 +1,65 @@
+
 document.addEventListener('DOMContentLoaded', function() {
-    async function loadContent(action) {
-        try {
-            const response = await fetch(`/Coopase/Cliente/Servicos/${action}`, {
-                headers: { 'Accept': 'text/html' }
-            });
-
-            if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
-
-            const html = await response.text();
-
-            // Verifica se o HTML contém o fragmento esperado
-            if (!html.includes('th:fragment')) {
-                throw new Error('Resposta não contém fragmento Thymeleaf');
-            }
-
-            // Cria um container temporário
-            const tempContainer = document.createElement('div');
-            tempContainer.innerHTML = html;
-
-            // Tenta encontrar o fragmento de três maneiras diferentes
-            const fragment =
-                tempContainer.querySelector('[th\\:fragment]') ||  // Notação Thymeleaf
-                tempContainer.querySelector('div') ||               // Primeira div
-                tempContainer;                                    // Fallback para todo conteúdo
-
-            // Insere no container principal
-            document.getElementById('dynamic-content').innerHTML = fragment.innerHTML;
-
-            // Atualiza a URL
-            history.pushState({action}, null, `/Coopase/Cliente/Servicos?action=${action}`);
-
-        } catch (error) {
-            console.error('Erro ao carregar:', error);
-            document.getElementById('dynamic-content').innerHTML = `
-                <div class="alert alert-danger">
-                    Erro: ${error.message || 'Falha ao carregar o conteúdo'}
-                </div>
-            `;
-        }
-    }
-
-    // Configuração dos eventos (mantido igual)
-    document.querySelectorAll('.bloco-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            loadContent(this.getAttribute('data-action'));
-        });
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
     });
+  // Seleciona todos os links dos blocos
+  const blocosLinks = document.querySelectorAll('.bloco-link');
 
-    // Carregamento inicial (mantido igual)
-    const urlParams = new URLSearchParams(window.location.search);
-    loadContent(urlParams.get('action') || 'Cadastrar');
+  // Adiciona o event listener para cada link
+  blocosLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault(); // Previne o comportamento padrão do link
+
+      const action = this.getAttribute('data-action');
+      loadView(action);
+    });
+  });
+
+  // Função para carregar a view via AJAX
+  function loadView(viewName) {
+    const contentContainer = document.getElementById('dynamic-content');
+
+    // Mostra um indicador de carregamento (opcional)
+    contentContainer.innerHTML = '<p>Carregando...</p>';
+
+    // Converte o nome da view para o padrão do seu sistema (ex: "Cadastrar" -> "CadastrarClienteView")
+    const viewFileName = `/Coopase/Cliente/${viewName}ClienteView`;
+
+    // Faz a requisição AJAX
+    fetch(viewFileName)
+      .then(response => {
+        if (!response.ok) {
+            Toast.fire({
+              icon: "error",
+              title: `Erro ao abrir a view ${viewName}!`
+            });
+          throw new Error(`View não encontrada: ${viewFileName}`);
+        }
+        Toast.fire({
+          icon: "info",
+          title: `A view ${viewName} foi selecionada!`
+        });
+        return response.text();
+      })
+      .then(html => {
+        // Insere o conteúdo no container
+        contentContainer.innerHTML = html;
+      })
+      .catch(error => {
+        console.error('Erro ao carregar a view:', error);
+        contentContainer.innerHTML = `<p>Erro ao carregar a view: ${error.message}</p>`;
+      });
+  }
+
+  // Carrega a view inicial (opcional)
+  loadView('Cadastrar');
 });
