@@ -11,4 +11,6 @@ public interface R_Cliente extends JpaRepository<E_Cliente, Long> {
 
     Optional<E_Cliente> findByDocument(String document);
 
+    Optional<E_Cliente> findByName(String name);
+
 }

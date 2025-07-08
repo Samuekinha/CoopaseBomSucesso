@@ -63,3 +63,4 @@ document.addEventListener('DOMContentLoaded', function() {
   // Carrega a view inicial (opcional)
   loadView('Cadastrar');
 });
+
