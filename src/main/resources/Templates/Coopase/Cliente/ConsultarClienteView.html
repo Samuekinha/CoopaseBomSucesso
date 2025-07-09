@@ -1,0 +1,29 @@
+<div th:fragment="Consultar">
+    <h2 class="d-flex justify-content-center">Consultar Cliente</h2>
+
+    <table class="table" id="listaDeClientes">
+        <thead>
+        <tr>
+            <th>N°:</th>
+            <th>Nome:</th>
+            <th>Documento:</th>
+            <th>Data Nasc.:</th>
+            <th>Cooperado:</th>
+            <th>Data Venc. CAF</th>
+            <th>Código CAF</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="resultado : ${resultadoConsulta}" th:id="${'row' + resultado.id}">
+            <td th:text="${resultado.id}"></td>
+            <td th:text="${resultado.name}"></td>
+            <td th:text="${resultado.document}"></td>
+            <td th:text="${#temporals.format(resultado.birthDate, 'dd-MM-yyyy')}"></td>
+            <td th:text="${resultado.cooperated}"></td>
+            <td th:text="${#temporals.format(resultado.maturity_caf, 'dd-MM-yyyy')}"></td>
+            <td th:text="${resultado.caf}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

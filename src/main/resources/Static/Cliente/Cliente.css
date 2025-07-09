@@ -1,0 +1,75 @@
+/* Blocos de areas */
+
+.blocos-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espaço entre os blocos */
+    padding: 20px;
+    flex-wrap: wrap; /* Responsivo: quebra linha em telas pequenas */
+}
+
+.bloco-link {
+    text-decoration: none; /* Remove sublinhado do link */
+    color: inherit; /* Mantém a cor padrão do texto */
+    flex: 1; /* Distribui espaço igualmente */
+    min-width: 200px; /* Largura mínima para cada bloco */
+}
+
+.bloco {
+    background-color: #f8f9fa; /* Cor de fundo (pode personalizar) */
+    border-radius: 12px; /* Bordas arredondadas */
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efeito suave */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra leve */
+}
+
+.bloco:hover {
+    transform: scale(1.05); /* Aumenta 5% ao passar o mouse */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra mais destacada */
+}
+
+.bloco h3 {
+    justify-content: center;
+    margin-top: 0;
+    color: #333; /* Cor do título */
+}
+
+.bloco p {
+    color: #666; /* Cor da descrição */
+}
+
+/* Default */
+
+.titulo-escolha {
+    display: flex;
+    justify-content: center;
+    font-size: 40px;
+}
+
+.hidden-cooperado {
+    display: none !important;
+}
+
+/*
+.form-control {
+    .required input:after { content:"*"; }
+}
+*/
+
+#listaDeClientesSelecinavel tbody tr {
+    transition: all 0.2s ease;
+}
+
+#listaDeClientesSelecinavel tbody tr.selected {
+    border-left: 4px solid #007bff;
+    background-color: rgba(0, 123, 255, 0.1) !important;
+}
+
+#listaDeClientesSelecinavel tbody tr:hover:not(.selected) {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+#listaDeClientesSelecinavel tbody tr td:last-child {
+    padding: 8px;
+    text-align: center;
+}

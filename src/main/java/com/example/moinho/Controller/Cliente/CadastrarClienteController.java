@@ -19,8 +19,8 @@ public class CadastrarClienteController {
         this.s_cadastroCliente = s_cadastroCliente;
     }
 
-    private static final String[] parametros = {"nome", "documento", "dataNascimento", "cooperado",
-    "dataVencimentoCaf", "codigoCaf", "status"};
+//    private static final String[] parametros = {"nome", "documento", "dataNascimento", "cooperado",
+//    "dataVencimentoCaf", "codigoCaf", "status"};
 
     // Rotas para processar os formulários (POST)
     @GetMapping("/CadastrarClienteView")
@@ -42,7 +42,7 @@ public class CadastrarClienteController {
 
         for (int i = 0; i < resultados.length ; i++) {
             if (resultados[i] != null) {
-                model.addAttribute(resultados[i], parametros[i]);
+                model.addAttribute("parametros", resultados[i]);
             }
         }
 

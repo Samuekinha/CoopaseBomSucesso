@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     const Toast = Swal.mixin({
       toast: true,
