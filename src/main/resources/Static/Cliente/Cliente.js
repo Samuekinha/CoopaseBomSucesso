@@ -1,126 +1,158 @@
-// Usando delegação de eventos para funcionar com conteúdo dinâmico (CadastrarClienteView)
-document.addEventListener('DOMContentLoaded', function() {
-    // Ouvinte no documento que captura eventos de change propagados
-    document.addEventListener('change', function(e) {
-        if (e.target && e.target.id === 'cooperadoSelect') {
-            const camposCooperado = document.getElementById('camposCooperado');
-            if (camposCooperado) {
-                if (e.target.value === 'true') {
-                    camposCooperado.classList.remove('hidden-cooperado');
-                } else {
-                    camposCooperado.classList.add('hidden-cooperado');
-                }
-            }
-        }
-    });
+// Variável para controlar o observador
+let tableObserver;
 
-    // Dispara o evento change se o select já existir
-    const selectInicial = document.getElementById('cooperadoSelect');
-    if (selectInicial) {
-        selectInicial.dispatchEvent(new Event('change'));
-    }
-});
+function initClientEditView() {
+    console.log('Inicializando view de edição de cliente');
 
-// seleciona uma row e adiciona os dados ao form (EditarClienteView) ------------------------------------------
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Função para lidar com a seleção de linhas e preenchimento do formulário
-    function setupTableSelection() {
-        const table = document.getElementById('listaDeClientesSelecinavel');
-        if (!table) return;
-
-        // Ouvinte de eventos delegado para os botões de seleção
-        table.addEventListener('click', function(e) {
-            const btn = e.target.closest('button.btn-primary');
-            if (!btn) return;
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Remove a seleção de todas as outras linhas
-            document.querySelectorAll('#listaDeClientesSelecinavel tr.selected').forEach(row => {
-                row.classList.remove('selected');
-            });
-
-            // Adiciona a seleção na linha atual
-            const row = btn.closest('tr');
-            row.classList.add('selected');
-
-            // Preenche o formulário com os dados do botão
-            fillFormFromButton(btn);
-        });
-    }
-
-    // Função para preencher o formulário com os dados do botão
-    function fillFormFromButton(button) {
-        // Mapeamento dos campos do formulário
-        const formInputs = {
-            id: document.getElementById('ClientId'),
-            name: document.getElementById('ClientName'),
-            document: document.getElementById('ClientDocument'),
-            birthDate: document.getElementById('ClientBirth'),
-            cooperated: document.getElementById('cooperadoSelect'),
-            maturity_caf: document.getElementById('ClientCafDate'),
-            caf: document.getElementById('ClientCafCode')
-        };
-
-        // Preenche os campos básicos
-        formInputs.id.value = button.getAttribute('th:idSelect') || '';
-        formInputs.name.value = button.getAttribute('th:nomeSelect') || '';
-        formInputs.document.value = button.getAttribute('th:documentSelect') || '';
-
-        // Converte e preenche a data de nascimento (dd-MM-yyyy → yyyy-MM-dd)
-        const birthDate = button.getAttribute('th:birthDateSelect');
-        if (birthDate) {
-            const [day, month, year] = birthDate.split('-');
-            formInputs.birthDate.value = `${year}-${month}-${day}`;
-        }
-
-        // Preenche o campo cooperado
-        const isCooperado = button.getAttribute('th:cooperatedSelect') === 'true';
-        formInputs.cooperated.value = isCooperado;
-
-        // Mostra/oculta campos de cooperado conforme necessário
+    // 1. Controle do campo cooperado
+    function handleCooperadoChange(event) {
         const camposCooperado = document.getElementById('camposCooperado');
-        if (isCooperado) {
-            camposCooperado.classList.remove('hidden-cooperado');
-
-            // Converte e preenche a data de vencimento CAF
-            const maturityDate = button.getAttribute('th:maturityCafSelect');
-            if (maturityDate) {
-                const [day, month, year] = maturityDate.split('-');
-                formInputs.maturity_caf.value = `${year}-${month}-${day}`;
-            }
-
-            formInputs.caf.value = button.getAttribute('th:cafSeelct') || '';
-        } else {
-            camposCooperado.classList.add('hidden-cooperado');
-            formInputs.maturity_caf.value = '';
-            formInputs.caf.value = '';
+        if (event && event.target && event.target.id === 'cooperadoSelect' && camposCooperado) {
+            camposCooperado.classList.toggle('hidden-cooperado', event.target.value !== 'true');
         }
     }
 
-    // Configura o evento change para o select de cooperado
-    function setupCooperadoSelect() {
-        const select = document.getElementById('cooperadoSelect');
-        if (!select) return;
+    // Configura o event listener para o select cooperado
+    document.addEventListener('change', handleCooperadoChange);
 
-        select.addEventListener('change', function() {
-            const camposCooperado = document.getElementById('camposCooperado');
-            if (!camposCooperado) return;
+    // 2. Observador de mutação para detectar a tabela dinamicamente
+    function setupTableObserver() {
+        // Se já existe um observador, desconecta antes de criar um novo
+        if (tableObserver) {
+            tableObserver.disconnect();
+        }
 
-            if (this.value === 'true') {
-                camposCooperado.classList.remove('hidden-cooperado');
-            } else {
-                camposCooperado.classList.add('hidden-cooperado');
+        tableObserver = new MutationObserver(function(mutations) {
+            const table = document.getElementById('listaDeClientesSelecinavel');
+            if (table) {
+                console.log('Tabela detectada via MutationObserver');
+                setupTableEvents();
             }
         });
 
-        // Dispara o evento change inicialmente
-        select.dispatchEvent(new Event('change'));
+        tableObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     }
 
-    // Inicializa todas as funções
-    setupTableSelection();
-    setupCooperadoSelect();
-});
+    // 3. Configura os eventos da tabela
+    function setupTableEvents() {
+        const table = document.getElementById('listaDeClientesSelecinavel');
+        const formWrapper = document.getElementById('formWrapper');
+        
+        if (!table || !formWrapper) {
+            console.error('Elementos essenciais não encontrados');
+            return;
+        }
+
+        console.log('Configurando eventos da tabela');
+
+        // Remove event listener antigo se existir
+        table.removeEventListener('click', handleTableClick);
+        // Adiciona novo event listener
+        table.addEventListener('click', handleTableClick);
+    }
+
+    // 4. Handler para clicks na tabela
+    function handleTableClick(e) {
+        const row = e.target.closest('.main-row');
+        if (!row) return;
+
+        toggleRowSelection(row);
+        showFormForRow(row);
+        fillFormFromRow(row);
+    }
+
+    // 5. Funções auxiliares (mantidas iguais)
+    function toggleRowSelection(selectedRow) {
+        document.querySelectorAll('.main-row.selected').forEach(r => r.classList.remove('selected'));
+        selectedRow.classList.add('selected');
+    }
+
+    function showFormForRow(row) {
+        document.querySelectorAll('.expanded-form-row').forEach(r => r.remove());
+        
+        const expandedRow = document.createElement('tr');
+        expandedRow.className = 'expanded-form-row';
+        
+        const td = document.createElement('td');
+        td.colSpan = row.cells.length;
+        td.className = 'expanded-form-content';
+        
+        const formClone = document.getElementById('formWrapper').cloneNode(true);
+        formClone.style.display = 'block';
+        formClone.id = 'formWrapper-expanded';
+        td.appendChild(formClone);
+        
+        expandedRow.appendChild(td);
+        row.parentNode.insertBefore(expandedRow, row.nextSibling);
+    }
+
+    function fillFormFromRow(row) {
+        const cells = row.cells;
+        
+        ['formWrapper', 'formWrapper-expanded'].forEach(wrapperId => {
+            const wrapper = document.getElementById(wrapperId);
+            if (!wrapper) return;
+
+            const form = wrapper.querySelector('form');
+            if (!form) return;
+
+            // Preenche campos básicos
+            form.querySelector('[name="ClientId"]').value = cells[0].textContent.trim();
+            form.querySelector('[name="ClientName"]').value = cells[1].textContent.trim();
+            form.querySelector('[name="ClientDocument"]').value = cells[2].textContent.trim();
+
+            // Converte e preenche datas
+            const birthDateParts = cells[3].textContent.trim().split('-');
+            if (birthDateParts.length === 3) {
+                form.querySelector('[name="ClientBirth"]').value = `${birthDateParts[2]}-${birthDateParts[1]}-${birthDateParts[0]}`;
+            }
+            
+            // Preenche cooperado
+            const cooperadoValue = cells[4].textContent.trim().toLowerCase() === 'true' ? 'true' : 'false';
+            const cooperadoSelect = form.querySelector('[name="cooperadoSelect"]');
+            cooperadoSelect.value = cooperadoValue;
+            cooperadoSelect.dispatchEvent(new Event('change'));
+            
+            // Preenche campos adicionais se for cooperado
+            if (cooperadoValue === 'true') {
+                const cafDateParts = cells[5].textContent.trim().split('-');
+                if (cafDateParts.length === 3) {
+                    form.querySelector('[name="ClientCafDate"]').value = `${cafDateParts[2]}-${cafDateParts[1]}-${cafDateParts[0]}`;
+                }
+                form.querySelector('[name="ClientCafCode"]').value = cells[6].textContent.trim();
+            }
+        });
+    }
+
+    // Inicialização
+    setupTableObserver();
+    
+    // Verificação inicial
+    if (document.getElementById('listaDeClientesSelecinavel')) {
+        setupTableEvents();
+    }
+    
+    // Dispara evento change inicial se o select existir
+    const initialSelect = document.getElementById('cooperadoSelect');
+    if (initialSelect) {
+        initialSelect.dispatchEvent(new Event('change'));
+    }
+}
+
+// Inicializa quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', initClientEditView);
+
+// Se você tem um sistema de views SPA, chame initClientEditView() sempre que voltar para a view de edição
+// Exemplo:
+/*
+function navigateToView(viewName) {
+    // Limpeza da view anterior...
+    
+    if (viewName === 'edit') {
+        initClientEditView();
+    }
+}
+*/
