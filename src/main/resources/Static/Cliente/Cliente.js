@@ -91,7 +91,7 @@ function initClientEditView() {
 
     function fillFormFromRow(row) {
         const cells = row.cells;
-        
+
         ['formWrapper', 'formWrapper-expanded'].forEach(wrapperId => {
             const wrapper = document.getElementById(wrapperId);
             if (!wrapper) return;
@@ -109,13 +109,18 @@ function initClientEditView() {
             if (birthDateParts.length === 3) {
                 form.querySelector('[name="ClientBirth"]').value = `${birthDateParts[2]}-${birthDateParts[1]}-${birthDateParts[0]}`;
             }
-            
-            // Preenche cooperado
+
+            // Preenche cooperado - MODIFICAÇÃO PRINCIPAL AQUI
             const cooperadoValue = cells[4].textContent.trim().toLowerCase() === 'true' ? 'true' : 'false';
             const cooperadoSelect = form.querySelector('[name="cooperadoSelect"]');
             cooperadoSelect.value = cooperadoValue;
-            cooperadoSelect.dispatchEvent(new Event('change'));
-            
+
+            // Mostra/oculta os campos cooperado imediatamente
+            const camposCooperado = wrapper.querySelector('#camposCooperado');
+            if (camposCooperado) {
+                camposCooperado.classList.toggle('hidden-cooperado', cooperadoValue !== 'true');
+            }
+
             // Preenche campos adicionais se for cooperado
             if (cooperadoValue === 'true') {
                 const cafDateParts = cells[5].textContent.trim().split('-');
