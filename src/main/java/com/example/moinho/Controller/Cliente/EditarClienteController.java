@@ -47,18 +47,15 @@ public class EditarClienteController {
         String clienteValidadeResposta = editarCliente.validaEditarCliente(id, nome, documento,
                 dataNascimento, cooperado, vencimentoCaf, codigoCaf);
 
-        String nomeModel;
         if (clienteValidadeResposta.startsWith("Erro")){
-            nomeModel = "MensagemErro";
+            model.addAttribute("MensagemErro", clienteValidadeResposta);
         } else if(clienteValidadeResposta.startsWith("Sucesso")) {
-            nomeModel = "MensagemSucesso";
+            model.addAttribute("MensagemSucesso", clienteValidadeResposta);
         } else {
-            nomeModel = "MensagemSemMudanca";
+            model.addAttribute("MensagemSemMudanca", clienteValidadeResposta);
         }
 
-        model.addAttribute(nomeModel, clienteValidadeResposta);
-
-        return "/Coopase/Cliente/Servicos";
+        return "redirect:/Coopase/Cliente/Servicos";
     }
 
 }

@@ -1,29 +1,92 @@
 <div th:fragment="Consultar">
-    <h2 class="d-flex justify-content-center">Consultar Cliente</h2>
 
-    <table class="table" id="listaDeClientes">
-        <thead>
-        <tr>
-            <th>N°:</th>
-            <th>Nome:</th>
-            <th>Documento:</th>
-            <th>Data Nasc.:</th>
-            <th>Cooperado:</th>
-            <th>Data Venc. CAF</th>
-            <th>Código CAF</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="resultado : ${resultadoConsulta}" th:id="${'row' + resultado.id}">
-            <td th:text="${resultado.id}"></td>
-            <td th:text="${resultado.name}"></td>
-            <td th:text="${resultado.document}"></td>
-            <td th:text="${#temporals.format(resultado.birthDate, 'dd-MM-yyyy')}"></td>
-            <td th:text="${resultado.cooperated}"></td>
-            <td th:text="${#temporals.format(resultado.maturity_caf, 'dd-MM-yyyy')}"></td>
-            <td th:text="${resultado.caf}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <style>
+        .main-row {
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+        .main-row:hover {
+            background-color: #f5f5f5;
+        }
+        .main-row.selected {
+            background-color: #e3f2fd; /* Azul claro */
+            border-left: 4px solid #2196F3; /* Azul */
+        }
+    </style>
+
+    <div>
+        <h2 class="d-flex justify-content-center">Consultar Cliente</h2>
+
+        <div class="container">
+            <table class="main-table" id="listaDeClientesSelecinavel">
+                <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Nome</th>
+                    <th>Documento</th>
+                    <th>Data Nasc.</th>
+                    <th>Cooperado</th>
+                    <th>Data Venc. CAF</th>
+                    <th>Código CAF</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="main-row" th:each="resultado : ${resultadoConsulta}" data-id="resultado.id">
+                    <td th:text="${resultado.id}"></td>
+                    <td th:text="${resultado.name}"></td>
+                    <td th:text="${resultado.document}"></td>
+                    <td th:text="${#temporals.format(resultado.birthDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${resultado.cooperated}"></td>
+                    <td th:text="${#temporals.format(resultado.maturity_caf, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${resultado.caf}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="formWrapper" class="container" style="display: none;">
+            <form id="consultarClienteForm"> <!-- Adicionado o form -->
+                <div class="form-group">
+                    <label for="ClientId">Id</label>
+                    <input type="text" class="form-control" name="ClientId" id="ClientId" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="ClientName">Nome</label>
+                    <input type="text" class="form-control" name="ClientName" id="ClientName" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="ClientDocument">Documento (CPF/CNPJ)</label>
+                    <input type="text" class="form-control" name="ClientDocument" id="ClientDocument" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="ClientBirth">Data de nascimento</label>
+                    <input type="date" class="form-control" name="ClientBirth" id="ClientBirth" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="cooperadoSelect">Cooperado</label>
+                    <select name="cooperadoSelect" id="cooperadoSelect" class="form-control" disabled>
+                        <option value="false" selected>Não</option>
+                        <option value="true">Sim</option>
+                    </select>
+                </div>
+
+                <div id="camposCooperado" class="hidden-cooperado">
+                    <div class="form-group">
+                        <label for="ClientCafDate">Data de venc. CAF</label>
+                        <input type="date" class="form-control" name="ClientCafDate" id="ClientCafDate" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientCafCode">Código da CAF</label>
+                        <input type="text" class="form-control" name="ClientCafCode" id="ClientCafCode" readonly>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </div>
+

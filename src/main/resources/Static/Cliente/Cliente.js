@@ -1,10 +1,55 @@
+function setupServiceBlocks() {
+    const blocosLinks = document.querySelectorAll('.bloco-link');
+
+    blocosLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Remove a seleção de todos os blocos
+            document.querySelectorAll('.bloco-link.selected').forEach(b => {
+                b.classList.remove('selected');
+            });
+
+            // Adiciona a seleção no bloco clicado
+            this.classList.add('selected');
+
+            // Aqui você pode adicionar a lógica para carregar a view correspondente
+            const action = this.getAttribute('data-action');
+            console.log(`Ação selecionada: ${action}`);
+            // loadView(action); // Descomente se tiver uma função para carregar views
+        });
+    });
+
+    // Seleciona o primeiro bloco por padrão (opcional)
+    if (blocosLinks.length > 0) {
+        blocosLinks[0].classList.add('selected');
+    }
+}
+
 // Variável para controlar o observador
 let tableObserver;
 
 function initClientEditView() {
     console.log('Inicializando view de edição de cliente');
 
-    // 1. Controle do campo cooperado
+    // coloração de blocos de serviço quando selecionados
+    setupServiceBlocks();
+
+    // 1. Controle do campo cooperado - PARA O FORMULÁRIO DE CADASTRO
+    function handleCooperadoCadastro() {
+        const cooperadoSelect = document.getElementById('cooperadoSelect');
+        const camposCooperado = document.getElementById('camposCooperado');
+
+        if (cooperadoSelect && camposCooperado) {
+            cooperadoSelect.addEventListener('change', function() {
+                camposCooperado.classList.toggle('hidden-cooperado', this.value !== 'true');
+            });
+            // Dispara o evento inicialmente
+            cooperadoSelect.dispatchEvent(new Event('change'));
+        }
+    }
+
+    // 2. Controle do campo cooperado - PARA O FORMULÁRIO DE EDIÇÃO (existente)
     function handleCooperadoChange(event) {
         const camposCooperado = document.getElementById('camposCooperado');
         if (event && event.target && event.target.id === 'cooperadoSelect' && camposCooperado) {
@@ -12,8 +57,9 @@ function initClientEditView() {
         }
     }
 
-    // Configura o event listener para o select cooperado
-    document.addEventListener('change', handleCooperadoChange);
+    // Configura os event listeners
+    handleCooperadoCadastro(); // Para o formulário de cadastro
+    document.addEventListener('change', handleCooperadoChange); // Para o formulário de edição
 
     // 2. Observador de mutação para detectar a tabela dinamicamente
     function setupTableObserver() {

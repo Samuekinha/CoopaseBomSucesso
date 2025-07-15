@@ -1,15 +1,9 @@
 package com.example.moinho.Controller.Cliente;
 
-import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Service.S_Cliente.ConsultarClienteService;
-import com.example.moinho.Service.S_Cliente.S_CadastroCliente;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/Coopase/Cliente")

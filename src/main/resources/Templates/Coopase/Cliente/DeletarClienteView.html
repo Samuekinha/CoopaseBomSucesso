@@ -1,5 +1,4 @@
-<div th:fragment="Editar">
-
+<div th:fragment="Deletar">
     <style>
         .main-row {
             transition: background-color 0.2s ease;
@@ -9,13 +8,13 @@
             background-color: #f5f5f5;
         }
         .main-row.selected {
-            background-color: #e8f5e9; /* Verde claro */
-            border-left: 4px solid #4CAF50; /* Verde */
+            background-color: #fff3e0; /* Laranja claro */
+            border-left: 4px solid #FF9800; /* Laranja */
         }
     </style>
 
     <div>
-        <h2 class="d-flex justify-content-center">Editar Cliente</h2>
+        <h2 class="d-flex justify-content-center">Deletar Cliente</h2>
 
         <div class="container">
             <table class="main-table" id="listaDeClientesSelecinavel">
@@ -45,30 +44,30 @@
         </div>
 
         <div id="formWrapper" class="container" style="display: none;">
-            <form id="editarClienteForm" action="/Coopase/Cliente/Editar" method="post">
+            <form id="DeletarClienteForm" action="/Coopase/Cliente/Deletar" method="post">
                 <div class="form-group">
                     <label for="ClientId">Id</label>
-                    <input type="text" class="form-control" name="ClientId" id="ClientId" value="" readonly>
+                    <input type="text" class="form-control" name="ClientId" id="ClientId" readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="ClientName">Nome</label>
-                    <input type="text" class="form-control" name="ClientName" id="ClientName" placeholder="Nome do cliente" required>
+                    <input type="text" class="form-control" name="ClientName" id="ClientName" readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="ClientDocument">Documento (CPF/CNPJ)</label>
-                    <input type="text" class="form-control" name="ClientDocument" id="ClientDocument" placeholder="CPF ou CNPJ">
+                    <input type="text" class="form-control" name="ClientDocument" id="ClientDocument" readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="ClientBirth">Data de nascimento</label>
-                    <input type="date" class="form-control" name="ClientBirth" id="ClientBirth">
+                    <input type="date" class="form-control" name="ClientBirth" id="ClientBirth" readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="cooperadoSelect">Cooperado</label>
-                    <select name="cooperadoSelect" id="cooperadoSelect" class="form-control">
+                    <select name="cooperadoSelect" id="cooperadoSelect" class="form-control" disabled>
                         <option value="false" selected>Não</option>
                         <option value="true">Sim</option>
                     </select>
@@ -77,16 +76,16 @@
                 <div id="camposCooperado" class="hidden-cooperado">
                     <div class="form-group">
                         <label for="ClientCafDate">Data de venc. CAF</label>
-                        <input type="date" class="form-control" name="ClientCafDate" id="ClientCafDate">
+                        <input type="date" class="form-control" name="ClientCafDate" id="ClientCafDate" readonly>
                     </div>
                     <div class="form-group">
                         <label for="ClientCafCode">Código da CAF</label>
-                        <input type="text" class="form-control" name="ClientCafCode" id="ClientCafCode" placeholder="Código CAF">
+                        <input type="text" class="form-control" name="ClientCafCode" id="ClientCafCode" readonly>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-success mt-4">Editar</button>
+                    <button type="submit" class="btn btn-warning mt-4">Deletar</button>
                 </div>
             </form>
         </div>
