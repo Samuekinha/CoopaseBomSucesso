@@ -1,5 +1,57 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Configura o clique na linha divisória
+    const clearViewTrigger = document.getElementById('clear-view-trigger');
+    if (clearViewTrigger) {
+        clearViewTrigger.addEventListener('click', function() {
+            const contentContainer = document.getElementById('dynamic-content');
+
+            if (contentContainer) {
+                // Limpa o conteúdo sem passar pelo controller
+                contentContainer.innerHTML = '';
+
+                // Remove a seleção de todos os blocos
+                document.querySelectorAll('.bloco-link.selected').forEach(b => {
+                    b.classList.remove('selected');
+                    const bloco = b.querySelector('.bloco');
+                    if (bloco) {
+                        bloco.style.transform = 'scale(0.98)';
+                    }
+                });
+
+                // Opcional: Mostra uma mensagem ou estado vazio
+                contentContainer.innerHTML = '<p class="text-muted">Nenhuma view selecionada</p>';
+            }
+        });
+    }
+
+    // Inicializa a view de edição se não houver sistema de views dinâmicas
+    initClientEditView();
+});
+
 function setupServiceBlocks() {
     const blocosLinks = document.querySelectorAll('.bloco-link');
+    const closeAllBtn = document.getElementById('clear-view-trigger');
+
+    // Função para resetar todos os estados
+    function resetAllStates() {
+        // Remove seleção de todos os blocos
+        document.querySelectorAll('.bloco-link.selected').forEach(b => {
+            b.classList.remove('selected');
+            const bloco = b.querySelector('.bloco');
+            if (bloco) {
+                bloco.style.transform = 'scale(0.98)';
+            }
+        });
+
+        // Limpa o conteúdo dinâmico
+        const contentContainer = document.getElementById('dynamic-content');
+        if (contentContainer) {
+            contentContainer.innerHTML = '<p>Nenhuma view selecionada</p>';
+        }
+    }
+
+    // Inicializa a página no estado correto (limpo)
+    resetAllStates();
 
     blocosLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -8,30 +60,44 @@ function setupServiceBlocks() {
             // Remove a seleção de todos os blocos
             document.querySelectorAll('.bloco-link.selected').forEach(b => {
                 b.classList.remove('selected');
+                const bloco = b.querySelector('.bloco');
+                if (bloco) {
+                    bloco.style.transform = 'scale(0.98)';
+                }
             });
 
             // Adiciona a seleção no bloco clicado
             this.classList.add('selected');
+            const selectedBloco = this.querySelector('.bloco');
+            if (selectedBloco) {
+                selectedBloco.style.transform = 'scale(1) translateY(-3px)';
+            }
 
-            // Aqui você pode adicionar a lógica para carregar a view correspondente
+            // Carrega a view correspondente
             const action = this.getAttribute('data-action');
-            console.log(`Ação selecionada: ${action}`);
-            // loadView(action); // Descomente se tiver uma função para carregar views
+            if (action && typeof loadView === 'function') {
+                loadView(action);
+            } else {
+                console.log(`Ação selecionada: ${action}`);
+            }
         });
     });
 
-    // Seleciona o primeiro bloco por padrão (opcional)
-    if (blocosLinks.length > 0) {
-        blocosLinks[0].classList.add('selected');
+    // Manipula o clique na divisória para limpar seleções
+    if (closeAllBtn) {
+        closeAllBtn.addEventListener('click', function() {
+            resetAllStates();
+        });
     }
+
+    // Expõe a função para uso externo se necessário
+    window.resetServiceBlocks = resetAllStates;
 }
 
 // Variável para controlar o observador
 let tableObserver;
 
 function initClientEditView() {
-    console.log('Inicializando view de edição de cliente');
-
     // coloração de blocos de serviço quando selecionados
     setupServiceBlocks();
 
@@ -71,7 +137,6 @@ function initClientEditView() {
         tableObserver = new MutationObserver(function(mutations) {
             const table = document.getElementById('listaDeClientesSelecinavel');
             if (table) {
-                console.log('Tabela detectada via MutationObserver');
                 setupTableEvents();
             }
         });
@@ -86,13 +151,10 @@ function initClientEditView() {
     function setupTableEvents() {
         const table = document.getElementById('listaDeClientesSelecinavel');
         const formWrapper = document.getElementById('formWrapper');
-        
+
         if (!table || !formWrapper) {
-            console.error('Elementos essenciais não encontrados');
             return;
         }
-
-        console.log('Configurando eventos da tabela');
 
         // Remove event listener antigo se existir
         table.removeEventListener('click', handleTableClick);
@@ -118,19 +180,19 @@ function initClientEditView() {
 
     function showFormForRow(row) {
         document.querySelectorAll('.expanded-form-row').forEach(r => r.remove());
-        
+
         const expandedRow = document.createElement('tr');
         expandedRow.className = 'expanded-form-row';
-        
+
         const td = document.createElement('td');
         td.colSpan = row.cells.length;
         td.className = 'expanded-form-content';
-        
+
         const formClone = document.getElementById('formWrapper').cloneNode(true);
         formClone.style.display = 'block';
         formClone.id = 'formWrapper-expanded';
         td.appendChild(formClone);
-        
+
         expandedRow.appendChild(td);
         row.parentNode.insertBefore(expandedRow, row.nextSibling);
     }
@@ -146,20 +208,29 @@ function initClientEditView() {
             if (!form) return;
 
             // Preenche campos básicos
-            form.querySelector('[name="ClientId"]').value = cells[0].textContent.trim();
-            form.querySelector('[name="ClientName"]').value = cells[1].textContent.trim();
-            form.querySelector('[name="ClientDocument"]').value = cells[2].textContent.trim();
+            const clientIdField = form.querySelector('[name="ClientId"]');
+            const clientNameField = form.querySelector('[name="ClientName"]');
+            const clientDocumentField = form.querySelector('[name="ClientDocument"]');
+            const clientBirthField = form.querySelector('[name="ClientBirth"]');
+
+            if (clientIdField) clientIdField.value = cells[0].textContent.trim();
+            if (clientNameField) clientNameField.value = cells[1].textContent.trim();
+            if (clientDocumentField) clientDocumentField.value = cells[2].textContent.trim();
 
             // Converte e preenche datas
-            const birthDateParts = cells[3].textContent.trim().split('-');
-            if (birthDateParts.length === 3) {
-                form.querySelector('[name="ClientBirth"]').value = `${birthDateParts[2]}-${birthDateParts[1]}-${birthDateParts[0]}`;
+            if (clientBirthField) {
+                const birthDateParts = cells[3].textContent.trim().split('-');
+                if (birthDateParts.length === 3) {
+                    clientBirthField.value = `${birthDateParts[2]}-${birthDateParts[1]}-${birthDateParts[0]}`;
+                }
             }
 
             // Preenche cooperado - MODIFICAÇÃO PRINCIPAL AQUI
             const cooperadoValue = cells[4].textContent.trim().toLowerCase() === 'true' ? 'true' : 'false';
             const cooperadoSelect = form.querySelector('[name="cooperadoSelect"]');
-            cooperadoSelect.value = cooperadoValue;
+            if (cooperadoSelect) {
+                cooperadoSelect.value = cooperadoValue;
+            }
 
             // Mostra/oculta os campos cooperado imediatamente
             const camposCooperado = wrapper.querySelector('#camposCooperado');
@@ -169,23 +240,30 @@ function initClientEditView() {
 
             // Preenche campos adicionais se for cooperado
             if (cooperadoValue === 'true') {
-                const cafDateParts = cells[5].textContent.trim().split('-');
-                if (cafDateParts.length === 3) {
-                    form.querySelector('[name="ClientCafDate"]').value = `${cafDateParts[2]}-${cafDateParts[1]}-${cafDateParts[0]}`;
+                const clientCafDateField = form.querySelector('[name="ClientCafDate"]');
+                const clientCafCodeField = form.querySelector('[name="ClientCafCode"]');
+
+                if (clientCafDateField && cells[5]) {
+                    const cafDateParts = cells[5].textContent.trim().split('-');
+                    if (cafDateParts.length === 3) {
+                        clientCafDateField.value = `${cafDateParts[2]}-${cafDateParts[1]}-${cafDateParts[0]}`;
+                    }
                 }
-                form.querySelector('[name="ClientCafCode"]').value = cells[6].textContent.trim();
+                if (clientCafCodeField && cells[6]) {
+                    clientCafCodeField.value = cells[6].textContent.trim();
+                }
             }
         });
     }
 
     // Inicialização
     setupTableObserver();
-    
+
     // Verificação inicial
     if (document.getElementById('listaDeClientesSelecinavel')) {
         setupTableEvents();
     }
-    
+
     // Dispara evento change inicial se o select existir
     const initialSelect = document.getElementById('cooperadoSelect');
     if (initialSelect) {
@@ -193,15 +271,12 @@ function initClientEditView() {
     }
 }
 
-// Inicializa quando o DOM estiver pronto
-document.addEventListener('DOMContentLoaded', initClientEditView);
-
 // Se você tem um sistema de views SPA, chame initClientEditView() sempre que voltar para a view de edição
 // Exemplo:
 /*
 function navigateToView(viewName) {
     // Limpeza da view anterior...
-    
+
     if (viewName === 'edit') {
         initClientEditView();
     }

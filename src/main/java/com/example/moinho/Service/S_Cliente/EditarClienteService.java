@@ -34,7 +34,7 @@ public class EditarClienteService {
 
         try {
             // Validação do nome
-            String nomeValidado = verificaNome(nome);
+            String nomeValidado = verificaNome(nome, id);
             if (!nomeValidado.equals(nome)) {
                 return nomeValidado;
             }
@@ -143,7 +143,7 @@ public class EditarClienteService {
     }
 
     // Validações
-    private String verificaNome(String nome) {
+    private String verificaNome(String nome, Long clienteId) {
         if (nome == null || nome.trim().isEmpty()) {
             return "Erro: Nome é obrigatório";
         }
@@ -156,7 +156,11 @@ public class EditarClienteService {
             return "Erro: Nome não pode conter números";
         }
 
-        if (r_cliente.findByName(nome).isPresent()) {
+        // Busca cliente com o documento
+        Optional<E_Cliente> clienteExistente = r_cliente.findByName(nome);
+
+        // Se encontrou um cliente com esse documento E não é o mesmo cliente sendo editado
+        if (clienteExistente.isPresent() && !clienteExistente.get().getId().equals(clienteId)) {
             return "Erro: Nome já cadastrado";
         }
 

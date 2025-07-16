@@ -19,4 +19,8 @@ public class ConsultarClienteService {
         return r_cliente.findAll();
     }
 
+    public List<E_Cliente> consultarCooperados() {
+        return r_cliente.findByCooperatedTrue();
+    }
+
 }
