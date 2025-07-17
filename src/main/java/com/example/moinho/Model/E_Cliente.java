@@ -15,7 +15,7 @@ public class E_Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 30)
+    @Column(length = 60)
     private String name;
 
     @Column(unique = true, length = 14)
@@ -36,7 +36,7 @@ public class E_Cliente {
     @Column(columnDefinition = "BOOLEAN", nullable = false)
     private boolean seller;
 
-    @Column(unique = true, length = 40)
+    @Column(unique = true, length = 50)
     private String caf;
 
     @Column(columnDefinition = "DATE")

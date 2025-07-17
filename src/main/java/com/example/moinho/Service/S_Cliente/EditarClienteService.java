@@ -48,23 +48,23 @@ public class EditarClienteService {
             }
 
             // Validação da data de nascimento
-            if (dataNascimento != null && dataNascimento.isAfter(LocalDate.now())) {
-                return "Erro: Data de nascimento não pode ser futura";
+            if (dataNascimento != null) {
+                if (dataNascimento.isAfter(LocalDate.now())) {
+                    return "Erro: Data de nascimento não pode ser futura";
+                }
             }
 
             // Validação para cooperados
             if (cooperado) {
-                if (vencimentoCaf == null) {
-                    return "Erro: Validade CAF é obrigatória para cooperados";
+                if (vencimentoCaf != null) {
+                    if (vencimentoCaf.isBefore(LocalDate.now())) {
+                        return "Erro: Validade CAF não pode ser no passado";
+                    }
                 }
-                if (vencimentoCaf.isBefore(LocalDate.now())) {
-                    return "Erro: Validade CAF não pode ser no passado";
-                }
-                if (codigoCaf == null || codigoCaf.isEmpty()) {
-                    return "Erro: Código CAF é obrigatório para cooperados";
-                }
-                if (codigoCaf.length() > TAMANHO_MAXIMO_CAF) {
-                    return "Erro: Código CAF deve ter no máximo " + TAMANHO_MAXIMO_CAF + " caracteres";
+                if (codigoCaf != null) {
+                    if (codigoCaf.length() > TAMANHO_MAXIMO_CAF) {
+                        return "Erro: Código CAF deve ter no máximo " + TAMANHO_MAXIMO_CAF + " caracteres";
+                    }
                 }
             }
 
@@ -86,9 +86,11 @@ public class EditarClienteService {
             dadosAlterados = true;
         }
 
-        if (!dataNascimento.equals(cliente.getBirthDate())) {
-            cliente.setBirthDate(dataNascimento);
-            dadosAlterados = true;
+        if (dataNascimento != null) {
+            if (!dataNascimento.equals(cliente.getBirthDate())) {
+                cliente.setBirthDate(dataNascimento);
+                dadosAlterados = true;
+            }
         }
 
         if (cooperado != cliente.isCooperated()) {
@@ -98,9 +100,11 @@ public class EditarClienteService {
 
         // Atualiza campos específicos de cooperado
         if (cooperado) {
-            if (!vencimentoCaf.equals(cliente.getMaturity_caf())) {
-                cliente.setMaturity_caf(vencimentoCaf);
-                dadosAlterados = true;
+            if (vencimentoCaf != null) {
+                if (!vencimentoCaf.equals(cliente.getMaturity_caf())) {
+                    cliente.setMaturity_caf(vencimentoCaf);
+                    dadosAlterados = true;
+                }
             }
 
             if (!codigoCaf.equals(cliente.getCaf())) {

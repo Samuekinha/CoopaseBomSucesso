@@ -207,6 +207,30 @@ function initClientEditView() {
             const form = wrapper.querySelector('form');
             if (!form) return;
 
+            // Função para limpar caracteres não numéricos
+            const limparDocumento = (doc) => doc ? doc.replace(/\D/g, '') : '';
+
+            // Nova função corrigida para datas
+            const formatarDataParaInput = (dataStr) => {
+                if (!dataStr || dataStr.trim() === '') return '';
+
+                // Remove qualquer formatação existente
+                const dataLimpa = dataStr.replace(/\D/g, '');
+
+                // Se não tiver números suficientes, retorna vazio
+                if (dataLimpa.length < 8) return '';
+
+                // Formata para yyyy-MM-dd (padrão do input date)
+                const dia = dataLimpa.substring(0, 2);
+                const mes = dataLimpa.substring(2, 4);
+                const ano = dataLimpa.substring(4, 8);
+
+                // Validação básica (opcional)
+                if (dia > 31 || mes > 12) return '';
+
+                return `${ano}-${mes}-${dia}`;
+            };
+
             // Preenche campos básicos
             const clientIdField = form.querySelector('[name="ClientId"]');
             const clientNameField = form.querySelector('[name="ClientName"]');
@@ -215,39 +239,35 @@ function initClientEditView() {
 
             if (clientIdField) clientIdField.value = cells[0].textContent.trim();
             if (clientNameField) clientNameField.value = cells[1].textContent.trim();
-            if (clientDocumentField) clientDocumentField.value = cells[2].textContent.trim();
-
-            // Converte e preenche datas
-            if (clientBirthField) {
-                const birthDateParts = cells[3].textContent.trim().split('-');
-                if (birthDateParts.length === 3) {
-                    clientBirthField.value = `${birthDateParts[2]}-${birthDateParts[1]}-${birthDateParts[0]}`;
-                }
+            if (clientDocumentField) {
+                clientDocumentField.value = limparDocumento(cells[2].textContent);
             }
 
-            // Preenche cooperado - MODIFICAÇÃO PRINCIPAL AQUI
+            // Preenche data de nascimento - CORREÇÃO PRINCIPAL AQUI
+            if (clientBirthField) {
+                clientBirthField.value = formatarDataParaInput(cells[3].textContent);
+                console.log('Data formatada:', clientBirthField.value); // Para debug
+            }
+
+            // Restante do código permanece igual...
             const cooperadoValue = cells[4].textContent.trim().toLowerCase() === 'true' ? 'true' : 'false';
             const cooperadoSelect = form.querySelector('[name="cooperadoSelect"]');
             if (cooperadoSelect) {
                 cooperadoSelect.value = cooperadoValue;
             }
 
-            // Mostra/oculta os campos cooperado imediatamente
             const camposCooperado = wrapper.querySelector('#camposCooperado');
             if (camposCooperado) {
                 camposCooperado.classList.toggle('hidden-cooperado', cooperadoValue !== 'true');
             }
 
-            // Preenche campos adicionais se for cooperado
             if (cooperadoValue === 'true') {
                 const clientCafDateField = form.querySelector('[name="ClientCafDate"]');
                 const clientCafCodeField = form.querySelector('[name="ClientCafCode"]');
 
                 if (clientCafDateField && cells[5]) {
-                    const cafDateParts = cells[5].textContent.trim().split('-');
-                    if (cafDateParts.length === 3) {
-                        clientCafDateField.value = `${cafDateParts[2]}-${cafDateParts[1]}-${cafDateParts[0]}`;
-                    }
+                    clientCafDateField.value = formatarDataParaInput(cells[5].textContent);
+                    console.log('Data CAF formatada:', clientCafDateField.value); // Para debug
                 }
                 if (clientCafCodeField && cells[6]) {
                     clientCafCodeField.value = cells[6].textContent.trim();

@@ -25,4 +25,9 @@ public class ConsultarClienteController {
         return "/Coopase/Cliente/ConsultarClienteView";
     }
 
+    @GetMapping("/Consultar")
+    public String redirecionamento(Model model) {
+        return "/Coopase/Cliente/Servicos";
+    }
+
 }

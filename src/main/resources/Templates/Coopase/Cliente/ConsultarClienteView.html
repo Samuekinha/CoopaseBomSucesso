@@ -34,10 +34,24 @@
                 <tr class="main-row" th:each="resultado : ${resultadoConsulta}" data-id="resultado.id">
                     <td th:text="${resultado.id}"></td>
                     <td th:text="${resultado.name}"></td>
-                    <td th:text="${resultado.document}"></td>
-                    <td th:text="${#temporals.format(resultado.birthDate, 'dd-MM-yyyy')}"></td>
+                    <td th:with="doc=${resultado.document != null ? resultado.document : ''}">
+                        <span th:if="${#strings.length(doc) == 11}"
+                            th:text="${#strings.substring(doc,0,3) + '.' +
+                            #strings.substring(doc,3,6) + '.' +
+                            #strings.substring(doc,6,9) + '-' +
+                            #strings.substring(doc,9,11)}"></span>
+                        <span th:if="${#strings.length(doc) == 14}"
+                        th:text="${#strings.substring(doc,0,2) + '.' +
+                            #strings.substring(doc,2,5) + '.' +
+                            #strings.substring(doc,5,8) + '/' +
+                            #strings.substring(doc,8,12) + '-' +
+                            #strings.substring(doc,12,14)}"></span>
+                        <span th:if="${!#strings.isEmpty(doc) && #strings.length(doc) != 11 && #strings.length(doc) != 14}"
+                              th:text="${doc}"></span>
+                    </td>
+                    <td th:text="${resultado.birthDate != null} ? ${#temporals.format(resultado.birthDate, 'dd/MM/yyyy')} : ''"></td>
                     <td th:text="${resultado.cooperated}"></td>
-                    <td th:text="${#temporals.format(resultado.maturity_caf, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${resultado.maturity_caf != null} ? ${#temporals.format(resultado.maturity_caf, 'dd/MM/yyyy')} : ''"></td>
                     <td th:text="${resultado.caf}"></td>
                 </tr>
                 </tbody>

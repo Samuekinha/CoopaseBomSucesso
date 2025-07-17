@@ -48,4 +48,9 @@ public class DeletarClienteController {
         return "/Coopase/Cliente/Servicos";
     }
 
+    @GetMapping("/Deletar")
+    public String redirecionamento(Model model) {
+        return "/Coopase/Cliente/Servicos";
+    }
+
 }

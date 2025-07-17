@@ -100,7 +100,7 @@
       <div class="container">
         <h2>Lista de cooperados</h2>
 
-        <table class="main-table" id="listaDeClientesSelecinavel">
+        <table class="main-table" id="listaDeCooperados">
           <thead>
           <tr>
             <th>N°</th>
@@ -110,11 +110,11 @@
           </tr>
           </thead>
           <tbody>
-          <tr class="main-row" th:each="consultaC : ${consultaCooperados}" data-id="consultaC.id">
-            <td th:text="${consultaC.id}"></td>
-            <td th:text="${consultaC.name}"></td>
-            <td th:text="${#temporals.format(consultaC.maturity_caf, 'dd-MM-yyyy')}"></td>
-            <td th:text="${consultaC.caf}"></td>
+          <tr class="main-row" th:each="listaCoop : ${listaCooperados}" data-id="listaCoop.id">
+            <td th:text="${listaCoop.id}"></td>
+            <td th:text="${listaCoop.name}"></td>
+            <td th:text="${listaCoop.maturity_caf != null} ? ${#temporals.format(listaCoop.maturity_caf, 'dd/MM/yyyy')} : ''"></td>
+            <td th:text="${listaCoop.caf}"></td>
           </tr>
           </tbody>
         </table>
@@ -122,8 +122,44 @@
     </div>
 
     <div class="col-6">
+      <div class="container">
+        <h2>Lista de vendedores</h2>
 
+        <table class="main-table" id="listaDeVendedores">
+          <thead>
+          <tr>
+            <th>N°</th>
+            <th>Nome</th>
+            <th>Documento</th>
+            <th>Cooperado</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="main-row" th:each="listaVend : ${listaVendedores}" data-id="listaVend.id">
+            <td th:text="${listaVend.id}"></td>
+            <td th:text="${listaVend.name}"></td>
+            <td th:with="doc=${listaVend.document != null ? listaVend.document : ''}">
+                        <span th:if="${#strings.length(doc) == 11}"
+                              th:text="${#strings.substring(doc,0,3) + '.' +
+                            #strings.substring(doc,3,6) + '.' +
+                            #strings.substring(doc,6,9) + '-' +
+                            #strings.substring(doc,9,11)}"></span>
+              <span th:if="${#strings.length(doc) == 14}"
+                    th:text="${#strings.substring(doc,0,2) + '.' +
+                            #strings.substring(doc,2,5) + '.' +
+                            #strings.substring(doc,5,8) + '/' +
+                            #strings.substring(doc,8,12) + '-' +
+                            #strings.substring(doc,12,14)}"></span>
+              <span th:if="${!#strings.isEmpty(doc) && #strings.length(doc) != 11 && #strings.length(doc) != 14}"
+                    th:text="${doc}"></span>
+            </td>
+            <td th:text="${listaVend.cooperated}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+
   </div>
 
 

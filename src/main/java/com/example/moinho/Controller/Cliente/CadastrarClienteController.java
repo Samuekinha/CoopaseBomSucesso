@@ -29,7 +29,7 @@ public class CadastrarClienteController {
     }
 
     @PostMapping("/Cadastrar")
-    public String cadastrarCliente(@RequestParam("ClientName") String nome,
+    public String cadastrarCliente(@RequestParam(value = "ClientName") String nome,
                            @RequestParam(value = "ClientDocument", required = false) String documento,
                            @RequestParam(value = "ClientBirth", required = false) LocalDate dataNascimento,
                            @RequestParam(value = "cooperadoSelect" , required = false) boolean cooperado,
@@ -46,6 +46,11 @@ public class CadastrarClienteController {
             }
         }
 
+        return "/Coopase/Cliente/Servicos";
+    }
+
+    @GetMapping("/Cadastrar")
+    public String redirecionamento(Model model) {
         return "/Coopase/Cliente/Servicos";
     }
 

@@ -37,11 +37,11 @@ public class EditarClienteController {
     @PostMapping("/Editar")
     public String editarCliente(@RequestParam("ClientId") Long id,
                                 @RequestParam("ClientName") String nome,
-                                @RequestParam("ClientDocument") String documento,
-                                @RequestParam("ClientBirth") LocalDate dataNascimento,
-                                @RequestParam("cooperadoSelect") boolean cooperado,
-                                @RequestParam("ClientCafDate") LocalDate vencimentoCaf,
-                                @RequestParam("ClientCafCode") String codigoCaf,
+                                @RequestParam(value = "ClientDocument", required = false) String documento,
+                                @RequestParam(value = "ClientBirth", required = false) LocalDate dataNascimento,
+                                @RequestParam(value = "cooperadoSelect", required = false) boolean cooperado,
+                                @RequestParam(value = "ClientCafDate", required = false) LocalDate vencimentoCaf,
+                                @RequestParam(value = "ClientCafCode", required = false) String codigoCaf,
                                 Model model){
 
         String clienteValidadeResposta = editarCliente.validaEditarCliente(id, nome, documento,
@@ -56,6 +56,11 @@ public class EditarClienteController {
         }
 
         return "redirect:/Coopase/Cliente/Servicos";
+    }
+
+    @GetMapping("/Editar")
+    public String redirecionamento(Model model) {
+        return "/Coopase/Cliente/Servicos";
     }
 
 }

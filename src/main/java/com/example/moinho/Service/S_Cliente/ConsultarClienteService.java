@@ -20,7 +20,17 @@ public class ConsultarClienteService {
     }
 
     public List<E_Cliente> consultarCooperados() {
-        return r_cliente.findByCooperatedTrue();
+        return r_cliente.findCooperatedsLimited(10);
+    }
+
+    public List<E_Cliente> consultarVendedores() {
+        return r_cliente.findSellersLimited(5);
+    }
+
+    public Integer consultarQuantidadeClientes() {
+        List<E_Cliente> listaCompleta = r_cliente.findAll();
+        List<E_Cliente> listaCompletaVendedores = r_cliente.findAll();
+        return listaCompleta.size();
     }
 
 }

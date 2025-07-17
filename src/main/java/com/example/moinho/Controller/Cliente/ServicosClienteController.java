@@ -1,6 +1,7 @@
 package com.example.moinho.Controller.Cliente;
 
 import com.example.moinho.Service.S_Cliente.ConsultarClienteService;
+import com.example.moinho.Util.FormatadorUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,10 @@ public class ServicosClienteController {
         // Define o fragmento padrão se action for nulo
         String fragment = (action != null) ? action : "Cadastrar";
 
-        model.addAttribute("consultaCooperados", consultarClientes.consultarCooperados());
+        model.addAttribute("listaCooperados", consultarClientes.consultarCooperados());
+        model.addAttribute("listaVendedores", consultarClientes.consultarVendedores());
+        model.addAttribute("quantidadeClientes", consultarClientes.consultarQuantidadeClientes());
+        model.addAttribute("formatador", new FormatadorUtil());
         model.addAttribute("fragmentToLoad", fragment);
         return "Coopase/Cliente/Servicos"; // Sua página principal
     }
