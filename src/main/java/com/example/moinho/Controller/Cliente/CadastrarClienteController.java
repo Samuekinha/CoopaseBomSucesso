@@ -51,7 +51,7 @@ public class CadastrarClienteController {
 
     @GetMapping("/Cadastrar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Cliente/Servicos";
+        return "/Coopase/Cliente/ServicosCliente";
     }
 
 }

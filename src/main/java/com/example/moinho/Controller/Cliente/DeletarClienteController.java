@@ -50,7 +50,7 @@ public class DeletarClienteController {
 
     @GetMapping("/Deletar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Cliente/Servicos";
+        return "/Coopase/Cliente/ServicosCliente";
     }
 
 }

@@ -30,7 +30,7 @@ public class ServicosClienteController {
         model.addAttribute("quantidadeClientes", consultarClientes.consultarQuantidadeClientes());
         model.addAttribute("formatador", new FormatadorUtil());
         model.addAttribute("fragmentToLoad", fragment);
-        return "Coopase/Cliente/Servicos"; // Sua página principal
+        return "Coopase/Cliente/ServicosCliente"; // Sua página principal
     }
 
 }
