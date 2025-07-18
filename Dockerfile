@@ -2,14 +2,14 @@ FROM eclipse-temurin:17-jdk-jammy
 
 WORKDIR /app
 
-# 1. Copia tudo necessário para o build
-COPY . .
+# Copia apenas o necessário para o build
+COPY pom.xml .
+COPY src ./src
+COPY .mvn ./.mvn
+COPY mvnw .
 
-# 2. Constrói o projeto (garanta que o nome do JAR está correto)
+# Executa com debug para ver o erro real
 RUN chmod +x mvnw && \
-    ./mvnw clean package && \
+    ./mvnw clean package -X && \  # -X ativa o debug completo
+    ls -la target/ && \           # Lista o conteúdo da pasta target
     mv target/*.jar app.jar
-
-# 3. Configuração final
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
