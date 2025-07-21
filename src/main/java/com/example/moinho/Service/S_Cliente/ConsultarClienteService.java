@@ -16,11 +16,15 @@ public class ConsultarClienteService {
     }
 
     public List<E_Cliente> consultarCliente() {
-        return r_cliente.findAll();
+        return r_cliente.findAllOrderById();
     }
 
-    public List<E_Cliente> consultarCooperados() {
+    public List<E_Cliente> consultar10Cooperados() {
         return r_cliente.findCooperatedsLimited(10);
+    }
+
+    public List<E_Cliente> consultarTodosCooperados() {
+        return r_cliente.findAllCooperateds();
     }
 
     public List<E_Cliente> consultarVendedores() {

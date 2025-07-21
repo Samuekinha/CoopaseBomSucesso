@@ -98,7 +98,24 @@
   <div class="row justify-content-center">
     <div class="col-6">
       <div class="container">
-        <h2>Lista de cooperados</h2>
+        <div class="row">
+          <div class="col-4">
+
+          </div>
+          <div class="col-4">
+            <h2>Lista de cooperados</h2>
+          </div>
+          <div class="col-4">
+            <!-- Rounded switch -->
+            <form action="/Coopase/Cliente/Servicos">
+              <p class="d-flex justify-content-center">Mostrar tudo</p>
+              <label class="switch d-flex justify-content-center">
+                <input type="checkbox" id="toggleCooperados" name="toggleCooperados" class="d-flex justify-content-center">
+                <span class="slider round d-flex justify-content-center"></span>
+              </label>
+            </form>
+          </div>
+        </div>
 
         <table class="main-table" id="listaDeCooperados">
           <thead>
@@ -118,6 +135,7 @@
           </tr>
           </tbody>
         </table>
+
       </div>
     </div>
 

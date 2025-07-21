@@ -21,11 +21,18 @@ public class ServicosClienteController {
     }
 
     @GetMapping
-    public String servicos(@RequestParam(name = "action", required = false) String action, Model model) {
+    public String servicos(@RequestParam(name = "action", required = false) String action,
+                           @RequestParam(value = "toggleCooperados", required = false) Boolean botaoListaCompleta,
+                           Model model) {
         // Define o fragmento padrão se action for nulo
         String fragment = (action != null) ? action : "Cadastrar";
 
-        model.addAttribute("listaCooperados", consultarClientes.consultarCooperados());
+        if (Boolean.TRUE.equals(botaoListaCompleta)) {
+            model.addAttribute("listaCooperados", consultarClientes.consultarTodosCooperados());
+        } else {
+            model.addAttribute("listaCooperados", consultarClientes.consultar10Cooperados());
+        }
+
         model.addAttribute("listaVendedores", consultarClientes.consultarVendedores());
         model.addAttribute("quantidadeClientes", consultarClientes.consultarQuantidadeClientes());
         model.addAttribute("formatador", new FormatadorUtil());

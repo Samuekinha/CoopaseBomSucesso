@@ -40,7 +40,10 @@ public class EditarClienteService {
             }
 
             // Validação do documento
-            if (documento != null && !documento.isEmpty()) {
+            if (documento != null) {
+                if (!documento.trim().isEmpty()) {
+                    documento = null;
+                }
                 String docValidado = verificaDocumento(documento, id);
                 if (!docValidado.equals(documento)) {
                     return docValidado;

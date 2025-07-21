@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cliente") // Define o nome da tabela no banco
@@ -18,11 +19,11 @@ public class E_Cliente {
     @Column(length = 60)
     private String name;
 
-    @Column(unique = true, length = 14)
+    @Column(unique=true, length = 14)
     private String document; // CPF ou CNPJ
 
     @Column(columnDefinition = "DECIMAL(10,3)")
-    private double balance_kg;
+    private Double balance_kg;
 
     @Column(columnDefinition = "DECIMAL(19,4)", nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;

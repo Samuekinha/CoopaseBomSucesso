@@ -2,4 +2,9 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "java -jar target/*.jar"
+startCommand = "java -jar target/moinho-0.0.1-SNAPSHOT.jar"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
+
+[deploy.healthcheckPath]
+path = "/actuator/health"

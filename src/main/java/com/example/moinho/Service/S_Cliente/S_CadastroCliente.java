@@ -33,10 +33,14 @@ public class S_CadastroCliente {
             }
 
             // Validação do documento
-            if (documento != null && !documento.isEmpty()) {
-                String docValidado = verificaDocumento(documento);
-                if (!docValidado.equals(documento)) {
-                    resultados[1] = docValidado;
+            if (documento != null) {
+                if (documento.trim().isEmpty()) {
+                    documento = null;
+                } else {
+                    String docValidado = verificaDocumento(documento);
+                    if (!docValidado.equals(documento)) {
+                        resultados[1] = docValidado;
+                    }
                 }
             }
 
