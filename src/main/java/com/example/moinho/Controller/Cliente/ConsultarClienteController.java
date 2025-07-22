@@ -18,9 +18,18 @@ public class ConsultarClienteController {
 
     // Rotas para processar os formulários (POST)
     @GetMapping("/ConsultarClienteView")
-    public String consultarClienteView(Model model) {
+    public String consultarClienteView(@RequestParam(value = "pesquisaPorNome", required = false) String pesquisaNome,
+                                        Model model) {
 
-        model.addAttribute("resultadoConsulta", consultarClientes.consultarCliente());
+        if (pesquisaNome != null) {
+            if (!pesquisaNome.trim().isEmpty()) {
+                model.addAttribute("resultadoConsulta", consultarClientes.consultarClientePorParametro(pesquisaNome));
+            } else {
+                model.addAttribute("resultadoConsulta", consultarClientes.consultarCliente());
+            }
+        } else {
+            model.addAttribute("resultadoConsulta", consultarClientes.consultarCliente());
+        }
 
         return "/Coopase/Cliente/ConsultarClienteView";
     }

@@ -3,6 +3,7 @@ package com.example.moinho.Repository;
 import com.example.moinho.Model.E_Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public interface R_Cliente extends JpaRepository<E_Cliente, Long> {
 
     @Query(value = "SELECT * FROM cliente ORDER BY id", nativeQuery = true)
     List<E_Cliente> findAllOrderById();
+
+    @Query(value = "SELECT * FROM cliente WHERE name = :pesquisaPorNome ORDER BY id", nativeQuery = true)
+    List<E_Cliente> findAllWithParameterOrderById(@Param("pesquisaPorNome") String pesquisaPorNome);
 
     @Query(value = "SELECT * FROM cliente WHERE cooperated = true ORDER BY id", nativeQuery = true)
     List<E_Cliente> findAllCooperateds();

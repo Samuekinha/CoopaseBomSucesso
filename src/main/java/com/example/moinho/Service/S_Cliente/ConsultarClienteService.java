@@ -19,6 +19,10 @@ public class ConsultarClienteService {
         return r_cliente.findAllOrderById();
     }
 
+    public List<E_Cliente> consultarClientePorParametro(String pesquisa) {
+        return r_cliente.findAllWithParameterOrderById(pesquisa);
+    }
+
     public List<E_Cliente> consultar10Cooperados() {
         return r_cliente.findCooperatedsLimited(10);
     }

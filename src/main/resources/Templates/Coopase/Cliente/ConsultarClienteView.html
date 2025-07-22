@@ -15,10 +15,71 @@
     </style>
 
     <div>
-        <h2 class="d-flex justify-content-center">Consultar Cliente</h2>
+        <div class="row">
+            <div class="col-4">
+
+            </div>
+
+            <div class="col-4">
+                <h2 class="d-flex justify-content-center">Consultar Cliente</h2>
+            </div>
+
+            <div class="col-4">
+                <p class="d-flex justify-content-center">Mostrar Filtros</p>
+                <label class="switch d-flex justify-content-center">
+                    <input type="checkbox" id="toggleFiltrosPesquisa" class="d-flex justify-content-center">
+                    <span class="slider round d-flex justify-content-center"></span>
+                </label>
+            </div>
+        </div>
+
+        <div id="sam" style="display: none">
+            <h2>deuuu</h2>
+        </div>
+
+        <div id="areaFiltros" style="display: none">
+            <p class="filtro-titulo">Filtros de pesquisa</p>
+            <form action="/Coopase/Cliente/ConsultarClienteView" class="filtros-form">
+                <div class="filtro-grupo">
+                    <label for="pesquisaPorNome">Nome</label>
+                    <input type="text" id="pesquisaPorNome" name="pesquisaPorNome" placeholder="Filtrar por nome">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="pesquisaPorDoc">Documento</label>
+                    <input type="text" id="pesquisaPorDoc" name="pesquisaPorDocumento" placeholder="CPF/CNPJ">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="pesquisaPorNascimento">Data Nasc.</label>
+                    <input type="text" id="pesquisaPorNascimento" name="pesquisaPorNascimento" placeholder="DD/MM/AAAA">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="pesquisaPorCooperado">Cooperado</label>
+                    <input type="text" id="pesquisaPorCooperado" name="pesquisaPorCooperado" placeholder="Sim/Não">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="pesquisaPorVencCaf">Venc. CAF</label>
+                    <input type="text" id="pesquisaPorVencCaf" name="pesquisaPorVencCaf" placeholder="DD/MM/AAAA">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="pesquisaPorCodCaf">Código CAF</label>
+                    <input type="text" id="pesquisaPorCodCaf" name="pesquisaPorCodCaf" placeholder="Código">
+                </div>
+
+                <div class="filtro-grupo w-100 mt-3">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                    <button type="reset" class="btn btn-secondary ms-2">Limpar</button>
+                </div>
+            </form>
+        </div>
 
         <div class="container">
             <table class="main-table" id="listaDeClientesSelecinavel">
+
                 <thead>
                 <tr>
                     <th>N°</th>
