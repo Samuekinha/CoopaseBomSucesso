@@ -64,5 +64,49 @@ document.addEventListener('DOMContentLoaded', function() {
   //  loadView('Cadastrar');
 });
 
+$(document).ready(function() {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
 
-// JavaScript/jQuery
+    // Pesquisa por digitação
+    $('#pesquisaPorNome').on('input', function() {
+        const termo = $(this).val();
+
+        // Só pesquisa com 3+ caracteres ou quando limpar
+        if (termo.length >= 1 || termo.length <= 60 || termo.length === 0) {
+            $.ajax({
+                url: '/Coopase/Cliente/ConsultarPesquisa',
+                type: 'POST',
+                data: { pesquisaPorNome: termo },
+                success: function(data) {
+                    // Extrai a tabela atualizada da resposta
+                    const newTable = $(data).find('#listaDeClientesSelecinavel').first();
+
+                    if (newTable.length) {
+                        $('#listaDeClientesSelecinavel').replaceWith(newTable);
+
+                        Toast.fire({
+                            icon: "success",
+                            title: "Resultados atualizados!"
+                        });
+                    }
+                },
+                error: function() {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Erro na pesquisa!"
+                    });
+                }
+            });
+        }
+    });
+});

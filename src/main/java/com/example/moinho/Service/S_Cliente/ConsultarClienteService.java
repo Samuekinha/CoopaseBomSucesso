@@ -20,7 +20,7 @@ public class ConsultarClienteService {
     }
 
     public List<E_Cliente> consultarClientePorParametro(String pesquisa) {
-        return r_cliente.findAllWithParameterOrderById(pesquisa);
+        return r_cliente.findAllWithParameter(pesquisa);
     }
 
     public List<E_Cliente> consultar10Cooperados() {

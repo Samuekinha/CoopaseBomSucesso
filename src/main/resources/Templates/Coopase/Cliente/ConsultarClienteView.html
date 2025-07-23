@@ -1,4 +1,4 @@
-<div th:fragment="Consultar">
+<div th:fragment="Consultar" data-view="consultar-cliente">
 
     <style>
         .main-row {
@@ -33,13 +33,9 @@
             </div>
         </div>
 
-        <div id="sam" style="display: none">
-            <h2>deuuu</h2>
-        </div>
-
-        <div id="areaFiltros" style="display: none">
+        <div id="areaFiltros" class="hidden-filtros">
             <p class="filtro-titulo">Filtros de pesquisa</p>
-            <form action="/Coopase/Cliente/ConsultarClienteView" class="filtros-form">
+            <form action="/Coopase/Cliente/ConsultarPesquisa" method="post" class="filtros-form">
                 <div class="filtro-grupo">
                     <label for="pesquisaPorNome">Nome</label>
                     <input type="text" id="pesquisaPorNome" name="pesquisaPorNome" placeholder="Filtrar por nome">
@@ -68,6 +64,16 @@
                 <div class="filtro-grupo">
                     <label for="pesquisaPorCodCaf">Código CAF</label>
                     <input type="text" id="pesquisaPorCodCaf" name="pesquisaPorCodCaf" placeholder="Código">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="apenasCooperados">Apenas cooperados</label>
+                    <input type="checkbox" id="apenasCooperados">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="deZ-A">De Z - A</label>
+                    <input type="checkbox" id="deZ-A">
                 </div>
 
                 <div class="filtro-grupo w-100 mt-3">

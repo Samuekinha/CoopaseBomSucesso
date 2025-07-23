@@ -105,6 +105,8 @@ function initClientEditView() {
     function handleCooperadoCadastro() {
         const cooperadoSelect = document.getElementById('cooperadoSelect');
         const camposCooperado = document.getElementById('camposCooperado');
+        console.log(`kur: ${camposCooperado}`);
+
 
         if (cooperadoSelect && camposCooperado) {
             cooperadoSelect.addEventListener('change', function() {

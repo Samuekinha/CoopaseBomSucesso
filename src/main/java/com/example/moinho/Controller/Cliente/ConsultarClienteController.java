@@ -18,25 +18,29 @@ public class ConsultarClienteController {
 
     // Rotas para processar os formulários (POST)
     @GetMapping("/ConsultarClienteView")
-    public String consultarClienteView(@RequestParam(value = "pesquisaPorNome", required = false) String pesquisaNome,
-                                        Model model) {
-
-        if (pesquisaNome != null) {
-            if (!pesquisaNome.trim().isEmpty()) {
-                model.addAttribute("resultadoConsulta", consultarClientes.consultarClientePorParametro(pesquisaNome));
-            } else {
-                model.addAttribute("resultadoConsulta", consultarClientes.consultarCliente());
-            }
-        } else {
-            model.addAttribute("resultadoConsulta", consultarClientes.consultarCliente());
-        }
-
+    public String consultarClienteView(Model model) {
+        model.addAttribute("resultadoConsulta", consultarClientes.consultarCliente());
         return "/Coopase/Cliente/ConsultarClienteView";
     }
 
     @GetMapping("/Consultar")
     public String redirecionamento(Model model) {
         return "/Coopase/Cliente/ServicosCliente";
+    }
+
+    @PostMapping("/ConsultarPesquisa")
+    public String consultarPorPesquisa(
+            @RequestParam(value = "pesquisaPorNome", required = false) String pesquisaNome,
+            Model model) {
+
+        if (pesquisaNome != null && !pesquisaNome.trim().isEmpty()) {
+            model.addAttribute("resultadoConsulta",
+                    consultarClientes.consultarClientePorParametro(pesquisaNome));
+        } else {
+            model.addAttribute("resultadoConsulta", consultarClientes.consultarCliente());
+        }
+
+        return "/Coopase/Cliente/ConsultarClienteView :: #listaDeClientesSelecinavel";
     }
 
 }
