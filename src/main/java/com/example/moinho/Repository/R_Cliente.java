@@ -16,19 +16,28 @@ public interface R_Cliente extends JpaRepository<E_Cliente, Long> {
 
     Optional<E_Cliente> findByName(String name);
 
-    @Query(value = "SELECT * FROM cliente ORDER BY name", nativeQuery = true)
+    @Query(value = "SELECT * FROM cliente " +
+            "ORDER BY name", nativeQuery = true)
     List<E_Cliente> findAllOrderById();
 
-    @Query(value = "SELECT * FROM cliente WHERE name = :pesquisaPorNome ORDER BY name", nativeQuery = true)
+    @Query(value = "SELECT * FROM cliente " +
+            "WHERE name LIKE CONCAT('%', :pesquisaPorNome, '%') " +
+            "ORDER BY name", nativeQuery = true)
     List<E_Cliente> findAllWithParameter(@Param("pesquisaPorNome") String pesquisaPorNome);
 
-    @Query(value = "SELECT * FROM cliente WHERE cooperated = true ORDER BY name", nativeQuery = true)
+    @Query(value = "SELECT * FROM cliente " +
+            "WHERE cooperated = true " +
+            "ORDER BY name", nativeQuery = true)
     List<E_Cliente> findAllCooperateds();
 
-    @Query(value = "SELECT * FROM cliente WHERE cooperated = true ORDER BY name LIMIT ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM cliente " +
+            "WHERE cooperated = true " +
+            "ORDER BY name LIMIT ?1", nativeQuery = true)
     List<E_Cliente> findCooperatedsLimited(int limit);
 
-    @Query(value = "SELECT * FROM cliente WHERE seller = true ORDER BY name LIMIT ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM cliente " +
+            "WHERE seller = true " +
+            "ORDER BY name LIMIT ?1", nativeQuery = true)
     List<E_Cliente> findSellersLimited(int limit);
 
 }

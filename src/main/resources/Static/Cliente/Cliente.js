@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Inicializa a view de edição se não houver sistema de views dinâmicas
+    // Inicializa a view
     initClientEditView();
 });
 

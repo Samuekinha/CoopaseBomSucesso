@@ -1,9 +1,12 @@
 package com.example.moinho.Controller.Cliente;
 
+import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Service.S_Cliente.ConsultarClienteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/Coopase/Cliente")
@@ -28,19 +31,49 @@ public class ConsultarClienteController {
         return "/Coopase/Cliente/ServicosCliente";
     }
 
-    @PostMapping("/ConsultarPesquisa")
+    @GetMapping("/ConsultarPorPesquisa")
     public String consultarPorPesquisa(
             @RequestParam(value = "pesquisaPorNome", required = false) String pesquisaNome,
+            @RequestParam(value = "pesquisaPorDocumento", required = false) String pesquisaPorDocumento,
+            @RequestParam(value = "pesquisaPorNascimento", required = false) String pesquisaPorNascimento,
+            @RequestParam(value = "pesquisaPorCooperado", required = false) String pesquisaPorCooperado,
+            @RequestParam(value = "pesquisaPorVencCaf", required = false) String pesquisaPorVencCaf,
+            @RequestParam(value = "pesquisaPorCodCaf", required = false) String pesquisaPorCodCaf,
+            @RequestParam(value = "apenasCooperados", required = false) Boolean apenasCooperados,
+            @RequestParam(value = "deZ-A", required = false) Boolean deZA,
             Model model) {
 
-        if (pesquisaNome != null && !pesquisaNome.trim().isEmpty()) {
-            model.addAttribute("resultadoConsulta",
-                    consultarClientes.consultarClientePorParametro(pesquisaNome));
-        } else {
-            model.addAttribute("resultadoConsulta", consultarClientes.consultarCliente());
-        }
+        List<E_Cliente> resultados = consultarClientes.consultarClientePorParametro(
+                pesquisaNome
+                // e os outros filtros se quiser implementar depois
+        );
 
-        return "/Coopase/Cliente/ConsultarClienteView :: #listaDeClientesSelecinavel";
+        model.addAttribute("resultadoConsulta", resultados);
+        return "/Coopase/Cliente/Fragments/TabelaClientes :: corpoTabela";
     }
 
+
+//    @GetMapping("/ConsultarPorPesquisa")
+//    @ResponseBody
+//    public void consultarPorPesquisa(
+//            @RequestParam(value = "pesquisaPorNome", required = false) String pesquisaNome,
+//            @RequestParam(value = "pesquisaPorDocumento", required = false) String pesquisaPorDocumento,
+//            @RequestParam(value = "pesquisaPorNascimento", required = false) String pesquisaPorNascimento,
+//            @RequestParam(value = "pesquisaPorCooperado", required = false) String pesquisaPorCooperado,
+//            @RequestParam(value = "pesquisaPorVencCaf", required = false) String pesquisaPorVencCaf,
+//            @RequestParam(value = "pesquisaPorCodCaf", required = false) String pesquisaPorCodCaf,
+//            @RequestParam(value = "apenasCooperados", required = false) Boolean apenasCooperados,
+//            @RequestParam(value = "deZ-A", required = false) Boolean deZA,
+//            Model model) {
+//
+//        // Aqui você implementa a lógica de filtro com todos os parâmetros
+//        List<E_Cliente> resultados = consultarClientes.consultarClientePorParametro(
+//                pesquisaNome
+//        );
+//
+//        model.addAttribute("resultadoConsulta", resultados);
+//    }
 }
+//, pesquisaPorDocumento, pesquisaPorNascimento,
+//                pesquisaPorCooperado, pesquisaPorVencCaf, pesquisaPorCodCaf,
+//                apenasCooperados, deZA
