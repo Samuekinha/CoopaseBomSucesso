@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +21,33 @@ public interface R_Cliente extends JpaRepository<E_Cliente, Long> {
             "ORDER BY name", nativeQuery = true)
     List<E_Cliente> findAllOrderById();
 
-    @Query(value = "SELECT * FROM cliente " +
-            "WHERE name LIKE CONCAT('%', :pesquisaPorNome, '%') " +
-            "ORDER BY name", nativeQuery = true)
-    List<E_Cliente> findAllWithParameter(@Param("pesquisaPorNome") String pesquisaPorNome);
+    @Query(nativeQuery = true, value = """
+    SELECT * FROM cliente 
+    WHERE (:pesquisaPorNome IS NULL OR name ILIKE CONCAT('%', :pesquisaPorNome, '%'))
+    AND (:pesquisaPorDocumento IS NULL OR document ILIKE CONCAT('%', :pesquisaPorDocumento, '%'))
+    AND (:pesquisaPorCodCaf IS NULL OR caf ILIKE CONCAT('%', :pesquisaPorCodCaf, '%'))
+    AND (:apenasCooperados IS NULL OR cooperated = CAST(:apenasCooperados AS BOOLEAN))
+    ORDER BY name ASC
+    """)
+    List<E_Cliente> findAllWithFiltersAsc(
+            @Param("pesquisaPorNome") String pesquisaPorNome,
+            @Param("pesquisaPorDocumento") String pesquisaPorDocumento,
+            @Param("pesquisaPorCodCaf") String pesquisaPorCodCaf,
+            @Param("apenasCooperados") Boolean apenasCooperados);
+
+    @Query(nativeQuery = true, value = """
+    SELECT * FROM cliente 
+    WHERE (:pesquisaPorNome IS NULL OR name ILIKE CONCAT('%', :pesquisaPorNome, '%'))
+    AND (:pesquisaPorDocumento IS NULL OR document ILIKE CONCAT('%', :pesquisaPorDocumento, '%'))
+    AND (:pesquisaPorCodCaf IS NULL OR caf ILIKE CONCAT('%', :pesquisaPorCodCaf, '%'))
+    AND (:apenasCooperados IS NULL OR cooperated = CAST(:apenasCooperados AS BOOLEAN))
+    ORDER BY name DESC
+    """)
+    List<E_Cliente> findAllWithFiltersDesc(
+            @Param("pesquisaPorNome") String pesquisaPorNome,
+            @Param("pesquisaPorDocumento") String pesquisaPorDocumento,
+            @Param("pesquisaPorCodCaf") String pesquisaPorCodCaf,
+            @Param("apenasCooperados") Boolean apenasCooperados);
 
     @Query(value = "SELECT * FROM cliente " +
             "WHERE cooperated = true " +

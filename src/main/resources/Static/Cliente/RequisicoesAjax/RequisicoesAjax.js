@@ -49,6 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (viewName === 'Consultar') {
           configurarPesquisa(); // reinicializa eventos da pesquisa
         }
+        if (viewName === 'Deletar') {
+            configurarPesquisa(); // reinicializa eventos da pesquisa
+        }
+        if (viewName === 'Editar') {
+              configurarPesquisa(); // reinicializa eventos da pesquisa
+        }
 
         // 🔁 Reexecuta scripts gerais (se existir)
         if (typeof setupTableEvents === 'function') {
@@ -72,24 +78,7 @@ $(document).ready(function () {
 
 // ========== Pesquisa Cliente ========== //
 function configurarPesquisa() {
-   const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 2500,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-
   // Remove eventos anteriores para evitar múltiplos binds
-  $('.filtros-form').off('submit').on('submit', function (e) {
-    e.preventDefault();
-    realizarPesquisa();
-  });
-
   $('#clearPesquisar').off('click').on('click', function () {
     $('.filtros-form')[0].reset();
     realizarPesquisa();
@@ -98,10 +87,40 @@ function configurarPesquisa() {
   $('#pesquisaPorNome').off('input').on('input', debounce(function () {
     realizarPesquisa();
   }, 300));
+    $('#pesquisaPorDoc').off('input').on('input', debounce(function () {
+      realizarPesquisa();
+    }, 300));
+      $('#pesquisaPorCodCaf').off('input').on('input', debounce(function () {
+        realizarPesquisa();
+      }, 300));
+        $('#apenasCooperados').off('input').on('input', debounce(function () {
+          realizarPesquisa();
+        }, 300));
+          $('#deZaA').off('input').on('input', debounce(function () {
+            realizarPesquisa();
+          }, 300));
 }
 
 function realizarPesquisa() {
-  const formData = $('.filtros-form').serialize();
+    const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 2500,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+
+    const formData = {
+      pesquisaPorNome: $('#pesquisaPorNome').val(),
+      pesquisaPorDocumento: $('#pesquisaPorDoc').val(),
+      pesquisaPorCodCaf: $('#pesquisaPorCodCaf').val(),
+      apenasCooperados: $('#apenasCooperados').is(':checked') ? true : null,
+      'deZaA': $('#deZaA').is(':checked')
+    };
 
   $('#listaDeClientesSelecinavel tbody').html(
     '<tr><td colspan="7" class="text-center">' +
@@ -128,7 +147,7 @@ function realizarPesquisa() {
     error: function () {
       Toast.fire({
         icon: "error",
-        title: "erro na pesquisa!"
+        title: "Erro na pesquisa!"
     });
 
       $('#listaDeClientesSelecinavel tbody').html(

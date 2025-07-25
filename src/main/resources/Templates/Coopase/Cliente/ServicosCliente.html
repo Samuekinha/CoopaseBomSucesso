@@ -134,6 +134,16 @@
             <td th:text="${listaCoop.caf}"></td>
           </tr>
           </tbody>
+          <thead>
+            <th colspan="2" class="justify-content-center">Qtde de Cooperados</th>
+            <th colspan="2" class="justify-content-center">Qtde de Dap Ativa</th>
+          </thead>
+          <tbody>
+          <tr class="main-row">
+            <td colspan="2" th:text="${qtdeDeCooperados} ?: '0 find'"></td>
+            <td colspan="2" th:text="${qtdeDeDapsAtivas} ?: '0 find'"></td>
+          </tr>
+          </tbody>
         </table>
 
       </div>

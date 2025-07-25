@@ -55,12 +55,12 @@ public class EditarClienteController {
             model.addAttribute("MensagemSemMudanca", clienteValidadeResposta);
         }
 
-        return "redirect:/Coopase/Cliente/ServicosCliente";
+        return "redirect:/Coopase/Cliente/Servicos";
     }
 
     @GetMapping("/Editar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Cliente/Servicos";
+        return "/Coopase/Cliente/ServicosCliente";
     }
 
 }

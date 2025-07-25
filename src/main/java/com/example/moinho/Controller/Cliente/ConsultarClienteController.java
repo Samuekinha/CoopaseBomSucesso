@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -35,45 +36,24 @@ public class ConsultarClienteController {
     public String consultarPorPesquisa(
             @RequestParam(value = "pesquisaPorNome", required = false) String pesquisaNome,
             @RequestParam(value = "pesquisaPorDocumento", required = false) String pesquisaPorDocumento,
-            @RequestParam(value = "pesquisaPorNascimento", required = false) String pesquisaPorNascimento,
-            @RequestParam(value = "pesquisaPorCooperado", required = false) String pesquisaPorCooperado,
-            @RequestParam(value = "pesquisaPorVencCaf", required = false) String pesquisaPorVencCaf,
             @RequestParam(value = "pesquisaPorCodCaf", required = false) String pesquisaPorCodCaf,
             @RequestParam(value = "apenasCooperados", required = false) Boolean apenasCooperados,
-            @RequestParam(value = "deZ-A", required = false) Boolean deZA,
+            @RequestParam(value = "deZaA", required = false) boolean deZaA,
             Model model) {
 
-        List<E_Cliente> resultados = consultarClientes.consultarClientePorParametro(
-                pesquisaNome
-                // e os outros filtros se quiser implementar depois
-        );
+        List<E_Cliente> resultados = consultarClientes.consultarComFiltros(
+                emptyToNull(pesquisaNome),
+                emptyToNull(pesquisaPorDocumento),
+                emptyToNull(pesquisaPorCodCaf),
+                apenasCooperados,
+                deZaA);
 
         model.addAttribute("resultadoConsulta", resultados);
         return "/Coopase/Cliente/Fragments/TabelaClientes :: corpoTabela";
     }
 
+    private String emptyToNull(String valor) {
+        return (valor == null || valor.trim().isEmpty()) ? null : valor.trim();
+    }
 
-//    @GetMapping("/ConsultarPorPesquisa")
-//    @ResponseBody
-//    public void consultarPorPesquisa(
-//            @RequestParam(value = "pesquisaPorNome", required = false) String pesquisaNome,
-//            @RequestParam(value = "pesquisaPorDocumento", required = false) String pesquisaPorDocumento,
-//            @RequestParam(value = "pesquisaPorNascimento", required = false) String pesquisaPorNascimento,
-//            @RequestParam(value = "pesquisaPorCooperado", required = false) String pesquisaPorCooperado,
-//            @RequestParam(value = "pesquisaPorVencCaf", required = false) String pesquisaPorVencCaf,
-//            @RequestParam(value = "pesquisaPorCodCaf", required = false) String pesquisaPorCodCaf,
-//            @RequestParam(value = "apenasCooperados", required = false) Boolean apenasCooperados,
-//            @RequestParam(value = "deZ-A", required = false) Boolean deZA,
-//            Model model) {
-//
-//        // Aqui você implementa a lógica de filtro com todos os parâmetros
-//        List<E_Cliente> resultados = consultarClientes.consultarClientePorParametro(
-//                pesquisaNome
-//        );
-//
-//        model.addAttribute("resultadoConsulta", resultados);
-//    }
 }
-//, pesquisaPorDocumento, pesquisaPorNascimento,
-//                pesquisaPorCooperado, pesquisaPorVencCaf, pesquisaPorCodCaf,
-//                apenasCooperados, deZA

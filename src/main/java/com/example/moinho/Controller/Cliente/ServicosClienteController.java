@@ -33,6 +33,12 @@ public class ServicosClienteController {
             model.addAttribute("listaCooperados", consultarClientes.consultar10Cooperados());
         }
 
+        int[] infosProcessadasCooperados = consultarClientes.consultarInfosProcessadasCooperados();
+        model.addAttribute("qtdeDeCooperados",
+                infosProcessadasCooperados[0]);
+        model.addAttribute("qtdeDeDapsAtivas",
+                infosProcessadasCooperados[1]);
+
         model.addAttribute("listaVendedores", consultarClientes.consultarVendedores());
         model.addAttribute("quantidadeClientes", consultarClientes.consultarQuantidadeClientes());
         model.addAttribute("formatador", new FormatadorUtil());

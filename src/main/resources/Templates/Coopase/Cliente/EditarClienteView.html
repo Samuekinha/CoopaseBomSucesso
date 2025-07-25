@@ -1,4 +1,4 @@
-<div th:fragment="Editar" data-view="editar-cliente">>
+<div th:fragment="Editar" data-view="editar-cliente">
 
     <style>
         .main-row {
@@ -15,47 +15,75 @@
     </style>
 
     <div>
-        <h2 class="d-flex justify-content-center">Editar Cliente</h2>
+        <div class="row">
+            <div class="col-4">
+
+            </div>
+
+            <div class="col-4">
+                <h2 class="d-flex justify-content-center">Editar Cliente</h2>
+            </div>
+
+            <div class="col-4">
+                <p class="d-flex justify-content-center">Mostrar Filtros</p>
+                <label class="switch d-flex justify-content-center">
+                    <input type="checkbox" id="toggleFiltrosPesquisa" class="d-flex justify-content-center">
+                    <span class="slider round d-flex justify-content-center"></span>
+                </label>
+            </div>
+        </div>
+
+        <div id="areaFiltros" class="hidden-filtros">
+            <p class="filtro-titulo">Filtros de pesquisa</p>
+            <form method="GET" class="filtros-form">
+                <div class="filtro-grupo">
+                    <label for="pesquisaPorNome">Nome</label>
+                    <input type="text" id="pesquisaPorNome" name="pesquisaPorNome" placeholder="Filtrar por nome">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="pesquisaPorDoc">Documento</label>
+                    <input type="text" id="pesquisaPorDoc" name="pesquisaPorDocumento" placeholder="CPF/CNPJ">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="pesquisaPorCodCaf">Código CAF</label>
+                    <input type="text" id="pesquisaPorCodCaf" name="pesquisaPorCodCaf" placeholder="Código">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="apenasCooperados">Apenas cooperados</label>
+                    <input type="checkbox" id="apenasCooperados">
+                </div>
+
+                <div class="filtro-grupo">
+                    <label for="deZaA">De Z - A</label>
+                    <input type="checkbox" id="deZaA">
+                </div>
+
+                <div class="filtro-grupo w-100 mt-3">
+                    <button id="clearPesquisar" type="reset" class="btn btn-secondary ms-2">Limpar</button>
+                </div>
+            </form>
+        </div>
 
         <div class="container">
-            <table class="main-table" id="listaDeClientesSelecinavel">
-                <thead>
-                <tr>
-                    <th>N°</th>
-                    <th>Nome</th>
-                    <th>Documento</th>
-                    <th>Data Nasc.</th>
-                    <th>Cooperado</th>
-                    <th>Data Venc. CAF</th>
-                    <th>Código CAF</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="main-row" th:each="resultado : ${resultadoConsulta}" data-id="resultado.id">
-                    <td th:text="${resultado.id}"></td>
-                    <td th:text="${resultado.name}"></td>
-                    <td th:with="doc=${resultado.document != null ? resultado.document : ''}">
-                        <span th:if="${#strings.length(doc) == 11}"
-                              th:text="${#strings.substring(doc,0,3) + '.' +
-                            #strings.substring(doc,3,6) + '.' +
-                            #strings.substring(doc,6,9) + '-' +
-                            #strings.substring(doc,9,11)}"></span>
-                        <span th:if="${#strings.length(doc) == 14}"
-                              th:text="${#strings.substring(doc,0,2) + '.' +
-                            #strings.substring(doc,2,5) + '.' +
-                            #strings.substring(doc,5,8) + '/' +
-                            #strings.substring(doc,8,12) + '-' +
-                            #strings.substring(doc,12,14)}"></span>
-                        <span th:if="${!#strings.isEmpty(doc) && #strings.length(doc) != 11 && #strings.length(doc) != 14}"
-                              th:text="${doc}"></span>
-                    </td>
-                    <td th:text="${resultado.birthDate != null} ? ${#temporals.format(resultado.birthDate, 'dd/MM/yyyy')} : ''"></td>
-                    <td th:text="${resultado.cooperated}"></td>
-                    <td th:text="${resultado.maturity_caf != null} ? ${#temporals.format(resultado.maturity_caf, 'dd/MM/yyyy')} : ''"></td>
-                    <td th:text="${resultado.caf}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <div th:fragment="tabelaClientes">
+                <table class="main-table" id="listaDeClientesSelecinavel">
+                    <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Nome</th>
+                        <th>Documento</th>
+                        <th>Data Nasc.</th>
+                        <th>Cooperado</th>
+                        <th>Data Venc. CAF</th>
+                        <th>Código CAF</th>
+                    </tr>
+                    </thead>
+                    <tbody th:replace="~{/Coopase/Cliente/Fragments/TabelaClientes :: corpoTabela}"></tbody>
+                </table>
+            </div>
         </div>
 
         <div id="formWrapper" class="container" style="display: none;">
