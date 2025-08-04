@@ -1,0 +1,56 @@
+<div th:fragment="Cadastrar" data-view="cadastrar-ContaD">
+  <h2 class="d-flex justify-content-center">Cadastrar Conta Depósito</h2>
+
+  <div class="container">
+    <div class="cadastro-container"> <!-- Container específico para cadastro -->
+      <form id="ContaDForm" action="/Coopase/ContaDeposito/Cadastrar" method="post">
+        <div class="form-rows">
+          <!-- Coluna principal -->
+          <div class="form-main-column">
+            <div class="form-group">
+              <label for="ClientName">Nome</label>
+              <input type="text" class="form-control" name="ClientName" id="ClientName" placeholder="Nome do cliente" required>
+            </div>
+
+            <div class="form-group">
+              <label for="ClientDocument">Documento (CPF/CNPJ)</label>
+              <input type="text" class="form-control" name="ClientDocument" id="ClientDocument" placeholder="CPF ou CNPJ">
+            </div>
+
+            <div class="form-group">
+              <label for="ClientBirth">Data de nascimento</label>
+              <input type="date" class="form-control" name="ClientBirth" id="ClientBirth">
+            </div>
+
+            <div class="form-group">
+              <label for="cooperadoSelect">Cooperado</label>
+              <select name="cooperadoSelect" id="cooperadoSelect" class="form-control">
+                <option value="false" selected>Não</option>
+                <option value="true">Sim</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Coluna do cooperado (inicialmente oculta) -->
+          <div id="camposCooperado" class="form-cooperado-column hidden-cooperado">
+            <div class="cooperado-header">
+              <h5>Infos adicionais de cooperado</h5>
+            </div>
+            <div class="form-group">
+              <label for="ClientCafDate">Data de venc. CAF</label>
+              <input type="date" class="form-control" name="ClientCafDate" id="ClientCafDate">
+            </div>
+            <div class="form-group">
+              <label for="ClientCafCode">Código da CAF</label>
+              <input type="text" class="form-control" name="ClientCafCode" id="ClientCafCode" placeholder="Código CAF">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Cadastre</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

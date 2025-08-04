@@ -1,4 +1,4 @@
-package com.example.moinho.Service.S_Cliente;
+package com.example.moinho.Service.ClienteService;
 
 import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Repository.R_Cliente;

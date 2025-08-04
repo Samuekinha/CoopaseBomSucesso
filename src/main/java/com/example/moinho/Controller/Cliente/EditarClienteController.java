@@ -1,14 +1,14 @@
 package com.example.moinho.Controller.Cliente;
 
-import com.example.moinho.Model.E_Cliente;
-import com.example.moinho.Service.S_Cliente.ConsultarClienteService;
-import com.example.moinho.Service.S_Cliente.EditarClienteService;
+import com.example.moinho.Service.ClienteService.ConsultarClienteService;
+import com.example.moinho.Service.ClienteService.EditarClienteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 
@@ -36,24 +36,19 @@ public class EditarClienteController {
 
     @PostMapping("/Editar")
     public String editarCliente(@RequestParam("ClientId") Long id,
-                                @RequestParam("ClientName") String nome,
+                                @RequestParam(value = "ClientName", required = false) String nome,
                                 @RequestParam(value = "ClientDocument", required = false) String documento,
                                 @RequestParam(value = "ClientBirth", required = false) LocalDate dataNascimento,
                                 @RequestParam(value = "cooperadoSelect", required = false) boolean cooperado,
                                 @RequestParam(value = "ClientCafDate", required = false) LocalDate vencimentoCaf,
                                 @RequestParam(value = "ClientCafCode", required = false) String codigoCaf,
-                                Model model){
+                                RedirectAttributes redirectAttributes){
 
-        String clienteValidadeResposta = editarCliente.validaEditarCliente(id, nome, documento,
+        String resposta = editarCliente.editarCliente(id, nome, documento,
                 dataNascimento, cooperado, vencimentoCaf, codigoCaf);
 
-        if (clienteValidadeResposta.startsWith("Erro")){
-            model.addAttribute("MensagemErro", clienteValidadeResposta);
-        } else if(clienteValidadeResposta.startsWith("Sucesso")) {
-            model.addAttribute("MensagemSucesso", clienteValidadeResposta);
-        } else {
-            model.addAttribute("MensagemSemMudanca", clienteValidadeResposta);
-        }
+        redirectAttributes.addFlashAttribute("resposta", resposta);
+
 
         return "redirect:/Coopase/Cliente/Servicos";
     }

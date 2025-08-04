@@ -1,8 +1,7 @@
 package com.example.moinho.Controller.Cliente;
 
-import com.example.moinho.Service.S_Cliente.ConsultarClienteService;
-import com.example.moinho.Service.S_Cliente.DeletarClienteService;
-import com.example.moinho.Service.S_Cliente.EditarClienteService;
+import com.example.moinho.Service.ClienteService.ConsultarClienteService;
+import com.example.moinho.Service.ClienteService.DeletarClienteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,18 +33,7 @@ public class DeletarClienteController {
 
         String clienteValidadeResposta = deletarCliente.validaDeletarCliente(id);
 
-//        String nomeModel;
-//        if (clienteValidadeResposta.startsWith("Erro")){
-//            nomeModel = "MensagemErro";
-//        } else if(clienteValidadeResposta.startsWith("Sucesso")) {
-//            nomeModel = "MensagemSucesso";
-//        } else {
-//            nomeModel = "MensagemSemMudanca";
-//        }
-//
-//        model.addAttribute(nomeModel, clienteValidadeResposta);
-
-        return "/Coopase/Cliente/Servicos";
+        return "/Coopase/Cliente/ServicosCliente";
     }
 
     @GetMapping("/Deletar")

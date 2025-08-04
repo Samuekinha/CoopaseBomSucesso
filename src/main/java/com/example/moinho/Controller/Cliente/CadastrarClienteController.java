@@ -1,22 +1,22 @@
 package com.example.moinho.Controller.Cliente;
 
-import com.example.moinho.Service.S_Cliente.S_CadastroCliente;
+import com.example.moinho.Service.ClienteService.CadastrarClienteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Controller
 @RequestMapping("/Coopase/Cliente")
 public class CadastrarClienteController {
 
-    private final S_CadastroCliente s_cadastroCliente;
+    private final CadastrarClienteService cadastrarClienteService;
 
     // Injeção via construtor
-    public CadastrarClienteController(S_CadastroCliente s_cadastroCliente) {
-        this.s_cadastroCliente = s_cadastroCliente;
+    public CadastrarClienteController(CadastrarClienteService cadastrarClienteService) {
+        this.cadastrarClienteService = cadastrarClienteService;
     }
 
 //    private static final String[] parametros = {"nome", "documento", "dataNascimento", "cooperado",
@@ -35,16 +35,12 @@ public class CadastrarClienteController {
                            @RequestParam(value = "cooperadoSelect" , required = false) boolean cooperado,
                            @RequestParam(value = "ClientCafDate", required = false) LocalDate dataVencimentoCAF,
                            @RequestParam(value = "ClientCafCode", required = false) String codigoCaf,
-                           Model model) {
+                           RedirectAttributes redirectAttributes) {
 
-        String[] resultados = s_cadastroCliente.cadastrarCliente(nome, documento, dataNascimento, cooperado,
+        String resposta = cadastrarClienteService.cadastrarCliente(nome, documento, dataNascimento, cooperado,
                 dataVencimentoCAF, codigoCaf);
 
-        for (int i = 0; i < resultados.length ; i++) {
-            if (resultados[i] != null) {
-                model.addAttribute("parametros", resultados[i]);
-            }
-        }
+        redirectAttributes.addFlashAttribute("resposta", resposta);
 
         return "redirect:/Coopase/Cliente/Servicos";
     }

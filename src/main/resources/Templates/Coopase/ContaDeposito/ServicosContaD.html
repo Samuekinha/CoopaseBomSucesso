@@ -38,7 +38,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#" style="border-left: 3px solid #28a745; padding-left: 3px;">
-                        Área do cliente
+                        Área de Conta Depósito
                     </a>
                 </li>
             </ul>
@@ -54,7 +54,7 @@
         <a href="" data-action="Cadastrar" class="bloco-link">
             <div class="bloco">
                 <h3>Cadastrar</h3>
-                <p>Cadastrar cliente</p>
+                <p>Cadastrar Conta Depósito</p>
             </div>
         </a>
 
@@ -62,7 +62,7 @@
         <a href="" data-action="Editar" class="bloco-link">
             <div class="bloco">
                 <h3>Editar</h3>
-                <p>Editar cliente</p>
+                <p>Editar Conta Depósito</p>
             </div>
         </a>
 
@@ -70,7 +70,7 @@
         <a href="" data-action="Consultar" class="bloco-link">
             <div class="bloco">
                 <h3>Consultar</h3>
-                <p>Consultar cliente</p>
+                <p>Consultar Conta Depósito</p>
             </div>
         </a>
 
@@ -78,7 +78,7 @@
         <a href="" data-action="Deletar" class="bloco-link">
             <div class="bloco">
                 <h3>Deletar</h3>
-                <p>Deletar cliente</p>
+                <p>Deletar Conta Depósito</p>
             </div>
         </a>
     </div>
@@ -95,82 +95,15 @@
 
     <h2>Acesso Rápido</h2>
 
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <div class="container">
-                <h2>Lista de cooperados</h2>
-
-                <table class="main-table" id="listaDeCooperados">
-                    <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Nome</th>
-                        <th>Data Venc. CAF</th>
-                        <th>Código CAF</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="main-row" th:each="listaCoop : ${listaCooperados}" data-id="listaCoop.id">
-                        <td th:text="${listaCoop.id}"></td>
-                        <td th:text="${listaCoop.name}"></td>
-                        <td th:text="${listaCoop.maturity_caf != null} ? ${#temporals.format(listaCoop.maturity_caf, 'dd/MM/yyyy')} : ''"></td>
-                        <td th:text="${listaCoop.caf}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="col-6">
-            <div class="container">
-                <h2>Lista de vendedores</h2>
-
-                <table class="main-table" id="listaDeVendedores">
-                    <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Nome</th>
-                        <th>Documento</th>
-                        <th>Cooperado</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="main-row" th:each="listaVend : ${listaVendedores}" data-id="listaVend.id">
-                        <td th:text="${listaVend.id}"></td>
-                        <td th:text="${listaVend.name}"></td>
-                        <td th:with="doc=${listaVend.document != null ? listaVend.document : ''}">
-                        <span th:if="${#strings.length(doc) == 11}"
-                              th:text="${#strings.substring(doc,0,3) + '.' +
-                            #strings.substring(doc,3,6) + '.' +
-                            #strings.substring(doc,6,9) + '-' +
-                            #strings.substring(doc,9,11)}"></span>
-                            <span th:if="${#strings.length(doc) == 14}"
-                                  th:text="${#strings.substring(doc,0,2) + '.' +
-                            #strings.substring(doc,2,5) + '.' +
-                            #strings.substring(doc,5,8) + '/' +
-                            #strings.substring(doc,8,12) + '-' +
-                            #strings.substring(doc,12,14)}"></span>
-                            <span th:if="${!#strings.isEmpty(doc) && #strings.length(doc) != 11 && #strings.length(doc) != 14}"
-                                  th:text="${doc}"></span>
-                        </td>
-                        <td th:text="${listaVend.cooperated}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-
 </container>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" defer></script>
 
     <script src="/Index.js" defer></script> <!-- defer = executa após o HTML -->
-    <script src="/Cliente/RequisicoesAjax.js" defer></script> <!-- defer = executa após o HTML -->
-    <script src="/Cliente/Cliente.js" defer></script>
+
+    <script src="/ContaDeposito/RequisicoesAjax/RequisicoesAjax.js" defer></script>
+    <script src="/ContaDeposito/ContaDeposito.js" defer></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="sweetalert2.all.min.js" defer></script>

@@ -204,5 +204,16 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 <script src="sweetalert2.all.min.js" defer></script>
 
+<script th:inline="javascript">
+  const resposta = /*[[${resposta}]]*/ null;
+  if (resposta) {
+      Swal.fire({
+          icon: resposta.startsWith("Sucesso") ? 'success' : 'error',
+          title: resposta.split(":")[0],
+          text: resposta.split(":")[1]?.trim()
+      });
+  }
+</script>
+
 </body>
 </html>

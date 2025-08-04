@@ -8,16 +8,16 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "deposito_dinheiro") // Define o nome da tabela no banco
+@Table(name = "conta_deposito") // Define o nome da tabela no banco
 @Data
-public class E_DepositoDinheiro {
+public class E_ContaDeposito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, length = 25)
-    private String vault_name;
+    @Column(name = "vault_name", nullable = false, length = 40)
+    private String vaultName;
 
     @Column(columnDefinition = "DECIMAL(10,3)")
     private BigDecimal total_amount;

@@ -31,7 +31,7 @@ public class E_Transacoes {
 
     @ManyToOne
     @JoinColumn(name = "name")  // Nome da coluna FK
-    private E_DepositoDinheiro vault_id;
+    private E_ContaDeposito vault_id;
 
     @ManyToOne
     @JoinColumn(name = "name_client")  // Nome da coluna FK

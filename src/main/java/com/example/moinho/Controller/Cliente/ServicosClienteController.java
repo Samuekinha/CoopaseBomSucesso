@@ -1,13 +1,10 @@
 package com.example.moinho.Controller.Cliente;
 
-import com.example.moinho.Service.S_Cliente.ConsultarClienteService;
+import com.example.moinho.Service.ClienteService.ConsultarClienteService;
 import com.example.moinho.Util.FormatadorUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.context.Context;
-
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/Coopase/Cliente/Servicos")

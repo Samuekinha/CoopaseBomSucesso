@@ -1,12 +1,10 @@
-package com.example.moinho.Service.S_Cliente;
+package com.example.moinho.Service.ClienteService;
 
 import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Repository.R_Cliente;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -57,7 +55,7 @@ public class ConsultarClienteService {
         for (int i = 0; i < todosCooperados.toArray().length ; i++) {
             LocalDate maturityCaf = todosCooperados.get(i).getMaturity_caf();
             if (maturityCaf != null) {
-                if (maturityCaf.isBefore(LocalDate.now())) {
+                if (maturityCaf.isAfter(LocalDate.now())) {
                     qtdeDapAtiva++;
                 }
             }
@@ -71,7 +69,6 @@ public class ConsultarClienteService {
 
     public Integer consultarQuantidadeClientes() {
         List<E_Cliente> listaCompleta = r_cliente.findAll();
-        List<E_Cliente> listaCompletaVendedores = r_cliente.findAll();
         return listaCompleta.size();
     }
 
