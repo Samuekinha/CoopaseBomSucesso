@@ -1,0 +1,388 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/*3. Títulos*/
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/*4. Tabela do consultar, editar e deletar*/
+.main-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.main-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+.main-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* qué isso? */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/*5. alteração nas classes do form (Não declaradas no Html)*/
+.form-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/*6. Grupo de cada input e label do form */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+/*7. Formulário de cadastro, editar e deletar (mesmo que este seja readonly) */
+.form-main-column {
+    flex: 1;
+    min-width: 0;
+    width: 70%; /* Ocupa 70% do espaço disponível */
+}
+/* Form control sendo a classe dos inputs*/
+.form-main-column .form-control {
+    width: 100%;
+    min-width: 300px; /* Largura mínima garantida */
+    max-width: 600px; /* Largura máxima aumentada */
+    padding: 12px;
+}
+
+.form-main-column select.form-control {
+    padding: 11px; /* Ajuste fino para select */
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.form-control[readonly] {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/*8. Botões de envio de formulário (cadastrar, editar e deletar) */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/*9. Garantindo funcionamento sem e com bootstrap*/
+.d-flex {
+    display: flex;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+/**/
+.cooperado-fields {
+    background-color: #e8f5e8;
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 4px solid #4caf50;
+}
+
+.close-btn {
+    float: right;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+/* Estilo para os blocos de serviço */
+/* Estilo aprimorado para os blocos de serviço com animação de borda */
+.bloco-link {
+    position: relative;
+    text-decoration: none;
+    overflow: hidden; /* Para conter o pseudo-elemento */
+}
+
+.bloco {
+    position: relative;
+    padding: 15px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Efeito de borda animada */
+.bloco-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    background-color: transparent;
+    border-radius: 0 4px 4px 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 1;
+}
+
+/* Cores e animação quando selecionado */
+.bloco-link[data-action="Cadastrar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #0d6efd;
+}
+
+.bloco-link[data-action="Editar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #198754;
+}
+
+.bloco-link[data-action="Consultar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #6c757d;
+}
+
+.bloco-link[data-action="Deletar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #fd7e14;
+}
+
+/* Efeito hover */
+.bloco-link:hover .bloco {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Efeito de "compressão" quando não selecionado */
+.bloco-link:not(.selected) .bloco {
+    opacity: 0.85;
+    transform: scale(0.98);
+}
+
+/* Transição suave para o estado normal */
+.bloco-link .bloco {
+    transition: all 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* cooperado inputs adiiconais de cadastro */
+/* NOVO CSS PARA O LAYOUT DE CADASTRO */
+.cadastro-container {
+    max-width: 1200px; /* Largura máxima do container */
+    margin: 0 auto;
+}
+
+.form-rows {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Melhor espaçamento entre os campos */
+.form-main-column .form-group {
+    margin-bottom: 20px;
+}
+
+/* Ajuste fino para labels */
+.form-main-column .form-group label {
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.form-cooperado-column .form-control {
+    width: 100%;
+    min-width: 250px; /* Largura mínima */
+}
+
+.cooperado-header h5 {
+  color: #0d6efd;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.hidden-cooperado {
+  display: none;
+}
+
+.form-actions {
+  text-align: center;
+  padding-top: 20px;
+  clear: both;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .form-rows {
+        flex-direction: column;
+    }
+
+    .form-main-column,
+    .form-cooperado-column {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .form-main-column .form-control {
+        max-width: 100%;
+    }
+}
+
+/* Linha divisória com efeito de transição - sempre visível */
+.divisoria-vertical {
+    height: 3px;
+
+    margin: 20px 0;
+    opacity: 0.8; /* Opacidade fixa */
+}
+
+/* Linha divisória clicável com efeito de gradiente */
+#clear-view-trigger {
+    cursor: pointer;
+    height: 25px;
+    margin: 5px 0;
+    width: 100%;
+    border: none;
+    opacity: 0.8; /* Opacidade fixa */
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.2);
+    transition: all 0.4s ease;
+    position: relative;
+    background: linear-gradient(
+        90deg,
+        rgba(8, 51, 120, 0.9) 0%,      /* Azul muito escuro */
+        rgba(13, 71, 161, 0.8) 25%,    /* Azul escuro */
+        #2196F3 50%,                   /* Cor original no centro */
+        rgba(13, 71, 161, 0.8) 75%,    /* Azul escuro */
+        rgba(8, 51, 120, 0.9) 100%    /* Azul muito escuro */
+    );
+}
+
+#clear-view-trigger:hover {
+    background: linear-gradient(
+        90deg,
+        rgba(6, 41, 98, 0.9) 0%,       /* Azul hover mais escuro */
+        rgba(10, 58, 132, 0.8) 25%,    /* Azul hover escuro */
+        #1a7de8 50%,                   /* Azul hover mais claro no centro */
+        rgba(10, 58, 132, 0.8) 75%,    /* Azul hover escuro */
+        rgba(6, 41, 98, 0.9) 100%     /* Azul hover mais escuro */
+    );
+    box-shadow: 0 2px 12px rgba(13, 110, 253, 0.4);
+}
+
+/* n. filtros escondidos*/
+/* Estilo para a área de filtros */
+#areaFiltros {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.filtro-titulo {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.filtros-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    align-items: end;
+}
+
+.filtro-grupo {
+    display: flex;
+    flex-direction: column;
+}
+
+.filtro-grupo label {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.filtro-grupo input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.filtro-grupo input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.filtro-grupo.w-100 {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}

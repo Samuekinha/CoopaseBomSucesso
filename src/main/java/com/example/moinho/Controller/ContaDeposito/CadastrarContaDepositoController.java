@@ -23,9 +23,6 @@ public class CadastrarContaDepositoController {
         this.cadastrarContaD = cadastrarContaD;
     }
 
-//    private static final String[] parametros = {"nome", "documento", "dataNascimento", "cooperado",
-//    "dataVencimentoCaf", "codigoCaf", "status"};
-
     // Rotas para processar os formulários (POST)
     @GetMapping("/CadastrarContaDView")
     public String viewCadastroCliente() {
@@ -33,7 +30,7 @@ public class CadastrarContaDepositoController {
     }
 
     @PostMapping("/Cadastrar")
-    public String cadastrarContaD(@RequestParam(value = "ContaDName") String nome,
+    public String cadastrarContaD(@RequestParam(value = "ContaDNome") String nome,
                            RedirectAttributes redirectAttributes) {
 
         String resposta = cadastrarContaD.cadastrarContaDeposito(nome);

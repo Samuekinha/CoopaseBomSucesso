@@ -1,20 +1,19 @@
 package com.example.moinho.Service.CofreService;
 
 import com.example.moinho.Model.E_ContaDeposito;
-import com.example.moinho.Repository.R_ContaDeposito;
+import com.example.moinho.Repository.ContaDepositoRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Service
 public class CadastrarContaDepositoService {
-    private final R_ContaDeposito r_contaDeposito;
+    private final ContaDepositoRepository _contaDepositoRepository;
 
     private static final int TAMANHO_MAXIMO_NOME = 40;
 
-    public CadastrarContaDepositoService(R_ContaDeposito r_contaDeposito) {
-        this.r_contaDeposito = r_contaDeposito;
+    public CadastrarContaDepositoService(ContaDepositoRepository _contaDepositoRepository) {
+        this._contaDepositoRepository = _contaDepositoRepository;
     }
 
     public String cadastrarContaDeposito(String nome) {
@@ -27,10 +26,10 @@ public class CadastrarContaDepositoService {
 
             // Criar e salvar a conta
             E_ContaDeposito conta = new E_ContaDeposito();
-            conta.setVault_name(nome.trim());
+            conta.setVaultName(nome.trim());
             conta.setTotal_amount(BigDecimal.valueOf(0.0)); // Saldo inicial zero
 
-            r_contaDeposito.save(conta);
+            _contaDepositoRepository.save(conta);
 
             return "Sucesso: Conta depósito cadastrada com sucesso!";
 
@@ -50,7 +49,7 @@ public class CadastrarContaDepositoService {
         }
 
         // Verifica se já existe conta com este nome (opcional)
-        if (r_contaDeposito.findByvault_name(nome).isPresent()) {
+        if (_contaDepositoRepository.findByVaultName(nome).isPresent()) {
             return "Erro: Já existe uma conta com este nome";
         }
 
