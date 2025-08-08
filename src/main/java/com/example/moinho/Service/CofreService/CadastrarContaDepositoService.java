@@ -8,12 +8,12 @@ import java.math.BigDecimal;
 
 @Service
 public class CadastrarContaDepositoService {
-    private final ContaDepositoRepository _contaDepositoRepository;
+    private final ContaDepositoRepository contaDepositoRepository;
 
     private static final int TAMANHO_MAXIMO_NOME = 40;
 
-    public CadastrarContaDepositoService(ContaDepositoRepository _contaDepositoRepository) {
-        this._contaDepositoRepository = _contaDepositoRepository;
+    public CadastrarContaDepositoService(ContaDepositoRepository contaDepositoRepository) {
+        this.contaDepositoRepository = contaDepositoRepository;
     }
 
     public String cadastrarContaDeposito(String nome) {
@@ -29,7 +29,7 @@ public class CadastrarContaDepositoService {
             conta.setVaultName(nome.trim());
             conta.setTotal_amount(BigDecimal.valueOf(0.0)); // Saldo inicial zero
 
-            _contaDepositoRepository.save(conta);
+            contaDepositoRepository.save(conta);
 
             return "Sucesso: Conta depósito cadastrada com sucesso!";
 
@@ -49,7 +49,7 @@ public class CadastrarContaDepositoService {
         }
 
         // Verifica se já existe conta com este nome (opcional)
-        if (_contaDepositoRepository.findByVaultName(nome).isPresent()) {
+        if (contaDepositoRepository.findByVaultName(nome).isPresent()) {
             return "Erro: Já existe uma conta com este nome";
         }
 

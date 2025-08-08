@@ -2,6 +2,7 @@ package com.example.moinho.Controller.ContaDeposito;
 
 import com.example.moinho.Service.ClienteService.ConsultarClienteService;
 import com.example.moinho.Service.ClienteService.DeletarClienteService;
+import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,35 +14,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/Coopase/ContaDeposito")
 public class DeletarContaDepositoController {
 
-    private final ConsultarClienteService consultarCliente;
+    private final ConsultarContaDepositoService consultarContaDeposito;
     private final DeletarClienteService deletarCliente;
 
     // Injeção via construtor
-    public DeletarContaDepositoController(ConsultarClienteService consultarClientes, DeletarClienteService deletarCliente) {
-        this.consultarCliente = consultarClientes;
+    public DeletarContaDepositoController(ConsultarContaDepositoService consultarContaDeposito,
+                                          DeletarClienteService deletarCliente) {
+        this.consultarContaDeposito = consultarContaDeposito;
         this.deletarCliente = deletarCliente;
     }
 
-    @GetMapping("/DeletarContaDView")
-    public String deletarClienteView(Model model) {
+    @GetMapping("/DeletarContaDepositoView")
+    public String deletarContaDepositoView(Model model) {
 
-        model.addAttribute("resultadoConsulta", consultarCliente.consultarCliente());
+        model.addAttribute("resultadoConsulta", consultarContaDeposito.consultarContaDeposito());
 
-        return "/Coopase/ContaDeposito/DeletarContaDView";
+        return "/Coopase/ContaDeposito/DeletarContaDepositoView";
     }
 
     @PostMapping("/Deletar")
-    public String deletarCliente(@RequestParam("ClientId") Long id,
+    public String deletarContaDeposito(@RequestParam("ContaDepositoId") Long id,
                                 Model model) {
 
-        String clienteValidadeResposta = deletarCliente.validaDeletarCliente(id);
+        String contaDepositoValidadeResposta = deletarCliente.validaDeletarCliente(id);
 
-        return "/Coopase/ContaDeposito/ServicosContaD";
+        return "/Coopase/ContaDeposito/ServicosContaDeposito";
     }
 
     @GetMapping("/Deletar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Cliente/ServicosCliente";
+        return "/Coopase/ContaDeposito/ServicosContaDeposito";
     }
 
 }

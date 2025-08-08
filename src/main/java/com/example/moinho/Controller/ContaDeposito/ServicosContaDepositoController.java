@@ -27,7 +27,7 @@ public class ServicosContaDepositoController {
 
         model.addAttribute("formatador", new FormatadorUtil());
         model.addAttribute("fragmentToLoad", fragment);
-        return "Coopase/ContaDeposito/ServicosContaD"; // Sua página principal
+        return "Coopase/ContaDeposito/ServicosContaDeposito"; // Sua página principal
     }
 
 }

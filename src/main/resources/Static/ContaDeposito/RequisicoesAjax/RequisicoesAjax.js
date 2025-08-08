@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const contentContainer = document.getElementById('dynamic-content');
     contentContainer.innerHTML = '<p>Carregando...</p>';
 
-    const viewFileName = `/Coopase/ContaDeposito/${viewName}ContaDView`;
+    const viewFileName = `/Coopase/ContaDeposito/${viewName}ContaDepositoView`;
 
     fetch(viewFileName)
       .then(response => {
@@ -45,24 +45,10 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(html => {
         contentContainer.innerHTML = html;
 
-        // ✅ Reexecuta scripts específicos da view carregada
-        if (viewName === 'Consultar') {
-          configurarPesquisa(); // reinicializa eventos da pesquisa
-        }
-        if (viewName === 'Deletar') {
-            configurarPesquisa(); // reinicializa eventos da pesquisa
-        }
-        if (viewName === 'Editar') {
-              configurarPesquisa(); // reinicializa eventos da pesquisa
-        }
-
         // 🔁 Reexecuta scripts gerais (se existir)
         if (typeof setupTableEvents === 'function') {
           setupTableEvents();
         }
-
-        // ✅ Dispara evento customizado se precisar de mais controle
-        $(document).trigger("viewLoaded");
       })
       .catch(error => {
         console.error('Erro ao carregar a view:', error);

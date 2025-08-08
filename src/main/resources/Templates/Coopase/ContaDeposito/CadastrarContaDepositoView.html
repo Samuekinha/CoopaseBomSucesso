@@ -1,15 +1,15 @@
-<div th:fragment="Cadastrar" data-view="cadastrar-ContaD">
+<div th:fragment="Cadastrar" data-view="cadastrar-ContaDeposito">
   <h2 class="d-flex justify-content-center">Cadastrar Conta Depósito</h2>
 
   <div class="container">
     <div class="cadastro-container"> <!-- Container específico para cadastro -->
-      <form id="ContaDForm" action="/Coopase/ContaDeposito/Cadastrar" method="post">
+      <form id="ContaDepositoForm" action="/Coopase/ContaDeposito/Cadastrar" method="post">
         <div class="form-rows">
           <!-- Coluna principal -->
           <div class="form-main-column">
             <div class="form-group">
-              <label for="ContaDNome">Nome</label>
-              <input type="text" class="form-control" name="ContaDNome" id="ContaDNome" placeholder="Nome da conta" required>
+              <label for="ContaDepositoNome">Nome</label>
+              <input type="text" class="form-control" name="ContaDepositoNome" id="ContaDepositoNome" placeholder="Nome da conta" required>
             </div>
           </div>
         </div>

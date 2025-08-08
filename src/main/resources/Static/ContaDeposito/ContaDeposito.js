@@ -136,7 +136,7 @@ function initContaDepositoView() {
         }
 
         tableObserver = new MutationObserver(function(mutations) {
-            const table = document.getElementById('listaDeContaDSelecinavel');
+            const table = document.getElementById('listadeContasDepositoSelecinavel');
             if (table) {
                 setupTableEvents();
             }
@@ -150,7 +150,7 @@ function initContaDepositoView() {
 
     // 3. Configura os eventos da tabela
     function setupTableEvents() {
-        const table = document.getElementById('listaDeContaDSelecinavel');
+        const table = document.getElementById('listadeContasDepositoSelecinavel');
         const formWrapper = document.getElementById('formWrapper');
 
         if (!table || !formWrapper) {
@@ -212,42 +212,42 @@ function initContaDepositoView() {
 //            const limparDocumento = (doc) => doc ? doc.replace(/\D/g, '') : '';
 //
 //            // Nova função corrigida para datas
-//            const formatarDataParaInput = (dataStr) => {
-//                if (!dataStr || dataStr.trim() === '') return '';
-//
-//                // Remove qualquer formatação existente
-//                const dataLimpa = dataStr.replace(/\D/g, '');
-//
-//                // Se não tiver números suficientes, retorna vazio
-//                if (dataLimpa.length < 8) return '';
-//
-//                // Formata para yyyy-MM-dd (padrão do input date)
-//                const dia = dataLimpa.substring(0, 2);
-//                const mes = dataLimpa.substring(2, 4);
-//                const ano = dataLimpa.substring(4, 8);
-//
-//                // Validação básica (opcional)
-//                if (dia > 31 || mes > 12) return '';
-//
-//                return `${ano}-${mes}-${dia}`;
-//            };
+            const formatarDataParaInput = (dataStr) => {
+                if (!dataStr || dataStr.trim() === '') return '';
+
+                // Remove qualquer formatação existente
+                const dataLimpa = dataStr.replace(/\D/g, '');
+
+                // Se não tiver números suficientes, retorna vazio
+                if (dataLimpa.length < 8) return '';
+
+                // Formata para yyyy-MM-dd (padrão do input date)
+                const dia = dataLimpa.substring(0, 2);
+                const mes = dataLimpa.substring(2, 4);
+                const ano = dataLimpa.substring(4, 8);
+
+                // Validação básica (opcional)
+                if (dia > 31 || mes > 12) return '';
+
+                return `${ano}-${mes}-${dia}`;
+            };
 
             // Preenche campos básicos
-            const clientIdField = form.querySelector('[name="ContaDId"]');
-            const clientNameField = form.querySelector('[name="ContaDName"]');
-            const clientDocumentField = form.querySelector('[name="ContaDTotalAmount"]');
-            const clientBirthField = form.querySelector('[name="ContaDBirth"]');
+            const ContaDepositoIdField = form.querySelector('[name="ContaDepositoId"]');
+            const ContaDepositoNomeField = form.querySelector('[name="ContaDepositoNome"]');
+            const ContaDepositoMontanteField = form.querySelector('[name="ContaDepositoMontante"]');
+            const ContaDepositoDataCriacaoField = form.querySelector('[name="ContaDepositoDataCriacao"]');
 
-            if (ContaDIdField) clientIdField.value = cells[0].textContent.trim();
-            if (ContaDNameField) clientNameField.value = cells[1].textContent.trim();
-            if (ContaDTotalAmountField) {
-                clientDocumentField.value = limparDocumento(cells[2].textContent);
+            if (ContaDepositoIdField) ContaDepositoIdField.value = cells[0].textContent.trim();
+            if (ContaDepositoNomeField) ContaDepositoNomeField.value = cells[1].textContent.trim();
+            if (ContaDepositoMontanteField) {
+                ContaDepositoMontanteField.value = cells[2].textContent.trim();;
             }
 
             // Preenche data de nascimento - CORREÇÃO PRINCIPAL AQUI
-            if (ContaDBirthField) {
-                ContaDBirthField.value = formatarDataParaInput(cells[3].textContent);
-                console.log('Data formatada:', clientBirthField.value); // Para debug
+            if (ContaDepositoDataCriacaoField) {
+                ContaDepositoDataCriacaoField.value = formatarDataParaInput(cells[3].textContent);
+                console.log('Data formatada:', ContaDepositoDataCriacaoField.value); // Para debug
             }
 
         });
@@ -257,7 +257,7 @@ function initContaDepositoView() {
     setupTableObserver();
 
     // Verificação inicial
-    if (document.getElementById('listaDeContaDSelecinavel')) {
+    if (document.getElementById('listadeContasDepositoSelecinavel')) {
         setupTableEvents();
     }
 }

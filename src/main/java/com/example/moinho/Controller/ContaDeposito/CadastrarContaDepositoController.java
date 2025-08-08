@@ -24,13 +24,13 @@ public class CadastrarContaDepositoController {
     }
 
     // Rotas para processar os formulários (POST)
-    @GetMapping("/CadastrarContaDView")
-    public String viewCadastroCliente() {
-        return "/Coopase/ContaDeposito/CadastrarContaDView";
+    @GetMapping("/CadastrarContaDepositoView")
+    public String viewCadastroContaDeposito() {
+        return "/Coopase/ContaDeposito/CadastrarContaDepositoView";
     }
 
     @PostMapping("/Cadastrar")
-    public String cadastrarContaD(@RequestParam(value = "ContaDNome") String nome,
+    public String cadastrarContaDeposito(@RequestParam(value = "ContaDepositoNome") String nome,
                            RedirectAttributes redirectAttributes) {
 
         String resposta = cadastrarContaD.cadastrarContaDeposito(nome);

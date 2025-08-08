@@ -1,7 +1,10 @@
 package com.example.moinho.Controller.ContaDeposito;
 
+import com.example.moinho.Model.E_ContaDeposito;
 import com.example.moinho.Service.ClienteService.ConsultarClienteService;
 import com.example.moinho.Service.ClienteService.EditarClienteService;
+import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
+import com.example.moinho.Service.CofreService.EditarContaDepositoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,51 +14,47 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
-@RequestMapping("/Coopase/Cliente")
+@RequestMapping("/Coopase/ContaDeposito")
 public class EditarContaDepositoController {
 
-    private final ConsultarClienteService consultarCliente;
-    private final EditarClienteService editarCliente;
+    private final ConsultarContaDepositoService consultarContaDeposito;
+    private final EditarContaDepositoService contaDeposito;
 
     // Injeção via construtor
-    public EditarContaDepositoController(ConsultarClienteService consultarClientes, EditarClienteService editarCliente) {
-        this.consultarCliente = consultarClientes;
-        this.editarCliente = editarCliente;
+    public EditarContaDepositoController(ConsultarContaDepositoService consultarContaDeposito, EditarContaDepositoService contaDeposito) {
+        this.consultarContaDeposito = consultarContaDeposito;
+        this.contaDeposito = contaDeposito;
     }
 
     // Rotas para processar os formulários (POST)
-    @GetMapping("/EditarClienteView")
-    public String editarClienteView(Model model) {
+    @GetMapping("/EditarContaDepositoView")
+    public String editarContaDepositoView(Model model) {
 
-        model.addAttribute("resultadoConsulta", consultarCliente.consultarCliente());
+        List<E_ContaDeposito> resultadoConsulta = consultarContaDeposito.consultarContaDeposito();
 
-        return "/Coopase/Cliente/EditarClienteView";
+        model.addAttribute("resultadoConsulta", resultadoConsulta);
+
+        return "/Coopase/ContaDeposito/EditarContaDepositoView";
     }
 
     @PostMapping("/Editar")
-    public String editarCliente(@RequestParam("ClientId") Long id,
-                                @RequestParam(value = "ClientName", required = false) String nome,
-                                @RequestParam(value = "ClientDocument", required = false) String documento,
-                                @RequestParam(value = "ClientBirth", required = false) LocalDate dataNascimento,
-                                @RequestParam(value = "cooperadoSelect", required = false) boolean cooperado,
-                                @RequestParam(value = "ClientCafDate", required = false) LocalDate vencimentoCaf,
-                                @RequestParam(value = "ClientCafCode", required = false) String codigoCaf,
+    public String editarContaDeposito(@RequestParam("ContaDepositoId") Long id,
+                                @RequestParam(value = "ContaDepositoNome", required = false) String nome,
                                 RedirectAttributes redirectAttributes){
 
-        String resposta = editarCliente.editarCliente(id, nome, documento,
-                dataNascimento, cooperado, vencimentoCaf, codigoCaf);
+        String resposta = contaDeposito.editarContaDeposito(id, nome);
 
         redirectAttributes.addFlashAttribute("resposta", resposta);
-
-
-        return "redirect:/Coopase/Cliente/Servicos";
+        
+        return "redirect:/Coopase/ContaDeposito/Servicos";
     }
 
     @GetMapping("/Editar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Cliente/ServicosCliente";
+        return "/Coopase/ContaDeposito/ServicosContaDeposito";
     }
 
 }
