@@ -1,8 +1,8 @@
 package com.example.moinho.Controller.ContaDeposito;
 
-import com.example.moinho.Service.ClienteService.ConsultarClienteService;
-import com.example.moinho.Service.ClienteService.DeletarClienteService;
+import com.example.moinho.Model.Response.CrudResponse;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
+import com.example.moinho.Service.CofreService.DeletarContaDepositoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DeletarContaDepositoController {
 
     private final ConsultarContaDepositoService consultarContaDeposito;
-    private final DeletarClienteService deletarCliente;
+    private final DeletarContaDepositoService deletarContaDepositoService;
 
     // Injeção via construtor
-    public DeletarContaDepositoController(ConsultarContaDepositoService consultarContaDeposito,
-                                          DeletarClienteService deletarCliente) {
+    public DeletarContaDepositoController(ConsultarContaDepositoService consultarContaDeposito, DeletarContaDepositoService deletarContaDepositoService) {
         this.consultarContaDeposito = consultarContaDeposito;
-        this.deletarCliente = deletarCliente;
+        this.deletarContaDepositoService = deletarContaDepositoService;
     }
 
     @GetMapping("/DeletarContaDepositoView")
     public String deletarContaDepositoView(Model model) {
 
-        model.addAttribute("resultadoConsulta", consultarContaDeposito.consultarContaDeposito());
+        model.addAttribute("resultadoConsulta",
+                consultarContaDeposito.consultarContaDeposito());
 
         return "/Coopase/ContaDeposito/DeletarContaDepositoView";
     }
@@ -36,7 +36,8 @@ public class DeletarContaDepositoController {
     public String deletarContaDeposito(@RequestParam("ContaDepositoId") Long id,
                                 Model model) {
 
-        String contaDepositoValidadeResposta = deletarCliente.validaDeletarCliente(id);
+        CrudResponse contaDepositoValidadeResposta =
+                deletarContaDepositoService.DeletarContaDeposito(id);
 
         return "/Coopase/ContaDeposito/ServicosContaDeposito";
     }

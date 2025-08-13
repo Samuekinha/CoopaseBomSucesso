@@ -1,5 +1,6 @@
 package com.example.moinho.Controller.ContaDeposito;
 
+import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import com.example.moinho.Util.FormatadorUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/Coopase/ContaDeposito/Servicos")
 public class ServicosContaDepositoController {
 
-//    private final ConsultarClienteService consultarClientes;
-//
-//    // Injeção via construtor
-//    public ServicosClienteController(ConsultarClienteService consultarClientes) {
-//        this.consultarClientes = consultarClientes;
-//    }
+    private final ConsultarContaDepositoService consultarContaD;
+
+    // Injeção via construtor
+    public ServicosContaDepositoController(ConsultarContaDepositoService consultarContaD) {
+        this.consultarContaD = consultarContaD;
+    }
 
     @GetMapping
     public String servicos(@RequestParam(name = "action", required = false) String action,
@@ -25,6 +26,9 @@ public class ServicosContaDepositoController {
         String fragment = (action != null) ? action : "Cadastrar";
 
 
+
+        model.addAttribute("valorTotalContas",
+                consultarContaD.ConsultarValorTotalContas());
         model.addAttribute("formatador", new FormatadorUtil());
         model.addAttribute("fragmentToLoad", fragment);
         return "Coopase/ContaDeposito/ServicosContaDeposito"; // Sua página principal

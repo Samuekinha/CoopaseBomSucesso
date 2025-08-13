@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "deposito_transacoes") // Define o nome da tabela no banco
+@Table(name = "deposito_transacoes")
 @Data
 public class E_Transacoes {
 
@@ -16,29 +16,39 @@ public class E_Transacoes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public enum TypeTransaction { // Define as opções do ENUM
+    public enum TypeTransaction {
         DEPOSIT,
         WITHDRAW,
         TRANSFER
     }
 
-    @Enumerated(EnumType.STRING)  // Armazena o nome do enum como texto
+    @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private TypeTransaction typeTransaction;
 
     @Column(columnDefinition = "DECIMAL(10,3)")
-    private BigDecimal value; // Valor da transação
+    private BigDecimal value;
 
     @ManyToOne
-    @JoinColumn(name = "name")  // Nome da coluna FK
-    private E_ContaDeposito vault_id;
+    @JoinColumn(name = "conta_deposito_id", referencedColumnName = "id")  // Correct FK reference
+    private E_ContaDeposito contaDeposito;  // Renamed to follow conventions
 
     @ManyToOne
-    @JoinColumn(name = "name_client")  // Nome da coluna FK
-    private E_Cliente translaction_operator;
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")  // Correct FK reference
+    private E_Cliente cliente;  // Renamed to follow conventions
 
     @Column(updatable = false)
     @CreationTimestamp
-    private LocalDateTime time; // Define um timestamp pro momento da transação
+    private LocalDateTime dataTransacao;  // Renamed to Portuguese for consistency
 
+    // Additional improvements you might consider:
+
+    @Column(length = 255)
+    private String descricao;  // Optional: description of the transaction
+
+    @Column(name = "saldo_anterior", columnDefinition = "DECIMAL(10,3)")
+    private BigDecimal saldoAnterior;  // Optional: balance before transaction
+
+    @Column(name = "saldo_posterior", columnDefinition = "DECIMAL(10,3)")
+    private BigDecimal saldoPosterior;  // Optional: balance after transaction
 }
