@@ -35,7 +35,7 @@ public class E_Transacoes {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")  // Correct FK reference
-    private E_Cliente cliente;  // Renamed to follow conventions
+    private E_Cliente cliente;  // Renamed to follow conventions -> alterar de cliente para Operador
 
     @Column(updatable = false)
     @CreationTimestamp
