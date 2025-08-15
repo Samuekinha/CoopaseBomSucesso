@@ -1,4 +1,4 @@
-<div th:fragment="Deletar" data-view="deletar-ContaDeposito">
+<div th:fragment="Inativar" data-view="inativar-transacao">
     <style>
         .main-row {
             transition: background-color 0.2s ease;
@@ -14,29 +14,29 @@
     </style>
 
     <div>
-        <h2 class="d-flex justify-content-center">Deletar Conta Deposito</h2>
+        <h2 class="d-flex justify-content-center">Inativar Transação</h2>
 
         <div class="container">
-            <div th:fragment="tabelaContasDeposito">
-                <table class="main-table" id="listadeContasDepositoSelecinavel">
+            <div th:fragment="tabelaTransacao">
+                <table class="main-table" id="listaDeTransacaoSelecinavel">
                     <thead>
                     <tr>
                         <th>N°</th>
-                        <th>Nome</th>
-                        <th>Montante</th>
+                        <th>Tipo Transação</th>
+                        <th>Valor</th>
                         <th>Data Criação</th>
                     </tr>
                     </thead>
-                    <tbody th:replace="~{/Coopase/ContaDeposito/Fragments/TabelaContaDeposito :: corpoTabela}"></tbody>
+                    <tbody th:replace="~{/Coopase/Transacao/Fragments/TabelaTransacao :: corpoTabela}"></tbody>
                 </table>
             </div>
         </div>
 
         <div id="formWrapper" class="container" style="display: none;">
-            <form id="deletarContaDepositoForm" action="/Coopase/ContaDeposito/Deletar" method="post">
+            <form id="deletarContaDepositoForm" action="/Coopase/Transacao/Inativar" method="post">
                 <div class="form-group">
-                    <label for="ContaDepositoId">Id</label>
-                    <input type="text" class="form-control" name="ContaDepositoId" id="ContaDepositoId" value="" readonly>
+                    <label for="IdTransacao">Id</label>
+                    <input type="text" class="form-control" name="IdTransacao" id="IdTransacao" value="" readonly>
                 </div>
 
                 <div class="form-group">
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-warning mt-4">Deletar</button>
+                    <button type="submit" class="btn btn-warning mt-4">Inativar</button>
                 </div>
             </form>
         </div>

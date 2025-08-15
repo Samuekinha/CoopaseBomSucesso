@@ -1,0 +1,90 @@
+<div th:fragment="Cadastrar" data-view="cadastrar-Transacao">
+  <h2 class="d-flex justify-content-center">Cadastrar Transação</h2>
+
+  <div class="container">
+    <div class="transaction-options">
+      <button class="transaction-option active" data-type="entrada">
+        Entrada
+        <div class="underline-animation"></div>
+      </button>
+      <button class="transaction-option" data-type="saida">
+        Saída
+        <div class="underline-animation"></div>
+      </button>
+      <button class="transaction-option" data-type="transferencia">
+        Transferência
+        <div class="underline-animation"></div>
+      </button>
+    </div>
+
+    <div class="transaction-content">
+      <div class="form-container">
+        <form id="TransacaoForm" action="/Coopase/Transacao/Cadastrar" method="post">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="TipoTransacao">Tipo de Transação</label>
+              <input type="text" class="form-control" name="TipoTransacao" id="TipoTransacao" required readonly>
+            </div>
+            <div class="form-group">
+              <label for="Valor">Valor</label>
+              <input type="number" class="form-control" name="Valor" id="Valor" step="1" required>
+            </div>
+          </div>
+
+          <div class="form-group transferencia-field" id="transferencia-field">
+            <label for="ContaDestino">Conta de Destino</label>
+            <select class="form-control" name="ContaDestino" id="ContaDestino">
+              <option value="">Selecione uma conta</option>
+              <option value="1">Conta Corrente - 001</option>
+              <option value="2">Conta Poupança - 002</option>
+              <option value="3">Conta Investimento - 003</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="Descricao">Descrição</label>
+              <input type="text" class="form-control" name="Descricao" id="Descricao">
+            </div>
+            <div class="form-group" id="forma-field">
+              <label for="FormaTransacao">Forma Transação</label>
+              <select class="form-control" name="FormaTransacao" id="FormaTransacao">
+                <option value="">Selecione uma forma</option>
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Pix">Pix</option>
+                <option value="Cheque">Cheque</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">Cadastrar Transação</button>
+        </form>
+      </div>
+
+      <div class="transaction-table">
+        <h3>Preview da Transação</h3>
+        <table>
+          <thead>
+          <tr>
+            <th>Nome da Conta</th>
+            <th>Agora</th>
+            <th>Depois</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td colspan="3" style="text-align: center; color: #6c757d;">
+              Selecione uma conta para ver a preview
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <!-- Operador movido para baixo da tabela -->
+        <div class="operator-info">
+          <strong>Operador:</strong> <span id="operator-name">[Não informado]</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
