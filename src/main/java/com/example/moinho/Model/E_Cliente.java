@@ -37,6 +37,9 @@ public class E_Cliente {
     @Column(columnDefinition = "BOOLEAN", nullable = false)
     private boolean seller;
 
+    @Column(columnDefinition = "BOOLEAN", nullable = false)
+    private boolean operator;
+
     @Column(unique = true, length = 50)
     private String caf;
 

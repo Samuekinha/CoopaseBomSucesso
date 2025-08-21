@@ -25,4 +25,7 @@ public class E_ContaDeposito {
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime creation_date; // Tempo exato que foi criado
+
+    @Column(columnDefinition = "BOOLEAN", nullable = false)
+    private boolean active;
 }

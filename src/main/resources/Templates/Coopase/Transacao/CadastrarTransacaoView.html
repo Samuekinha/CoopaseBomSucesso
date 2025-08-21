@@ -25,9 +25,26 @@
               <label for="TipoTransacao">Tipo de Transação</label>
               <input type="text" class="form-control" name="TipoTransacao" id="TipoTransacao" required readonly>
             </div>
+            <div class="form-group NomeOperador-field" id="NomeOperador-field">
+              <label for="NomeOperador">Operador</label>
+              <select class="form-control" name="NomeOperador" id="NomeOperador">
+                <option value="">Selecione operador</option>
+                <option value="1">Vendedor 1</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
             <div class="form-group">
               <label for="Valor">Valor</label>
               <input type="number" class="form-control" name="Valor" id="Valor" step="1" required>
+            </div>
+            <div class="form-group ContaOrigem-field" id="ContaOrigem-field">
+              <label for="ContaOrigem">Conta de Origem</label>
+              <select class="form-control" name="ContaOrigem" id="ContaOrigem">
+                <option value="">Selecione Conta Origem</option>
+                <option value="1">Conta 001</option>
+              </select>
             </div>
           </div>
 
@@ -50,9 +67,9 @@
               <label for="FormaTransacao">Forma Transação</label>
               <select class="form-control" name="FormaTransacao" id="FormaTransacao">
                 <option value="">Selecione uma forma</option>
-                <option value="Dinheiro">Dinheiro</option>
-                <option value="Pix">Pix</option>
-                <option value="Cheque">Cheque</option>
+                <option value="DINHEIRO">Dinheiro</option>
+                <option value="PIX">Pix</option>
+                <option value="CHEQUE">Cheque</option>
               </select>
             </div>
           </div>
@@ -85,6 +102,7 @@
           <strong>Operador:</strong> <span id="operator-name">[Não informado]</span>
         </div>
       </div>
+
     </div>
   </div>
 </div>

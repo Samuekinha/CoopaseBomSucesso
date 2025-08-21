@@ -1,5 +1,6 @@
 package com.example.moinho.Controller.Transacao;
 
+import com.example.moinho.Service.Transacao.CadastrarTransacaoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +15,12 @@ import java.math.BigDecimal;
 @RequestMapping("/Coopase/Transacao")
 public class CadastrarTransacaoController {
 
-//    private final CadastrarContaDepositoService cadastrarContaD;
-//
-//    // Injeção via construtor
-//    public CadastrarContaDepositoController(CadastrarContaDepositoService cadastrarContaD) {
-//        this.cadastrarContaD = cadastrarContaD;
-//    }
+    private final CadastrarTransacaoService cadastrarTransacaoService;
+
+    // Injeção via construtor
+    public CadastrarTransacaoController(CadastrarTransacaoService cadastrarTransacaoService) {
+        this.cadastrarTransacaoService = cadastrarTransacaoService;
+    }
 
     // Rotas para processar os formulários (POST)
     @GetMapping("/CadastrarTransacaoView")
@@ -28,18 +29,35 @@ public class CadastrarTransacaoController {
     }
 
     @PostMapping("/Cadastrar")
-    public String cadastrarTransacao (@RequestParam("TipoTransacao") String tipoTransacao,
-                           @RequestParam("ValorTransacao") BigDecimal valorTransacao,
-                           @RequestParam("ContaDepositoDaTransacao") Long contaDepositoTransacao,
-                           @RequestParam("OperadorDaTransacao") Long operadorTransacao,
+    public String cadastrarTransacao (@RequestParam("TipoTransacao")
+                                            String tipoTransacao,
+                           @RequestParam("ValorTransacao")
+                                          BigDecimal valorTransacao,
+                           @RequestParam("ContaOrigem")
+                                          Long contaOrigem,
+                           @RequestParam("NomeOperador")
+                                          Long operadorTransacao,
+                          @RequestParam("FormaTransacao")
+                                          String formaTransacao,
+                           @RequestParam(value = "ContaDestino", required = false)
+                                          Long contaDestino,
                            @RequestParam(value = "DescricaoTransacao", required = false)
                                           String descricaoTransacao,
                            RedirectAttributes redirectAttributes) {
 
-        
+        if (tipoTransacao.equalsIgnoreCase("DEPOSIT")) {
 
-//        String resposta = cadastrarTransacao.cadastrarTransacao(tipoTransacao, valorTransacao,
-//                contaDepositoTransacao, operadorTransacao, descricaoTransacao);
+            cadastrarTransacaoService.cadastrarTransacaoEntrada(valorTransacao,
+                    contaOrigem, operadorTransacao, formaTransacao, descricaoTransacao);
+
+        } else if (tipoTransacao.equalsIgnoreCase("WITHDRAW")) {
+
+        } else if (tipoTransacao.equalsIgnoreCase("TRANSFER")) {
+
+        } else {
+            redirectAttributes.addFlashAttribute("Erro","Impossível" +
+                    " completar a operação sem um tipo de transação.");
+        }
 
 //        redirectAttributes.addFlashAttribute("resposta", resposta);
         return "redirect:/Coopase/Transacao/Servicos";

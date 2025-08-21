@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "deposito_transacoes")
 @Data
-public class E_Transacoes {
+public class TransacaoTable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +29,23 @@ public class E_Transacoes {
     @Column(columnDefinition = "DECIMAL(10,3)")
     private BigDecimal value;
 
+    public enum TypeMoney {
+        PIX,
+        DINHEIRO,
+        CHEQUE
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private TypeMoney typeMoney;
+
     @ManyToOne
     @JoinColumn(name = "conta_deposito_id", referencedColumnName = "id")  // Correct FK reference
     private E_ContaDeposito contaDeposito;  // Renamed to follow conventions
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")  // Correct FK reference
-    private E_Cliente cliente;  // Renamed to follow conventions -> alterar de cliente para Operador
+    private E_Cliente operador;  // Renamed to follow conventions -> alterar de cliente para Operador
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -51,4 +61,8 @@ public class E_Transacoes {
 
     @Column(name = "saldo_posterior", columnDefinition = "DECIMAL(10,3)")
     private BigDecimal saldoPosterior;  // Optional: balance after transaction
+
+    private BigDecimal calculoSaldoPosterior (BigDecimal saldoPosterior, BigDecimal value) {
+        return saldoPosterior.add(value);
+    }
 }

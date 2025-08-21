@@ -1,33 +1,37 @@
-// Sistema robusto para lidar com views carregadas dinamicamente
-class DynamicViewManager {
-    constructor() {
-        this.observers = new Map();
-        this.initialized = new Set();
-        this.initGlobalObserver();
+document.addEventListener('DOMContentLoaded', function() {
+    // Configura o clique na linha divisória
+    const clearViewTrigger = document.getElementById('clear-view-trigger');
+    if (clearViewTrigger) {
+        clearViewTrigger.addEventListener('click', function() {
+            const contentContainer = document.getElementById('dynamic-content');
+
+            if (contentContainer) {
+                // Limpa o conteúdo sem passar pelo controller
+                contentContainer.innerHTML = '';
+
+                // Remove a seleção de todos os blocos
+                document.querySelectorAll('.bloco-link.selected').forEach(b => {
+                    b.classList.remove('selected');
+                    const bloco = b.querySelector('.bloco');
+                    if (bloco) {
+                        bloco.style.transform = 'scale(0.98)';
+                    }
+                });
+
+                // Opcional: Mostra uma mensagem ou estado vazio
+                contentContainer.innerHTML = '<p class="text-muted">Nenhuma view selecionada</p>';
+            }
+        });
     }
 
-    // Observador global que monitora mudanças no DOM
-    initGlobalObserver() {
-        const globalObserver = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.type === 'childList') {
-                    mutation.addedNodes.forEach((node) => {
-                        if (node.nodeType === Node.ELEMENT_NODE) {
-                            this.checkForTransactionView(node);
-                        }
-                    });
-                }
-            });
-        });
+    // Inicializa a view
+    initContaDepositoView();
+});
 
-        globalObserver.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['data-view']
-        });
-
-        console.log('🔍 Observador global iniciado - monitorando views dinâmicas');
+// Classe para gerenciar as views de transação
+class TransactionViewManager {
+    constructor() {
+        this.initialized = new Set();
     }
 
     // Verifica se o elemento contém uma view de transação
@@ -81,6 +85,7 @@ class DynamicViewManager {
         const transferenciaField = container.querySelector('#transferencia-field');
         const tipoTransacaoInput = container.querySelector('#TipoTransacao');
         const contaDestinoSelect = container.querySelector('#ContaDestino');
+        const nomeOperadorSelect = container.querySelector('#NomeOperador');
         const operatorNameSpan = container.querySelector('#operator-name');
 
         console.log(`📊 Elementos encontrados:
@@ -88,6 +93,7 @@ class DynamicViewManager {
         - Campo transferência: ${transferenciaField ? 'SIM' : 'NÃO'}
         - Input tipo: ${tipoTransacaoInput ? 'SIM' : 'NÃO'}
         - Select conta: ${contaDestinoSelect ? 'SIM' : 'NÃO'}
+        - Select operador: ${nomeOperadorSelect ? 'SIM' : 'NÃO'}
         - Span operador: ${operatorNameSpan ? 'SIM' : 'NÃO'}`);
 
         if (transactionOptions.length === 0) {
@@ -112,6 +118,7 @@ class DynamicViewManager {
         // Reseleciona os elementos após a clonagem
         const newTransactionOptions = container.querySelectorAll('.transaction-option');
         const newContaDestinoSelect = container.querySelector('#ContaDestino');
+        const newNomeOperadorSelect = container.querySelector('#NomeOperador');
 
         // Event listener para o select de conta destino
         if (newContaDestinoSelect) {
@@ -128,21 +135,33 @@ class DynamicViewManager {
             });
         }
 
+        // Event listener para o select de operador
+        if (newNomeOperadorSelect) {
+            const newOperatorSelect = newNomeOperadorSelect.cloneNode(true);
+            newNomeOperadorSelect.parentNode.replaceChild(newOperatorSelect, newNomeOperadorSelect);
+
+            newOperatorSelect.addEventListener('change', () => {
+                console.log('👤 Operador selecionado:', newOperatorSelect.value);
+                this.updateOperatorDisplay(newOperatorSelect, container);
+            });
+        }
+
         // Inicialização - Define a primeira opção como ativa
         if (newTransactionOptions.length > 0) {
             const firstOption = newTransactionOptions[0];
             firstOption.classList.add('active');
 
+            // Atualiza o campo de tipo de transação
             const tipoInput = container.querySelector('#TipoTransacao');
-            const operatorSpan = container.querySelector('#operator-name');
-
             if (tipoInput) {
-                tipoInput.value = firstOption.getAttribute('data-type');
+                const transactionType = firstOption.getAttribute('data-type');
+                tipoInput.value = transactionType;
             }
 
-            if (operatorSpan) {
-                const transactionType = firstOption.getAttribute('data-type');
-                operatorSpan.textContent = transactionType.charAt(0).toUpperCase() + transactionType.slice(1);
+            // Atualiza a exibição inicial do operador se já houver um selecionado
+            const operadorSelect = container.querySelector('#NomeOperador');
+            if (operadorSelect && operadorSelect.value) {
+                this.updateOperatorDisplay(operadorSelect, container);
             }
         }
 
@@ -157,12 +176,31 @@ class DynamicViewManager {
         return true;
     }
 
+    // Atualiza a exibição do operador selecionado
+    updateOperatorDisplay(operatorSelect, container) {
+        const operatorNameSpan = container.querySelector('#operator-name');
+        if (!operatorNameSpan || !operatorSelect.value) {
+            if (operatorNameSpan) {
+                operatorNameSpan.textContent = '[Não informado]';
+            }
+            return;
+        }
+
+        // Pega o texto da opção selecionada
+        const selectedOption = operatorSelect.options[operatorSelect.selectedIndex];
+        const operatorName = selectedOption ? selectedOption.textContent : '[Não informado]';
+
+        operatorNameSpan.textContent = operatorName;
+        console.log('👤 Nome do operador atualizado para:', operatorName);
+    }
+
     // Handler para cliques nos botões de transação
     handleTransactionClick(clickedButton, container) {
         const transactionOptions = container.querySelectorAll('.transaction-option');
         const transferenciaField = container.querySelector('#transferencia-field');
         const tipoTransacaoInput = container.querySelector('#TipoTransacao');
         const contaDestinoSelect = container.querySelector('#ContaDestino');
+        const nomeOperadorSelect = container.querySelector('#NomeOperador');
         const operatorNameSpan = container.querySelector('#operator-name');
 
         // Remove active de todos os botões
@@ -175,11 +213,12 @@ class DynamicViewManager {
         if (tipoTransacaoInput) {
             const transactionType = clickedButton.getAttribute('data-type');
             tipoTransacaoInput.value = transactionType;
+            console.log('📝 Tipo de transação definido como:', transactionType);
+        }
 
-            // Atualiza o nome do operador
-            if (operatorNameSpan) {
-                operatorNameSpan.textContent = transactionType.charAt(0).toUpperCase() + transactionType.slice(1);
-            }
+        // Atualiza o nome do operador baseado na seleção atual
+        if (nomeOperadorSelect && operatorNameSpan) {
+            this.updateOperatorDisplay(nomeOperadorSelect, container);
         }
 
         // Mostra/esconde campo de transferência
@@ -202,122 +241,28 @@ class DynamicViewManager {
         }
     }
 
-    // Função para preencher a tabela
-    fillTable(contaId, container = document) {
-        const tableBody = container.querySelector('.transaction-table tbody');
-        if (!tableBody) return;
-
-        tableBody.innerHTML = '';
-
-        // Dados simulados
-        const mockData = {
-            '1': [
-                { id: 101, descricao: 'Depósito inicial', valor: 'R$ 1.000,00', data: '10/05/2023' },
-                { id: 102, descricao: 'Transferência recebida', valor: 'R$ 500,00', data: '15/05/2023' },
-                { id: 103, descricao: 'Pagamento PIX', valor: 'R$ 250,00', data: '18/05/2023' }
-            ],
-            '2': [
-                { id: 201, descricao: 'Aplicação', valor: 'R$ 2.000,00', data: '05/05/2023' },
-                { id: 202, descricao: 'Rendimento', valor: 'R$ 50,00', data: '20/05/2023' },
-                { id: 203, descricao: 'Resgate parcial', valor: 'R$ 300,00', data: '22/05/2023' }
-            ],
-            '3': [
-                { id: 301, descricao: 'Compra de ações', valor: 'R$ 3.000,00', data: '01/05/2023' },
-                { id: 302, descricao: 'Dividendos', valor: 'R$ 150,00', data: '25/05/2023' },
-                { id: 303, descricao: 'Venda de ações', valor: 'R$ 1.800,00', data: '28/05/2023' }
-            ]
-        };
-
-        const data = mockData[contaId] || [];
-
-        data.forEach(item => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${item.id}</td>
-                <td>${item.descricao}</td>
-                <td>${item.valor}</td>
-                <td>${item.data}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-
-        if (data.length === 0) {
-            const row = document.createElement('tr');
-            row.innerHTML = '<td colspan="4" style="text-align: center; color: #6c757d;">Nenhuma transação encontrada</td>';
-            tableBody.appendChild(row);
-        }
-
-        console.log(`📊 Tabela preenchida para conta ${contaId} com ${data.length} transações`);
+    // Métodos auxiliares (precisam ser implementados conforme sua lógica)
+    fillTable(contaId, container) {
+        console.log('📊 Preenchendo tabela para conta:', contaId);
+        // Implementar lógica para preencher a tabela com base na conta selecionada
     }
 
-    // Função para limpar a tabela
-    clearTable(container = document) {
-        const tableBody = container.querySelector('.transaction-table tbody');
-        if (!tableBody) return;
-
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="4" style="text-align: center; color: #6c757d;">
-                    Selecione uma conta de destino para ver as transações
-                </td>
-            </tr>
-        `;
-    }
-
-    // Método para forçar inicialização manual
-    forceInit() {
-        console.log('🔧 Forçando inicialização manual...');
-        const transactionViews = document.querySelectorAll('[data-view="cadastrar-Transacao"]');
-        transactionViews.forEach(view => this.initTransactionView(view));
-
-        // Se não encontrou views específicas, tenta inicializar botões diretamente
-        if (transactionViews.length === 0) {
-            this.initTransactionButtons();
-        }
+    clearTable(container) {
+        console.log('🧹 Limpando tabela');
+        // Implementar lógica para limpar a tabela
     }
 }
 
-// Instância global do gerenciador
-const dynamicViewManager = new DynamicViewManager();
+// Instância global do gerenciador de views de transação
+const transactionViewManager = new TransactionViewManager();
 
-// Funções de compatibilidade com o código existente
-function initTransactionButtons() {
-    return dynamicViewManager.initTransactionButtons();
-}
-
-// Modificação da função initTransacaoView existente
-function initTransacaoView() {
-    // coloração de blocos de serviço quando selecionados
-    setupServiceBlocks();
-
-    // Força a inicialização dos botões
-    dynamicViewManager.forceInit();
-
-    // Resto do código original mantido...
-    // (setupTableObserver, etc.)
-    setupTableObserver();
-    if (document.getElementById('listaDeTransacaoSelecinavel')) {
-        setupTableEvents();
-    }
-}
-
-// Event listener para DOMContentLoaded (mantém compatibilidade)
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🌟 DOM carregado - iniciando sistema de views dinâmicas');
-    dynamicViewManager.forceInit();
-});
-
-// Expõe funções globalmente
-window.initTransactionButtons = initTransactionButtons;
-window.initTransacaoView = initTransacaoView;
-window.forceInitTransactionButtons = () => dynamicViewManager.forceInit();
-
-// Resto do seu código original (setupServiceBlocks, etc.)
 function setupServiceBlocks() {
     const blocosLinks = document.querySelectorAll('.bloco-link');
     const closeAllBtn = document.getElementById('clear-view-trigger');
 
+    // Função para resetar todos os estados
     function resetAllStates() {
+        // Remove seleção de todos os blocos
         document.querySelectorAll('.bloco-link.selected').forEach(b => {
             b.classList.remove('selected');
             const bloco = b.querySelector('.bloco');
@@ -326,18 +271,21 @@ function setupServiceBlocks() {
             }
         });
 
+        // Limpa o conteúdo dinâmico
         const contentContainer = document.getElementById('dynamic-content');
         if (contentContainer) {
             contentContainer.innerHTML = '<p>Nenhuma view selecionada</p>';
         }
     }
 
+    // Inicializa a página no estado correto (limpo)
     resetAllStates();
 
     blocosLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
 
+            // Remove a seleção de todos os blocos
             document.querySelectorAll('.bloco-link.selected').forEach(b => {
                 b.classList.remove('selected');
                 const bloco = b.querySelector('.bloco');
@@ -346,141 +294,194 @@ function setupServiceBlocks() {
                 }
             });
 
+            // Adiciona a seleção no bloco clicado
             this.classList.add('selected');
             const selectedBloco = this.querySelector('.bloco');
             if (selectedBloco) {
                 selectedBloco.style.transform = 'scale(1) translateY(-3px)';
             }
 
+            // Carrega a view correspondente
             const action = this.getAttribute('data-action');
             if (action && typeof loadView === 'function') {
                 loadView(action);
-
-                // Aguarda a view ser carregada e força inicialização
-                setTimeout(() => {
-                    dynamicViewManager.forceInit();
-                }, 100);
             } else {
                 console.log(`Ação selecionada: ${action}`);
             }
         });
     });
 
+    // Manipula o clique na divisória para limpar seleções
     if (closeAllBtn) {
         closeAllBtn.addEventListener('click', function() {
             resetAllStates();
         });
     }
 
+    // Expõe a função para uso externo se necessário
     window.resetServiceBlocks = resetAllStates;
 }
 
-// Variável para controlar o observador (mantém código original)
+// Variável para controlar o observador
 let tableObserver;
 
-function setupTableObserver() {
-    if (tableObserver) {
-        tableObserver.disconnect();
+function initContaDepositoView() {
+    // coloração de blocos de serviço quando selecionados
+    setupServiceBlocks();
+
+    // Verifica se há views de transação no carregamento inicial
+    transactionViewManager.checkForTransactionView(document);
+
+    // 2. Observador de mutação para detectar a tabela dinamicamente
+    function setupTableObserver() {
+        // Se já existe um observador, desconecta antes de criar um novo
+        if (tableObserver) {
+            tableObserver.disconnect();
+        }
+
+        tableObserver = new MutationObserver(function(mutations) {
+            const table = document.getElementById('listadeContasDepositoSelecinavel');
+            if (table) {
+                setupTableEvents();
+            }
+
+            // Verifica se há novas views de transação adicionadas dinamicamente
+            mutations.forEach(mutation => {
+                mutation.addedNodes.forEach(node => {
+                    if (node.nodeType === 1) { // Element nodes only
+                        transactionViewManager.checkForTransactionView(node);
+                    }
+                });
+            });
+        });
+
+        tableObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     }
 
-    tableObserver = new MutationObserver(function(mutations) {
-        const table = document.getElementById('listaDeTransacaoSelecinavel');
-        if (table) {
-            setupTableEvents();
+    // 3. Configura os eventos da tabela
+    function setupTableEvents() {
+        const table = document.getElementById('listadeContasDepositoSelecinavel');
+        const formWrapper = document.getElementById('formWrapper');
+
+        if (!table || !formWrapper) {
+            return;
         }
-    });
 
-    tableObserver.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-}
-
-function setupTableEvents() {
-    const table = document.getElementById('listaDeTransacaoSelecinavel');
-    const formWrapper = document.getElementById('formWrapper');
-
-    if (!table || !formWrapper) {
-        return;
+        // Remove event listener antigo se existir
+        table.removeEventListener('click', handleTableClick);
+        // Adiciona novo event listener
+        table.addEventListener('click', handleTableClick);
     }
 
-    table.removeEventListener('click', handleTableClick);
-    table.addEventListener('click', handleTableClick);
+    // 4. Handler para clicks na tabela
+    function handleTableClick(e) {
+        const row = e.target.closest('.main-row');
+        if (!row) return;
+
+        toggleRowSelection(row);
+        showFormForRow(row);
+        fillFormFromRow(row);
+    }
+
+    // 5. Funções auxiliares (mantidas iguais)
+    function toggleRowSelection(selectedRow) {
+        document.querySelectorAll('.main-row.selected').forEach(r => r.classList.remove('selected'));
+        selectedRow.classList.add('selected');
+    }
+
+    function showFormForRow(row) {
+        document.querySelectorAll('.expanded-form-row').forEach(r => r.remove());
+
+        const expandedRow = document.createElement('tr');
+        expandedRow.className = 'expanded-form-row';
+
+        const td = document.createElement('td');
+        td.colSpan = row.cells.length;
+        td.className = 'expanded-form-content';
+
+        const formClone = document.getElementById('formWrapper').cloneNode(true);
+        formClone.style.display = 'block';
+        formClone.id = 'formWrapper-expanded';
+        td.appendChild(formClone);
+
+        expandedRow.appendChild(td);
+        row.parentNode.insertBefore(expandedRow, row.nextSibling);
+
+        // Verifica se o formulário expandido contém views de transação
+        transactionViewManager.checkForTransactionView(formClone);
+    }
+
+    function fillFormFromRow(row) {
+        const cells = row.cells;
+
+        ['formWrapper', 'formWrapper-expanded'].forEach(wrapperId => {
+            const wrapper = document.getElementById(wrapperId);
+            if (!wrapper) return;
+
+            const form = wrapper.querySelector('form');
+            if (!form) return;
+
+            const formatarDataParaInput = (dataStr) => {
+                if (!dataStr || dataStr.trim() === '') return '';
+
+                // Remove qualquer formatação existente
+                const dataLimpa = dataStr.replace(/\D/g, '');
+
+                // Se não tiver números suficientes, retorna vazio
+                if (dataLimpa.length < 8) return '';
+
+                // Formata para yyyy-MM-dd (padrão do input date)
+                const dia = dataLimpa.substring(0, 2);
+                const mes = dataLimpa.substring(2, 4);
+                const ano = dataLimpa.substring(4, 8);
+
+                // Validação básica (opcional)
+                if (dia > 31 || mes > 12) return '';
+
+                return `${ano}-${mes}-${dia}`;
+            };
+
+            // Preenche campos básicos
+            const ContaDepositoIdField = form.querySelector('[name="ContaDepositoId"]');
+            const ContaDepositoNomeField = form.querySelector('[name="ContaDepositoNome"]');
+            const ContaDepositoMontanteField = form.querySelector('[name="ContaDepositoMontante"]');
+            const ContaDepositoDataCriacaoField = form.querySelector('[name="ContaDepositoDataCriacao"]');
+
+            if (ContaDepositoIdField) ContaDepositoIdField.value = cells[0].textContent.trim();
+            if (ContaDepositoNomeField) ContaDepositoNomeField.value = cells[1].textContent.trim();
+            if (ContaDepositoMontanteField) {
+                ContaDepositoMontanteField.value = cells[2].textContent.trim();;
+            }
+
+            // Preenche data de nascimento - CORREÇÃO PRINCIPAL AQUI
+            if (ContaDepositoDataCriacaoField) {
+                ContaDepositoDataCriacaoField.value = formatarDataParaInput(cells[3].textContent);
+                console.log('Data formatada:', ContaDepositoDataCriacaoField.value); // Para debug
+            }
+
+        });
+    }
+
+    // Inicialização
+    setupTableObserver();
+
+    // Verificação inicial
+    if (document.getElementById('listadeContasDepositoSelecinavel')) {
+        setupTableEvents();
+    }
 }
 
-function handleTableClick(e) {
-    const row = e.target.closest('.main-row');
-    if (!row) return;
-
-    toggleRowSelection(row);
-    showFormForRow(row);
-    fillFormFromRow(row);
-}
-
-function toggleRowSelection(selectedRow) {
-    document.querySelectorAll('.main-row.selected').forEach(r => r.classList.remove('selected'));
-    selectedRow.classList.add('selected');
-}
-
-function showFormForRow(row) {
-    document.querySelectorAll('.expanded-form-row').forEach(r => r.remove());
-
-    const expandedRow = document.createElement('tr');
-    expandedRow.className = 'expanded-form-row';
-
-    const td = document.createElement('td');
-    td.colSpan = row.cells.length;
-    td.className = 'expanded-form-content';
-
-    const formClone = document.getElementById('formWrapper').cloneNode(true);
-    formClone.style.display = 'block';
-    formClone.id = 'formWrapper-expanded';
-    td.appendChild(formClone);
-
-    expandedRow.appendChild(td);
-    row.parentNode.insertBefore(expandedRow, row.nextSibling);
-}
-
-function fillFormFromRow(row) {
-    const cells = row.cells;
-
-    ['formWrapper', 'formWrapper-expanded'].forEach(wrapperId => {
-        const wrapper = document.getElementById(wrapperId);
-        if (!wrapper) return;
-
-        const form = wrapper.querySelector('form');
-        if (!form) return;
-
-        const formatarDataParaInput = (dataStr) => {
-            if (!dataStr || dataStr.trim() === '') return '';
-
-            const dataLimpa = dataStr.replace(/\D/g, '');
-
-            if (dataLimpa.length < 8) return '';
-
-            const dia = dataLimpa.substring(0, 2);
-            const mes = dataLimpa.substring(2, 4);
-            const ano = dataLimpa.substring(4, 8);
-
-            if (dia > 31 || mes > 12) return '';
-
-            return `${ano}-${mes}-${dia}`;
-        };
-
-        const ContaDepositoIdField = form.querySelector('[name="NãoMechaDeepSeek,Ok"]');
-        const ContaDepositoNomeField = form.querySelector('[name="NãoMechaDeepSeek,Ok2"]');
-        const ContaDepositoMontanteField = form.querySelector('[name="NãoMechaDeepSeek,Ok3"]');
-        const ContaDepositoDataCriacaoField = form.querySelector('[name="NãoMechaDeepSeek,Ok4"]');
-
-        if (ContaDepositoIdField) ContaDepositoIdField.value = cells[0].textContent.trim();
-        if (ContaDepositoNomeField) ContaDepositoNomeField.value = cells[1].textContent.trim();
-        if (ContaDepositoMontanteField) {
-            ContaDepositoMontanteField.value = cells[2].textContent.trim();
-        }
-
-        if (ContaDepositoDataCriacaoField) {
-            ContaDepositoDataCriacaoField.value = formatarDataParaInput(cells[3].textContent);
-            console.log('Data formatada:', ContaDepositoDataCriacaoField.value);
-        }
-    });
+// Função para carregar views (se não existir, precisa ser definida)
+if (typeof loadView === 'undefined') {
+    window.loadView = function(action) {
+        console.log('Carregando view para ação:', action);
+        // Implementar lógica para carregar views dinamicamente
+        // Após carregar a view, verificar se contém transações
+        setTimeout(() => {
+            transactionViewManager.checkForTransactionView(document.getElementById('dynamic-content'));
+        }, 100);
+    };
 }
