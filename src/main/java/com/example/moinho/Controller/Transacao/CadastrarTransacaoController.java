@@ -1,15 +1,15 @@
 package com.example.moinho.Controller.Transacao;
 
+import com.example.moinho.Dto.TransacaoRequest;
 import com.example.moinho.Service.Transacao.CadastrarTransacaoService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/Coopase/Transacao")
@@ -29,37 +29,23 @@ public class CadastrarTransacaoController {
     }
 
     @PostMapping("/Cadastrar")
-    public String cadastrarTransacao (@RequestParam("TipoTransacao")
-                                            String tipoTransacao,
-                           @RequestParam("ValorTransacao")
-                                          BigDecimal valorTransacao,
-                           @RequestParam("ContaOrigem")
-                                          Long contaOrigem,
-                           @RequestParam("NomeOperador")
-                                          Long operadorTransacao,
-                          @RequestParam("FormaTransacao")
-                                          String formaTransacao,
-                           @RequestParam(value = "ContaDestino", required = false)
-                                          Long contaDestino,
-                           @RequestParam(value = "DescricaoTransacao", required = false)
-                                          String descricaoTransacao,
-                           RedirectAttributes redirectAttributes) {
-
-        if (tipoTransacao.equalsIgnoreCase("DEPOSIT")) {
-
-            cadastrarTransacaoService.cadastrarTransacaoEntrada(valorTransacao,
-                    contaOrigem, operadorTransacao, formaTransacao, descricaoTransacao);
-
-        } else if (tipoTransacao.equalsIgnoreCase("WITHDRAW")) {
-
-        } else if (tipoTransacao.equalsIgnoreCase("TRANSFER")) {
-
-        } else {
-            redirectAttributes.addFlashAttribute("Erro","Impossível" +
-                    " completar a operação sem um tipo de transação.");
+    public String cadastrarTransacao(@Valid TransacaoRequest form,
+                                     BindingResult result,
+                                     RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("Erro", result.getAllErrors());
+            return "redirect:/Coopase/Transacao/CadastrarTransacaoView";
         }
 
-//        redirectAttributes.addFlashAttribute("resposta", resposta);
+        cadastrarTransacaoService.criarTransacaoEntrada(
+                form.getValorTransacao(),
+                form.getContaOrigemId(),
+                form.getOperadorTransacaoId(),
+                form.getFormaDinheiroTransacao(),
+                form.getDescricaoTransacao()
+        );
+
+        redirectAttributes.addFlashAttribute("Sucesso", "Transação cadastrada com sucesso!");
         return "redirect:/Coopase/Transacao/Servicos";
     }
 

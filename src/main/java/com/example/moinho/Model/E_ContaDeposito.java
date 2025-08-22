@@ -24,8 +24,27 @@ public class E_ContaDeposito {
 
     @Column(updatable = false)
     @CreationTimestamp
-    private LocalDateTime creation_date; // Tempo exato que foi criado
+    private LocalDateTime creation_date;
 
     @Column(columnDefinition = "BOOLEAN", nullable = false)
     private boolean active;
+
+    // Aplica um depósito (adiciona ao total)
+    public void aplicarDeposito(BigDecimal valor) {
+        if (valor == null || valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("O valor do depósito deve ser maior que zero");
+        }
+        this.total_amount = this.total_amount.add(valor);
+    }
+
+    // Aplica um desconto ou retirada (subtrai do total)
+    public void aplicarDesconto(BigDecimal valor) {
+        if (valor == null || valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("O valor do desconto deve ser maior que zero");
+        }
+        if (this.total_amount.compareTo(valor) < 0) {
+            throw new IllegalArgumentException("Saldo insuficiente para aplicar o desconto");
+        }
+        this.total_amount = this.total_amount.subtract(valor);
+    }
 }

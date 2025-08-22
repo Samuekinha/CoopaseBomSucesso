@@ -1,6 +1,6 @@
 package com.example.moinho.Controller.ContaDeposito;
 
-import com.example.moinho.Model.Response.CrudResponse;
+import com.example.moinho.Model.Response.OperationResult;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import com.example.moinho.Service.CofreService.DeletarContaDepositoService;
 import org.springframework.stereotype.Controller;
@@ -36,7 +36,7 @@ public class DeletarContaDepositoController {
     public String deletarContaDeposito(@RequestParam("ContaDepositoId") Long id,
                                 Model model) {
 
-        CrudResponse contaDepositoValidadeResposta =
+        OperationResult contaDepositoValidadeResposta =
                 deletarContaDepositoService.DeletarContaDeposito(id);
 
         return "/Coopase/ContaDeposito/ServicosContaDeposito";

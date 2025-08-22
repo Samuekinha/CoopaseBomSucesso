@@ -62,7 +62,10 @@ public class TransacaoTable {
     @Column(name = "saldo_posterior", columnDefinition = "DECIMAL(10,3)")
     private BigDecimal saldoPosterior;  // Optional: balance after transaction
 
-    private BigDecimal calculoSaldoPosterior (BigDecimal saldoPosterior, BigDecimal value) {
-        return saldoPosterior.add(value);
+    public BigDecimal calcularSaldoPosterior(BigDecimal saldoAtual, BigDecimal valorTransacao) {
+        if (valorTransacao == null || valorTransacao.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Valor inválido para depósito.");
+        }
+        return saldoAtual.add(valorTransacao);
     }
 }
