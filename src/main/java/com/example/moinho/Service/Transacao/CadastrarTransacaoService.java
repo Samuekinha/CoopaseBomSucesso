@@ -1,7 +1,10 @@
 package com.example.moinho.Service.Transacao;
 
 import com.example.moinho.Dto.TransacaoRequest;
-import com.example.moinho.Exception.BusinessException;
+import com.example.moinho.Exception.TransacaoExceptions.ContaDestinoInativaException;
+import com.example.moinho.Exception.TransacaoExceptions.ContaDestinoNaoEncontradaException;
+import com.example.moinho.Exception.TransacaoExceptions.OperadorNaoEncontradoException;
+import com.example.moinho.Exception.TransacaoExceptions.OperadorSemPermissaoException;
 import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Model.E_ContaDeposito;
 import com.example.moinho.Model.TransacaoTable;
@@ -9,8 +12,6 @@ import com.example.moinho.Repository.ContaDepositoRepository;
 import com.example.moinho.Repository.R_Cliente;
 import com.example.moinho.Repository.TransacaoRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -35,18 +36,19 @@ public class CadastrarTransacaoService {
 
         // Valida conta de destino
         E_ContaDeposito conta = contaDepositoRepository.findById(request.getContaDestinoId())
-                .orElseThrow(() -> new BusinessException("Conta destino não encontrada"));
+                .orElseThrow(() -> new ContaDestinoNaoEncontradaException
+                        ("Conta destino não encontrada"));
 
         if (!conta.isActive()) {
-            throw new BusinessException("Conta destino está inativa");
+            throw new ContaDestinoInativaException("Conta destino está inativa");
         }
 
         // Valida operador
         E_Cliente operador = clienteRepository.findById(request.getOperadorTransacaoId())
-                .orElseThrow(() -> new BusinessException("Operador não encontrado"));
+                .orElseThrow(() -> new OperadorNaoEncontradoException("Operador não encontrado"));
 
         if (!operador.isOperator()) {
-            throw new BusinessException("Operador não tem permissão");
+            throw new OperadorSemPermissaoException("Operador não tem permissão");
         }
 
         // Atualiza saldo da conta

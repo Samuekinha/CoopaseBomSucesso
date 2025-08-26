@@ -86,7 +86,7 @@ class TransactionViewManager {
         const tipoTransacaoInput = container.querySelector('#TipoTransacao');
         const contaDestinoSelect = container.querySelector('#ContaDestino');
         const nomeOperadorSelect = container.querySelector('#NomeOperador');
-        const operatorNameSpan = container.querySelector('#operator-name');
+        const operatorNameSpan = container.querySelector('#NomeOperadorSpan');
 
         console.log(`📊 Elementos encontrados:
         - Botões: ${transactionOptions.length}
@@ -340,7 +340,7 @@ function initContaDepositoView() {
         }
 
         tableObserver = new MutationObserver(function(mutations) {
-            const table = document.getElementById('listadeContasDepositoSelecinavel');
+            const table = document.getElementById('listaDeTransacaoSelecinavel');
             if (table) {
                 setupTableEvents();
             }
@@ -363,7 +363,7 @@ function initContaDepositoView() {
 
     // 3. Configura os eventos da tabela
     function setupTableEvents() {
-        const table = document.getElementById('listadeContasDepositoSelecinavel');
+        const table = document.getElementById('listaDeTransacaoSelecinavel');
         const formWrapper = document.getElementById('formWrapper');
 
         if (!table || !formWrapper) {
@@ -469,7 +469,7 @@ function initContaDepositoView() {
     setupTableObserver();
 
     // Verificação inicial
-    if (document.getElementById('listadeContasDepositoSelecinavel')) {
+    if (document.getElementById('listaDeTransacaoSelecinavel')) {
         setupTableEvents();
     }
 }

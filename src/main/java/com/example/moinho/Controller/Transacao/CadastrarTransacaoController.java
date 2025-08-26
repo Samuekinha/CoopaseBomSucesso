@@ -1,6 +1,8 @@
 package com.example.moinho.Controller.Transacao;
 
 import com.example.moinho.Dto.TransacaoRequest;
+import com.example.moinho.Exception.BusinessException;
+import com.example.moinho.Model.TransacaoTable;
 import com.example.moinho.Service.Transacao.CadastrarTransacaoService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -37,13 +39,7 @@ public class CadastrarTransacaoController {
             return "redirect:/Coopase/Transacao/CadastrarTransacaoView";
         }
 
-        cadastrarTransacaoService.criarTransacaoEntrada(
-                form.getValorTransacao(),
-                form.getContaOrigemId(),
-                form.getOperadorTransacaoId(),
-                form.getFormaDinheiroTransacao(),
-                form.getDescricaoTransacao()
-        );
+        cadastrarTransacaoService.criarTransacaoEntrada(form);
 
         redirectAttributes.addFlashAttribute("Sucesso", "Transação cadastrada com sucesso!");
         return "redirect:/Coopase/Transacao/Servicos";

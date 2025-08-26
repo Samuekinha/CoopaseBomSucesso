@@ -9,8 +9,7 @@ import java.util.List;
 
 public interface TransacaoRepository extends JpaRepository<TransacaoTable, Long> {
 
-    // OU, se quiser usar o nome da coluna explicitamente:
-    @Query("SELECT c FROM TransacaoTable ORDER BY id")
+    @Query(value = "SELECT * FROM transacao", nativeQuery = true)
     List<TransacaoTable> findAll();
 
 }
