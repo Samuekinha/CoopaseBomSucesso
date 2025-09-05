@@ -15,7 +15,6 @@ public interface ContaDepositoRepository extends JpaRepository<E_ContaDeposito, 
     @Query("SELECT c FROM E_ContaDeposito c WHERE c.vaultName = :vaultName")
     Optional<E_ContaDeposito> findByVaultName(@Param("vaultName") String vaultName);
 
-    @Query(value = "SELECT * FROM conta_deposito " +
-            "ORDER BY vault_name", nativeQuery = true)
+    @Query(value = "SELECT * FROM conta_deposito", nativeQuery = true)
     List<E_ContaDeposito> findAllContasD();
 }

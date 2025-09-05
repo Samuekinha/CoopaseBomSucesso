@@ -20,7 +20,7 @@ public class ConsultarTransacaoController {
     // Rotas para processar os formulários (POST)
     @GetMapping("/ConsultarContaDepositoView")
     public String consultarContaDepositoView(Model model) {
-        model.addAttribute("resultadoConsulta", consultarContaDeposito.consultarContaDeposito());
+        model.addAttribute("resultadoConsulta", consultarContaDeposito.consultarTodasContaDeposito());
         return "/Coopase/ContaDeposito/ConsultarContaDepositoView";
     }
 

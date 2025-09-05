@@ -41,6 +41,10 @@ public class ConsultarClienteService {
         return r_cliente.findAllCooperateds();
     }
 
+    public List<E_Cliente> consultarVendedoresLimitados() {
+        return r_cliente.findSellersLimited(5);
+    }
+
     public List<E_Cliente> consultarVendedores() {
         return r_cliente.findSellersLimited(5);
     }
@@ -67,7 +71,11 @@ public class ConsultarClienteService {
         return resultados;
     }
 
-    public Integer consultarQuantidadeClientes() {
+    public List<E_Cliente> consultarOperadores() {
+        return r_cliente.findAllOperadores();
+    }
+
+        public Integer consultarQuantidadeClientes() {
         List<E_Cliente> listaCompleta = r_cliente.findAll();
         return listaCompleta.size();
     }

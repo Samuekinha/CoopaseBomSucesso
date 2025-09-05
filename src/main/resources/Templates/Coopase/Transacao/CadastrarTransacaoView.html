@@ -26,11 +26,7 @@
               <input type="text" class="form-control" name="TipoTransacao" id="TipoTransacao" required readonly>
             </div>
             <div class="form-group NomeOperador-field" id="NomeOperador-field">
-              <label for="NomeOperador">Operador</label>
-              <select class="form-control" name="NomeOperador" id="NomeOperador">
-                <option value="">Selecione operador</option>
-                <option value="1">Vendedor 1</option>
-              </select>
+              <div th:replace="Coopase/Transacao/Fragments/InputOperador:: NomeOperador"></div>
             </div>
           </div>
 
@@ -39,23 +35,14 @@
               <label for="Valor">Valor</label>
               <input type="number" class="form-control" name="Valor" id="Valor" step="1" value="0,00" required>
             </div>
-            <div class="form-group ContaOrigem-field" id="ContaOrigem-field">
-              <label for="ContaOrigem">Conta de Origem</label>
-              <select class="form-control" name="ContaOrigem" id="ContaOrigem">
-                <option value="">Selecione Conta Origem</option>
-                <option value="1">Conta 001</option>
-              </select>
+
+            <div class="form-group ContaPrincipal-field" id="ContaPrincipal-field">
+              <div th:replace="Coopase/Transacao/Fragments/InputContaPrincipal :: ContaPrincipal"></div>
             </div>
           </div>
 
-          <div class="form-group transferencia-field" id="transferencia-field">
-            <label for="ContaDestino">Conta de Destino</label>
-            <select class="form-control" name="ContaDestino" id="ContaDestino">
-              <option value="">Selecione uma conta</option>
-              <option value="1">Conta Corrente - 001</option>
-              <option value="2">Conta Poupança - 002</option>
-              <option value="3">Conta Investimento - 003</option>
-            </select>
+          <div class="form-group transferencia-field" id="transferencia-field" style="display: none;">
+            <div th:replace="Coopase/Transacao/Fragments/InputContaDestino :: ContaDestino"></div>
           </div>
 
           <div class="form-row">
@@ -63,6 +50,7 @@
               <label for="Descricao">Descrição</label>
               <input type="text" class="form-control" name="Descricao" id="Descricao">
             </div>
+
             <div class="form-group" id="forma-field">
               <label for="FormaTransacao">Forma Transação</label>
               <select class="form-control" name="FormaTransacao" id="FormaTransacao">
@@ -72,6 +60,7 @@
                 <option value="CHEQUE">Cheque</option>
               </select>
             </div>
+
           </div>
 
           <button type="submit" class="btn-submit">Cadastrar Transação</button>

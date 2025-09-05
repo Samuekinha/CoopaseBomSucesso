@@ -21,6 +21,10 @@ public interface R_Cliente extends JpaRepository<E_Cliente, Long> {
             "ORDER BY name", nativeQuery = true)
     List<E_Cliente> findAllOrderById();
 
+    @Query(value = "SELECT * FROM cliente " +
+            "WHERE operator is TRUE", nativeQuery = true)
+    List<E_Cliente> findAllOperadores();
+
     @Query(nativeQuery = true, value = """
     SELECT * FROM cliente 
     WHERE (:pesquisaPorNome IS NULL OR name ILIKE CONCAT('%', :pesquisaPorNome, '%'))
@@ -63,5 +67,11 @@ public interface R_Cliente extends JpaRepository<E_Cliente, Long> {
             "WHERE seller = true " +
             "ORDER BY name LIMIT ?1", nativeQuery = true)
     List<E_Cliente> findSellersLimited(int limit);
+
+
+    @Query(value = "SELECT * FROM cliente " +
+            "WHERE seller = true " +
+            "ORDER BY name", nativeQuery = true)
+    List<E_Cliente> findSellers();
 
 }

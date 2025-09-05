@@ -1,0 +1,9 @@
+<div th:fragment="ContaPrincipal">
+  <label for="ContaPrincipalLabel" id="ContaPrincipalLabel">Conta</label>
+  <select class="form-control" name="ContaPrincipal" id="ContaPrincipal" required>
+    <option value="" selected>Selecione uma conta</option>
+    <option th:each="conta : ${contasDeposito}"
+            th:value="${conta.id}"
+            th:text="${conta.vaultName}">Conta</option>
+  </select>
+</div>

@@ -1,8 +1,6 @@
 package com.example.moinho.Controller.ContaDeposito;
 
 import com.example.moinho.Model.E_ContaDeposito;
-import com.example.moinho.Service.ClienteService.ConsultarClienteService;
-import com.example.moinho.Service.ClienteService.EditarClienteService;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import com.example.moinho.Service.CofreService.EditarContaDepositoService;
 import org.springframework.stereotype.Controller;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -33,7 +30,7 @@ public class EditarContaDepositoController {
     @GetMapping("/EditarContaDepositoView")
     public String editarContaDepositoView(Model model) {
 
-        List<E_ContaDeposito> resultadoConsulta = consultarContaDeposito.consultarContaDeposito();
+        List<E_ContaDeposito> resultadoConsulta = consultarContaDeposito.consultarTodasContaDeposito();
 
         model.addAttribute("resultadoConsulta", resultadoConsulta);
 

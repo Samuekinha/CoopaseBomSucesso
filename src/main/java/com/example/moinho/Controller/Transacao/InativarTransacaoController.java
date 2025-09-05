@@ -27,7 +27,7 @@ public class InativarTransacaoController {
     public String deletarContaDepositoView(Model model) {
 
         model.addAttribute("resultadoConsulta",
-                consultarContaDeposito.consultarContaDeposito());
+                consultarContaDeposito.consultarTodasContaDeposito());
 
         return "/Coopase/Transacao/InativarTransacaoView";
     }

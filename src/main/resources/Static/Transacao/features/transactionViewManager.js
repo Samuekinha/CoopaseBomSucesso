@@ -46,7 +46,7 @@ class TransactionViewManager {
         const transactionOptions = container.querySelectorAll('.transaction-option');
         const transferenciaField = container.querySelector('#transferencia-field');
         const tipoTransacaoInput = container.querySelector('#TipoTransacao');
-        const contaDestinoSelect = container.querySelector('#ContaDestino');
+        const contaPrincipalSelect = container.querySelector('#ContaPrincipal');
         const nomeOperadorSelect = container.querySelector('#NomeOperador');
         const operatorNameSpan = container.querySelector('#NomeOperadorSpan');
 
@@ -54,7 +54,7 @@ class TransactionViewManager {
         - Botões: ${transactionOptions.length}
         - Campo transferência: ${transferenciaField ? 'SIM' : 'NÃO'}
         - Input tipo: ${tipoTransacaoInput ? 'SIM' : 'NÃO'}
-        - Select conta: ${contaDestinoSelect ? 'SIM' : 'NÃO'}
+        - Select conta: ${contaPrincipalSelect ? 'SIM' : 'NÃO'}
         - Select operador: ${nomeOperadorSelect ? 'SIM' : 'NÃO'}
         - Span operador: ${operatorNameSpan ? 'SIM' : 'NÃO'}`);
 
@@ -75,12 +75,12 @@ class TransactionViewManager {
         });
 
         const newTransactionOptions = container.querySelectorAll('.transaction-option');
-        const newContaDestinoSelect = container.querySelector('#ContaDestino');
+        const newContaPrincipalSelect = container.querySelector('#ContaPrincipal');
         const newNomeOperadorSelect = container.querySelector('#NomeOperador');
 
-        if (newContaDestinoSelect) {
-            const newSelect = newContaDestinoSelect.cloneNode(true);
-            newContaDestinoSelect.parentNode.replaceChild(newSelect, newContaDestinoSelect);
+        if (newContaPrincipalSelect) {
+            const newSelect = newContaPrincipalSelect.cloneNode(true);
+            newContaPrincipalSelect.parentNode.replaceChild(newSelect, newContaPrincipalSelect);
 
             newSelect.addEventListener('change', () => {
                 console.log('💰 Conta destino alterada:', newSelect.value);
@@ -148,7 +148,7 @@ class TransactionViewManager {
         const transactionOptions = container.querySelectorAll('.transaction-option');
         const transferenciaField = container.querySelector('#transferencia-field');
         const tipoTransacaoInput = container.querySelector('#TipoTransacao');
-        const contaDestinoSelect = container.querySelector('#ContaDestino');
+        const contaPrincipalSelect = container.querySelector('#ContaPrincipal');
         const nomeOperadorSelect = container.querySelector('#NomeOperador');
         const operatorNameSpan = container.querySelector('#NomeOperadorSpan');
 
@@ -175,8 +175,8 @@ class TransactionViewManager {
                 transferenciaField.style.display = 'none';
                 console.log('🙈 Campo transferência escondido');
 
-                if (contaDestinoSelect) {
-                    contaDestinoSelect.value = '';
+                if (contaPrincipalSelect) {
+                    contaPrincipalSelect.value = '';
                     this.clearTable(container);
                 }
             }

@@ -27,7 +27,7 @@ public class E_ContaDeposito {
     private LocalDateTime creation_date;
 
     @Column(columnDefinition = "BOOLEAN", nullable = false)
-    private boolean active;
+    private boolean active = true;
 
     // Aplica um depósito (adiciona ao total)
     public void aplicarDeposito(BigDecimal valor) {
