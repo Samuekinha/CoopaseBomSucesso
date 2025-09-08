@@ -22,7 +22,8 @@ public class CadastrarClienteService {
     private static final int TAMANHO_CNPJ = 14;
 
     public String cadastrarCliente(String nome, String documento, LocalDate dataNascimento,
-                                   boolean cooperado, LocalDate validadeCaf, String codigoCaf) {
+                                   boolean cooperado, LocalDate validadeCaf, String codigoCaf,
+                                   boolean operatorSelect, boolean sellerSelect) {
         try {
             // Validação do nome
             String erroNome = validarNome(nome);
@@ -64,6 +65,8 @@ public class CadastrarClienteService {
             cliente.setDocument(documento.trim());
             cliente.setBirthDate(dataNascimento);
             cliente.setCooperated(cooperado);
+            cliente.setOperator(operatorSelect);
+            cliente.setSeller(sellerSelect);
 
             if (cooperado) {
                 cliente.setMaturity_caf(validadeCaf);

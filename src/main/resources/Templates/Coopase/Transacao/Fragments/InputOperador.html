@@ -2,8 +2,8 @@
   <label for="NomeOperador">Operador</label>
   <select class="form-control" name="NomeOperador" id="NomeOperador">
     <option value="">Selecione operador</option>
-    <option th:each="vendedor : ${vendedores}"
-            th:value="${vendedor.id}"
-            th:text="${vendedor.name}">Vendedor</option>
+    <option th:each="operador : ${Operadores}"
+            th:value="${operador.id}"
+            th:text="${operador.name}">Vendedor</option>
   </select>
 </div>

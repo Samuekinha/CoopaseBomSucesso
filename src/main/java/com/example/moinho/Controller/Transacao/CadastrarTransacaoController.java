@@ -48,11 +48,11 @@ public class CadastrarTransacaoController {
 
         // Buscar todos os vendedores/operadores para o select
         try {
-            List<E_Cliente> vendedores = consultarClienteService.consultarVendedores();
-            model.addAttribute("vendedores", vendedores);
+            List<E_Cliente> Operadores = consultarClienteService.consultarOperadores();
+            model.addAttribute("Operadores", Operadores);
         } catch (Exception e) {
             System.err.println("Erro ao carregar vendedores: " + e.getMessage());
-            model.addAttribute("vendedores", List.of()); // Lista vazia em caso de erro
+            model.addAttribute("Operadores", List.of()); // Lista vazia em caso de erro
         }
 
         return "/Coopase/Transacao/CadastrarTransacaoView";

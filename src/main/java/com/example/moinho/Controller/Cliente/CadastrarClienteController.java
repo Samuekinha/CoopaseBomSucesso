@@ -35,10 +35,12 @@ public class CadastrarClienteController {
                            @RequestParam(value = "cooperadoSelect" , required = false) boolean cooperado,
                            @RequestParam(value = "ClientCafDate", required = false) LocalDate dataVencimentoCAF,
                            @RequestParam(value = "ClientCafCode", required = false) String codigoCaf,
+                           @RequestParam(value = "operatorSelect", required = false) boolean operatorSelect,
+                           @RequestParam(value = "sellerSelect", required = false) boolean sellerSelect,
                            RedirectAttributes redirectAttributes) {
 
         String resposta = cadastrarClienteService.cadastrarCliente(nome, documento, dataNascimento, cooperado,
-                dataVencimentoCAF, codigoCaf);
+                dataVencimentoCAF, codigoCaf, operatorSelect, sellerSelect);
 
         redirectAttributes.addFlashAttribute("resposta", resposta);
 

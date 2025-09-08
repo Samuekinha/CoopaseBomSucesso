@@ -72,25 +72,32 @@
         <table>
           <thead>
           <tr>
-            <th>Nome da Conta</th>
+            <th>Conta</th>
             <th>Agora</th>
             <th>Depois</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody id="preview-principal">
           <tr>
             <td colspan="3" style="text-align: center; color: #6c757d;">
-              Selecione uma conta para ver a preview
+              Selecione a conta principal
+            </td>
+          </tr>
+          </tbody>
+          <tbody id="preview-destino" style="display:none;">
+          <tr>
+            <td colspan="3" style="text-align: center; color: #6c757d;">
+              Selecione a conta destino
             </td>
           </tr>
           </tbody>
         </table>
 
-        <!-- Operador movido para baixo da tabela -->
         <div class="operator-info">
           <strong>Operador:</strong> <span id="NomeOperadorSpan">[Não informado]</span>
         </div>
       </div>
+
 
     </div>
   </div>

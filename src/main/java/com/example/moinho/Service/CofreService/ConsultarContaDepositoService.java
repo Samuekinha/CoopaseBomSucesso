@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ConsultarContaDepositoService {
@@ -38,5 +39,9 @@ public class ConsultarContaDepositoService {
         }
 
         return valorTotal;
+    }
+
+    public Optional<E_ContaDeposito> consultarContaPorId (Long id) {
+        return r_ContaD.findById(id);
     }
 }

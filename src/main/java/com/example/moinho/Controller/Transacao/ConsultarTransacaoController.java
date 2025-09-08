@@ -1,6 +1,6 @@
 package com.example.moinho.Controller.Transacao;
 
-import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
+import com.example.moinho.Service.Transacao.ConsultarTransacaoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/Coopase/Transacao")
 public class ConsultarTransacaoController {
 
-    private final ConsultarContaDepositoService consultarContaDeposito;
+    private final ConsultarTransacaoService consultarTransacaoService;
 
     // Injeção via construtor
-    public ConsultarTransacaoController(ConsultarContaDepositoService consultarContaDeposito) {
-        this.consultarContaDeposito = consultarContaDeposito;
+    public ConsultarTransacaoController(ConsultarTransacaoService consultarTransacaoService) {
+        this.consultarTransacaoService = consultarTransacaoService;
     }
 
     // Rotas para processar os formulários (POST)
-    @GetMapping("/ConsultarContaDepositoView")
-    public String consultarContaDepositoView(Model model) {
-        model.addAttribute("resultadoConsulta", consultarContaDeposito.consultarTodasContaDeposito());
-        return "/Coopase/ContaDeposito/ConsultarContaDepositoView";
+    @GetMapping("/ConsultarTransacaoView")
+    public String consultarTransacaoView(Model model) {
+
+        return "/Coopase/Transacao/ConsultarContaDepositoView";
     }
 
     @GetMapping("/Consultar")
     public String redirecionamento(Model model) {
-        return "/Coopase/ContaDeposito/ServicosContaDeposito";
+        return "/Coopase/Transacao/ServicosTransacao";
     }
 
 }
