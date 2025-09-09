@@ -1,12 +1,20 @@
 package com.example.moinho.Exception;
 
-public class BusinessException extends RuntimeException {
+import lombok.Getter;
 
-    public BusinessException(String message) {
+@Getter
+public abstract class BusinessException extends RuntimeException {
+    private final String redirectPath;
+
+    public BusinessException(String message, String redirectPath) {
         super(message);
+        this.redirectPath = redirectPath;
     }
 
-    public BusinessException(String message, Throwable cause) {
+    public BusinessException(String message, String redirectPath, Throwable cause) {
         super(message, cause);
+        this.redirectPath = redirectPath;
     }
+
 }
+

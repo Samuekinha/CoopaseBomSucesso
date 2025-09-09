@@ -1,6 +1,6 @@
 <div th:fragment="NomeOperador">
-  <label for="NomeOperador">Operador</label>
-  <select class="form-control" name="NomeOperador" id="NomeOperador">
+  <label for="operadorTransacaoId">Operador</label>
+  <select class="form-control" name="operadorTransacaoId" id="operadorTransacaoId">
     <option value="">Selecione operador</option>
     <option th:each="operador : ${Operadores}"
             th:value="${operador.id}"

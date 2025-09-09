@@ -5,11 +5,8 @@ import com.example.moinho.Exception.BusinessException;
 public class OperadorSemPermissaoException extends BusinessException {
 
     public OperadorSemPermissaoException(String message) {
-        super(message);
+        super(message, "/Coopase/Servicos/Transacao");
     }
 
-    public OperadorSemPermissaoException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }
 

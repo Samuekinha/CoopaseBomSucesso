@@ -41,7 +41,11 @@ public class TransacaoTable {
 
     @ManyToOne
     @JoinColumn(name = "conta_deposito_id", referencedColumnName = "id")  // Correct FK reference
-    private E_ContaDeposito contaDeposito;  // Renamed to follow conventions
+    private E_ContaDeposito contaDeposito;  // conta principal origem
+
+    @ManyToOne
+    @JoinColumn(name = "conta_destino_id", referencedColumnName = "id")  // Correct FK reference
+    private E_ContaDeposito contaDestino;  // conta principal origem
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")  // Correct FK reference
@@ -69,3 +73,4 @@ public class TransacaoTable {
         return saldoAtual.add(valorTransacao);
     }
 }
+

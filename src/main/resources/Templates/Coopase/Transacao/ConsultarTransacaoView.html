@@ -1,4 +1,4 @@
-<div th:fragment="Consultar" data-view="consultar-ContaDeposito">
+<div th:fragment="Consultar" data-view="consultar-Transacao">
 
     <style>
         .main-row {
@@ -18,7 +18,7 @@
         <h2 class="d-flex justify-content-center">Consultar Conta Deposito</h2>
 
         <div class="container">
-            <div th:fragment="tabelaContasDeposito">
+            <div th:fragment="tabelaTransacao">
                 <table class="main-table" id="listadeContasDepositoSelecinavel">
                     <thead>
                     <tr>
@@ -28,7 +28,7 @@
                         <th>Data Criação</th>
                     </tr>
                     </thead>
-                    <tbody th:replace="~{/Coopase/ContaDeposito/Fragments/TabelaContaDeposito :: corpoTabela}"></tbody>
+                    <tbody th:replace="~{/Coopase/Transacao/Fragments/tabelaTransacao :: corpoTabela}"></tbody>
                 </table>
             </div>
         </div>

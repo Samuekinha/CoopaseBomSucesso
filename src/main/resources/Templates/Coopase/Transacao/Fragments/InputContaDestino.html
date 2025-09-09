@@ -1,6 +1,6 @@
 <div th:fragment="ContaDestino">
-  <label for="ContaDestino">Conta de Destino</label>
-  <select class="form-control" name="ContaDestino" id="ContaDestino">
+  <label for="contaDestinoId">Conta de Destino</label>
+  <select class="form-control" name="contaDestinoId" id="contaDestinoId">
     <option value="" selected>Selecione uma conta</option>
     <option th:each="conta : ${contasDeposito}"
             th:value="${conta.id}"

@@ -16,9 +16,10 @@ public class TransacaoRequest {
     @DecimalMin(value = "0.01", message = "O valor deve ser maior que zero")
     private BigDecimal valorTransacao;
 
-    @NotNull(message = "A conta destino é obrigatória")
     private Long contaDestinoId;
 
+    // conta principal
+    @NotNull(message = "A conta origem/principal é obrigatória")
     private Long contaOrigemId;
 
     @NotNull(message = "O operador da transação é obrigatório")

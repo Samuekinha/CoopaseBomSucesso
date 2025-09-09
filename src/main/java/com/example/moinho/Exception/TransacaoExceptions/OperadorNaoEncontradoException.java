@@ -5,10 +5,7 @@ import com.example.moinho.Exception.BusinessException;
 public class OperadorNaoEncontradoException extends BusinessException {
 
     public OperadorNaoEncontradoException(String message) {
-        super(message);
+        super(message, "/Coopase/Servicos/Transacao");
     }
 
-    public OperadorNaoEncontradoException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

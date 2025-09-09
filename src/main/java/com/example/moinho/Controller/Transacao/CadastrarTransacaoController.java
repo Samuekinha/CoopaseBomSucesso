@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -60,14 +61,26 @@ public class CadastrarTransacaoController {
 
     @PostMapping("/Cadastrar")
     public String cadastrarTransacao(@Valid TransacaoRequest form,
+                                     @RequestParam("TipoTransacao") String tipoTransacao,
                                      BindingResult result,
                                      RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("Erro", result.getAllErrors());
-            return "redirect:/Coopase/Transacao/CadastrarTransacaoView";
+            return "redirect:/Coopase/Transacao/Servicos";
         }
 
-        cadastrarTransacaoService.criarTransacaoEntrada(form);
+        if (tipoTransacao.equalsIgnoreCase(String.valueOf(TransacaoTable.TypeTransaction
+                .DEPOSIT))) {
+            cadastrarTransacaoService.criarTransacaoEntrada(form);
+        } else if (tipoTransacao.equalsIgnoreCase(String.valueOf(TransacaoTable.TypeTransaction
+                .WITHDRAW))) {
+   //         cadastrarTransacaoService.criarTransacaoSaida(form);
+        } else if (tipoTransacao.equalsIgnoreCase(String.valueOf(TransacaoTable.TypeTransaction
+                .TRANSFER))) {
+   //         cadastrarTransacaoService.criarTransacaoTransferencia(form);
+        } else {
+            redirectAttributes.addFlashAttribute("Erro", "tipo transação não permitido");
+        }
 
         redirectAttributes.addFlashAttribute("Sucesso", "Transação cadastrada com sucesso!");
         return "redirect:/Coopase/Transacao/Servicos";

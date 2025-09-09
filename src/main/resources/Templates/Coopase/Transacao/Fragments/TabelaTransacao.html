@@ -1,0 +1,10 @@
+<tbody th:fragment="corpoTabela">
+<tr class="main-row" th:each="resultado : ${resultadoConsulta}" data-id="${resultado.id}">
+  <td th:text="${resultado.typeTransaction}"></td>
+  <td th:text="${resultado.value}"></td>
+  <td th:text="${resultado.typeMoney}"></td>
+
+  <td th:text="${resultado.cooperated}"></td>
+  <td th:text="${resultado.maturity_caf != null} ? ${#temporals.format(resultado.maturity_caf, 'dd/MM/yyyy')} : ''"></td>
+  <td th:text="${resultado.caf}"></td>
+</tbody>
