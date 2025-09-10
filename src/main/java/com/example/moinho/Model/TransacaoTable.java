@@ -1,7 +1,8 @@
 package com.example.moinho.Model;
 
+import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.TipoTransacaoInexistenteException;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -9,7 +10,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transacao")
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"contaDeposito", "contaDestino", "operador"})
+@EqualsAndHashCode
 public class TransacaoTable {
 
     @Id
@@ -66,11 +70,5 @@ public class TransacaoTable {
     @Column(name = "saldo_posterior", columnDefinition = "DECIMAL(10,3)")
     private BigDecimal saldoPosterior;  // Optional: balance after transaction
 
-    public BigDecimal calcularSaldoPosterior(BigDecimal saldoAtual, BigDecimal valorTransacao) {
-        if (valorTransacao == null || valorTransacao.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Valor inválido para depósito.");
-        }
-        return saldoAtual.add(valorTransacao);
-    }
 }
 

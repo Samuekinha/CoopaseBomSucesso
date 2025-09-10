@@ -1,5 +1,6 @@
 package com.example.moinho.Model;
 
+import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.SaldoInsuficienteException;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,22 +30,19 @@ public class E_ContaDeposito {
     @Column(columnDefinition = "BOOLEAN", nullable = false)
     private boolean active = true;
 
-    // Aplica um depósito (adiciona ao total)
-    public void aplicarDeposito(BigDecimal valor) {
-        if (valor == null || valor.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("O valor do depósito deve ser maior que zero");
+    public void aplicarTransacao(BigDecimal valor, TransacaoTable.TypeTransaction tipoTransacao) {
+        if (valor == null) throw new IllegalArgumentException("Valor nulo");
+
+        switch (tipoTransacao) {
+            case DEPOSIT -> this.total_amount = this.total_amount.add(valor);
+            case WITHDRAW -> {
+                if (this.total_amount.compareTo(valor) < 0) {
+                    throw new SaldoInsuficienteException("Saldo insuficiente");
+                }
+                this.total_amount = this.total_amount.subtract(valor);
+            }
+            case TRANSFER -> throw new UnsupportedOperationException("Transferência não implementada aqui");
         }
-        this.total_amount = this.total_amount.add(valor);
     }
 
-    // Aplica um desconto ou retirada (subtrai do total)
-    public void aplicarDesconto(BigDecimal valor) {
-        if (valor == null || valor.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("O valor do desconto deve ser maior que zero");
-        }
-        if (this.total_amount.compareTo(valor) < 0) {
-            throw new IllegalArgumentException("Saldo insuficiente para aplicar o desconto");
-        }
-        this.total_amount = this.total_amount.subtract(valor);
-    }
 }

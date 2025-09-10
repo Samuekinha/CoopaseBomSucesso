@@ -1,4 +1,4 @@
-package com.example.moinho.Exception.TransacaoExceptions;
+package com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException;
 
 import com.example.moinho.Exception.BusinessException;
 

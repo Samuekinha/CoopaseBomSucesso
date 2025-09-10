@@ -1,10 +1,10 @@
 package com.example.moinho.Service.Transacao;
 
 import com.example.moinho.Dto.TransacaoRequest;
-import com.example.moinho.Exception.TransacaoExceptions.ContaDestinoInativaException;
-import com.example.moinho.Exception.TransacaoExceptions.ContaDestinoNaoEncontradaException;
-import com.example.moinho.Exception.TransacaoExceptions.OperadorNaoEncontradoException;
-import com.example.moinho.Exception.TransacaoExceptions.OperadorSemPermissaoException;
+import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.ContaDestinoInativaException;
+import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.ContaDestinoNaoEncontradaException;
+import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.OperadorNaoEncontradoException;
+import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.OperadorSemPermissaoException;
 import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Model.E_ContaDeposito;
 import com.example.moinho.Model.TransacaoTable;
@@ -53,7 +53,9 @@ public class CadastrarTransacaoService {
 
         // Atualiza saldo da conta
         BigDecimal saldoAnterior = conta.getTotal_amount();
-        conta.aplicarDeposito(request.getValorTransacao());
+
+        // Calcula o saldo posterior da conta
+        conta.aplicarTransacao(saldoAnterior, request.getTipoTransacao());
         contaDepositoRepository.save(conta);
 
         // Cria transação

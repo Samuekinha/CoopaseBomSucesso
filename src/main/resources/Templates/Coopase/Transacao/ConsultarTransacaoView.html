@@ -15,17 +15,20 @@
     </style>
 
     <div>
-        <h2 class="d-flex justify-content-center">Consultar Conta Deposito</h2>
+        <h2 class="d-flex justify-content-center">Consultar Transação</h2>
 
         <div class="container">
             <div th:fragment="tabelaTransacao">
-                <table class="main-table" id="listadeContasDepositoSelecinavel">
+                <table class="main-table" id="listaDeTransaçãoSelecionavel">
                     <thead>
                     <tr>
-                        <th>N°</th>
-                        <th>Nome</th>
-                        <th>Montante</th>
-                        <th>Data Criação</th>
+                        <th>Valor</th>
+                        <th>Tipo</th>
+                        <th>Conta Principal</th>
+                        <th>Conta Destino</th>
+                        <th>Data</th>
+                        <th>Saldo Anterior</th>
+                        <th>Saldo Posterior</th>
                     </tr>
                     </thead>
                     <tbody th:replace="~{/Coopase/Transacao/Fragments/tabelaTransacao :: corpoTabela}"></tbody>

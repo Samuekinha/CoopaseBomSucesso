@@ -1,11 +1,10 @@
 package com.example.moinho.Controller.Transacao;
 
 import com.example.moinho.Dto.TransacaoRequest;
-import com.example.moinho.Exception.BusinessException;
+import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.TipoTransacaoInexistenteException;
 import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Model.E_ContaDeposito;
 import com.example.moinho.Model.TransacaoTable;
-import com.example.moinho.Repository.ContaDepositoRepository;
 import com.example.moinho.Service.ClienteService.ConsultarClienteService;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import com.example.moinho.Service.Transacao.CadastrarTransacaoService;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+
+import static com.example.moinho.Model.TransacaoTable.TypeTransaction.*;
 
 @Controller
 @RequestMapping("/Coopase/Transacao")
@@ -39,6 +40,7 @@ public class CadastrarTransacaoController {
     // Rotas para processar os formulários (POST)
     @GetMapping("/CadastrarTransacaoView")
     public String cadastrarTransacaoView(Model model) {
+        //Buscar todas as contas depósito para o select
         try {
             List<E_ContaDeposito> contasDeposito = contaDepositoService.consultarTodasContaDeposito();
             model.addAttribute("contasDeposito", contasDeposito);
@@ -47,7 +49,7 @@ public class CadastrarTransacaoController {
             model.addAttribute("contasDeposito", List.of()); // Lista vazia em caso de erro
         }
 
-        // Buscar todos os vendedores/operadores para o select
+        // Buscar todos os operadores para o select
         try {
             List<E_Cliente> Operadores = consultarClienteService.consultarOperadores();
             model.addAttribute("Operadores", Operadores);
@@ -69,18 +71,16 @@ public class CadastrarTransacaoController {
             return "redirect:/Coopase/Transacao/Servicos";
         }
 
-        if (tipoTransacao.equalsIgnoreCase(String.valueOf(TransacaoTable.TypeTransaction
-                .DEPOSIT))) {
-            cadastrarTransacaoService.criarTransacaoEntrada(form);
-        } else if (tipoTransacao.equalsIgnoreCase(String.valueOf(TransacaoTable.TypeTransaction
-                .WITHDRAW))) {
-   //         cadastrarTransacaoService.criarTransacaoSaida(form);
-        } else if (tipoTransacao.equalsIgnoreCase(String.valueOf(TransacaoTable.TypeTransaction
-                .TRANSFER))) {
-   //         cadastrarTransacaoService.criarTransacaoTransferencia(form);
-        } else {
-            redirectAttributes.addFlashAttribute("Erro", "tipo transação não permitido");
+
+        TransacaoTable.TypeTransaction tipo = form.getTipoTransacao(); // já é enum
+
+        switch (tipo) {
+            case DEPOSIT -> cadastrarTransacaoService.criarTransacaoEntrada(form);
+//            case WITHDRAW -> cadastrarTransacaoService.criarTransacaoSaida(form);
+//            case TRANSFER -> cadastrarTransacaoService.criarTransacaoTransferencia(form);
         }
+
+
 
         redirectAttributes.addFlashAttribute("Sucesso", "Transação cadastrada com sucesso!");
         return "redirect:/Coopase/Transacao/Servicos";
