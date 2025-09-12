@@ -1,6 +1,6 @@
 package com.example.moinho.Service.Transacao;
 
-import com.example.moinho.Dto.TransacaoRequest;
+import com.example.moinho.Dto.Transacao.TransacaoRequestDTO;
 import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.ContaDestinoInativaException;
 import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.ContaDestinoNaoEncontradaException;
 import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.OperadorNaoEncontradoException;
@@ -32,10 +32,10 @@ public class CadastrarTransacaoService {
     }
 
     @Transactional
-    public TransacaoTable criarTransacaoEntrada(TransacaoRequest request) {
+    public TransacaoTable criarTransacaoEntrada(TransacaoRequestDTO request) {
 
         // Valida conta de destino
-        E_ContaDeposito conta = contaDepositoRepository.findById(request.getContaDestinoId())
+        E_ContaDeposito conta = contaDepositoRepository.findById(request.getContaPrincipalId())
                 .orElseThrow(() -> new ContaDestinoNaoEncontradaException
                         ("Conta destino não encontrada"));
 
@@ -55,7 +55,7 @@ public class CadastrarTransacaoService {
         BigDecimal saldoAnterior = conta.getTotal_amount();
 
         // Calcula o saldo posterior da conta
-        conta.aplicarTransacao(saldoAnterior, request.getTipoTransacao());
+        conta.aplicarTransacao(request.getValorTransacao(), request.getTipoTransacao());
         contaDepositoRepository.save(conta);
 
         // Cria transação
@@ -63,7 +63,8 @@ public class CadastrarTransacaoService {
         transacao.setOperador(operador);
         transacao.setContaDeposito(conta);
         transacao.setValue(request.getValorTransacao());
-        transacao.setTypeMoney(TransacaoTable.TypeMoney.valueOf(request.getFormaDinheiroTransacao()));
+        transacao.setTypeMoney(request.getFormaDinheiroTransacao());
+        transacao.setTypeTransaction(request.getTipoTransacao());
         transacao.setDescricao(request.getDescricaoTransacao());
         transacao.setSaldoAnterior(saldoAnterior);
         transacao.setSaldoPosterior(conta.getTotal_amount());

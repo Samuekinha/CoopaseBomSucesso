@@ -45,7 +45,7 @@ class TransactionViewManager {
 
         const transactionOptions = container.querySelectorAll('.transaction-option');
         const transferenciaField = container.querySelector('#transferencia-field');
-        const tipoTransacaoInput = container.querySelector('#TipoTransacao');
+        const tipoTransacaoInput = container.querySelector('#tipoTransacao');
         const contaPrincipalSelect = container.querySelector('#ContaPrincipal');
         const contaDestinoSelect = container.querySelector('#ContaDestino');
         const nomeOperadorSelect = container.querySelector('#NomeOperador');
@@ -81,9 +81,9 @@ class TransactionViewManager {
 
             newPrincipal.addEventListener('change', () => {
                 const contaDestinoAtual = container.querySelector('#ContaDestino');
-                const tipoAtual = container.querySelector('#TipoTransacao')?.value;
+                const tipoAtual = container.querySelector('#tipoTransacao')?.value;
 
-                if (tipoAtual === "transferencia" && newPrincipal.value && contaDestinoAtual && newPrincipal.value === contaDestinoAtual.value) {
+                if (tipoAtual === "TRANSFER" && newPrincipal.value && contaDestinoAtual && newPrincipal.value === contaDestinoAtual.value) {
                     Toast.fire({
                         icon: "error",
                         title: `Erro: a conta principal e de destino não podem ser iguais`
@@ -109,9 +109,9 @@ class TransactionViewManager {
 
             newDestino.addEventListener('change', () => {
                 const contaPrincipalAtual = container.querySelector('#ContaPrincipal');
-                const tipoAtual = container.querySelector('#TipoTransacao')?.value;
+                const tipoAtual = container.querySelector('#tipoTransacao')?.value;
 
-                if (tipoAtual === "transferencia" && newDestino.value && contaPrincipalAtual && newDestino.value === contaPrincipalAtual.value) {
+                if (tipoAtual === "TRANSFER" && newDestino.value && contaPrincipalAtual && newDestino.value === contaPrincipalAtual.value) {
                     Toast.fire({
                         icon: "error",
                         title: `Erro: a conta principal e de destino não podem ser iguais`
@@ -134,7 +134,7 @@ class TransactionViewManager {
         // Atualização do preview com base no valor e tipo
         const valorInput = container.querySelector('#Valor');
         const atualizarPreview = () => {
-            const tipo = container.querySelector('#TipoTransacao')?.value;
+            const tipo = container.querySelector('#tipoTransacao')?.value;
             const valor = parseFloat((valorInput?.value ?? "0").replace(',', '.')) || 0;
 
             const principalAtual = container.querySelector('#preview-principal td:nth-child(2)');
@@ -148,13 +148,13 @@ class TransactionViewManager {
             if (!tipo) return;
 
             switch (tipo) {
-                case "entrada":
+                case "DEPOSIT":
                     if (principalDepois) principalDepois.textContent = (principalSaldo + valor).toFixed(2);
                     break;
-                case "saida":
+                case "WITHDROW":
                     if (principalDepois) principalDepois.textContent = (principalSaldo - valor).toFixed(2);
                     break;
-                case "transferencia":
+                case "TRANSFER":
                     if (principalDepois) principalDepois.textContent = (principalSaldo - valor).toFixed(2);
                     if (destinoDepois) destinoDepois.textContent = (destinoSaldo + valor).toFixed(2);
                     break;
@@ -218,7 +218,7 @@ class TransactionViewManager {
     handleTransactionClick(clickedButton, container) {
         const transactionOptions = container.querySelectorAll('.transaction-option');
         const transferenciaField = container.querySelector('#transferencia-field');
-        const tipoTransacaoInput = container.querySelector('#TipoTransacao');
+        const tipoTransacaoInput = container.querySelector('#tipoTransacao');
         const contaPrincipalSelect = container.querySelector('#ContaPrincipal');
         const nomeOperadorSelect = container.querySelector('#NomeOperador');
         const operatorNameSpan = container.querySelector('#NomeOperadorSpan');
@@ -237,7 +237,7 @@ class TransactionViewManager {
         }
 
         if (transferenciaField) {
-            if (clickedButton.getAttribute('data-type') === 'transferencia') {
+            if (clickedButton.getAttribute('data-type') === 'TRANSFER') {
                 transferenciaField.classList.add('show');
                 transferenciaField.style.display = 'block';
                 console.log('👁️ Campo transferência mostrado');

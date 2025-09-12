@@ -1,7 +1,10 @@
 package com.example.moinho.Service.Transacao;
 
+import com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO;
 import com.example.moinho.Model.E_ContaDeposito;
+import com.example.moinho.Model.TransacaoTable;
 import com.example.moinho.Repository.ContaDepositoRepository;
+import com.example.moinho.Repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,25 +14,15 @@ import java.util.List;
 public class ConsultarTransacaoService {
 
     private final ContaDepositoRepository r_ContaD;
+    private final TransacaoRepository transacaoRepository;
 
-    public ConsultarTransacaoService(ContaDepositoRepository r_ContaD) {
+    public ConsultarTransacaoService(ContaDepositoRepository r_ContaD, TransacaoRepository transacaoRepository) {
         this.r_ContaD = r_ContaD;
+        this.transacaoRepository = transacaoRepository;
     }
 
-    public List<E_ContaDeposito> consultarContaDeposito() {
-        return r_ContaD.findAllContasD();
-    }
-    
-    public BigDecimal ConsultarValorTotalContas() {
-        BigDecimal valorTotal = BigDecimal.ZERO;
-        List<E_ContaDeposito> todasContas = r_ContaD.findAll();
-        
-        for (int i = 0; i < todasContas.size(); i++) {
-            E_ContaDeposito ContaDepositoValor = todasContas.get(i);
-            valorTotal = valorTotal.add(ContaDepositoValor.getTotal_amount());
-        }
-        
-        return valorTotal;
+    public List<TransacaoResumoDTO> consultarTodasTransacao() {
+        return transacaoRepository.buscarResumo();
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.moinho.Controller.Transacao;
 
-import com.example.moinho.Dto.TransacaoRequest;
-import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.TipoTransacaoInexistenteException;
+import com.example.moinho.Dto.Transacao.TransacaoRequestDTO;
 import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Model.E_ContaDeposito;
 import com.example.moinho.Model.TransacaoTable;
@@ -15,12 +14,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-
-import static com.example.moinho.Model.TransacaoTable.TypeTransaction.*;
 
 @Controller
 @RequestMapping("/Coopase/Transacao")
@@ -62,8 +58,7 @@ public class CadastrarTransacaoController {
     }
 
     @PostMapping("/Cadastrar")
-    public String cadastrarTransacao(@Valid TransacaoRequest form,
-                                     @RequestParam("TipoTransacao") String tipoTransacao,
+    public String cadastrarTransacao(@Valid TransacaoRequestDTO form,
                                      BindingResult result,
                                      RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {

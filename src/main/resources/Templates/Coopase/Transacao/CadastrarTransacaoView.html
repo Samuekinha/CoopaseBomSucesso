@@ -3,16 +3,16 @@
 
   <div class="container">
     <div class="transaction-options">
-      <button class="transaction-option active" data-type="entrada">
-        Entrada
+      <button class="transaction-option active" data-type="DEPOSIT">
+        DEPOSIT
         <div class="underline-animation"></div>
       </button>
-      <button class="transaction-option" data-type="saida">
-        Saída
+      <button class="transaction-option" data-type="WITHDROW">
+        WITHDROW
         <div class="underline-animation"></div>
       </button>
-      <button class="transaction-option" data-type="transferencia">
-        Transferência
+      <button class="transaction-option" data-type="TRANSFER">
+        TRANSFER
         <div class="underline-animation"></div>
       </button>
     </div>
@@ -22,8 +22,8 @@
         <form id="TransacaoForm" action="/Coopase/Transacao/Cadastrar" method="post">
           <div class="form-row">
             <div class="form-group">
-              <label for="TipoTransacao">Tipo de Transação</label>
-              <input type="text" class="form-control" name="TipoTransacao" id="TipoTransacao" required readonly>
+              <label for="tipoTransacao">Tipo de Transação</label>
+              <input type="text" class="form-control" name="tipoTransacao" id="tipoTransacao" required readonly>
             </div>
             <div class="form-group NomeOperador-field" id="NomeOperador-field">
               <div th:replace="Coopase/Transacao/Fragments/InputOperador:: NomeOperador"></div>

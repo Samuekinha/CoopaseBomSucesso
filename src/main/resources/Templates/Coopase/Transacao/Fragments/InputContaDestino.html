@@ -7,3 +7,14 @@
             th:text="${conta.vaultName}">Conta</option>
   </select>
 </div>
+
+
+<div th:fragment="ContaDestinoReadOnly">
+  <label for="ContaDestinoIdReadOnly">Conta de Destino</label>
+  <select class="form-control" name="ContaDestinoIdReadOnly" id="ContaDestinoIdReadOnly">
+    <option value="">Selecione uma conta</option>
+    <option th:each="conta : ${contasDeposito}"
+            th:value="${conta.id}"
+            th:text="${conta.vaultName}">Conta</option>
+  </select>
+</div>

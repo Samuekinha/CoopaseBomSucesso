@@ -1,4 +1,4 @@
-package com.example.moinho.Dto;
+package com.example.moinho.Dto.Transacao;
 
 import com.example.moinho.Model.TransacaoTable;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +8,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class TransacaoRequest {
+public class TransacaoRequestDTO {
 
     @NotNull(message = "O tipo da transação é obrigatório")
     private TransacaoTable.TypeTransaction tipoTransacao;
@@ -21,13 +21,13 @@ public class TransacaoRequest {
 
     // conta principal
     @NotNull(message = "A conta origem/principal é obrigatória")
-    private Long contaOrigemId;
+    private Long contaPrincipalId;
 
     @NotNull(message = "O operador da transação é obrigatório")
     private Long operadorTransacaoId;
 
     @NotNull(message = "A forma da transação é obrigatória")
-    private String formaDinheiroTransacao;
+    private TransacaoTable.TypeMoney formaDinheiroTransacao;
 
     private String descricaoTransacao;
 }
