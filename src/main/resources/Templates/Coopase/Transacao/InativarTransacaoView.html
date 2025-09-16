@@ -1,4 +1,5 @@
-<div th:fragment="Inativar" data-view="inativar-transacao">
+<div th:fragment="Consultar" data-view="consultar-Transacao">
+
     <style>
         .main-row {
             transition: background-color 0.2s ease;
@@ -7,59 +8,134 @@
         .main-row:hover {
             background-color: #f5f5f5;
         }
-        .main-row.selected {
-            background-color: #fff3e0; /* Laranja claro */
+
+        /* --- BORDAS SEMPRE VISÍVEIS --- */
+        .main-row.deposit {
+            border-left: 4px solid #2196F3; /* Azul */
+        }
+        .main-row.withdraw {
             border-left: 4px solid #FF9800; /* Laranja */
+        }
+        .main-row.transfer {
+            border-left: 4px solid #4CAF50; /* Verde */
+        }
+
+        /* --- BACKGROUND SÓ QUANDO SELECIONADO --- */
+        .main-row.selected.deposit {
+            background-color: #e3f2fd; /* Azul claro */
+        }
+        .main-row.selected.withdraw {
+            background-color: #fff3e0; /* Laranja claro */
+        }
+        .main-row.selected.transfer {
+            background-color: #e8f5e9; /* Verde claro */
         }
     </style>
 
     <div>
-        <h2 class="d-flex justify-content-center">Inativar Transação</h2>
+        <h2 class="d-flex justify-content-center">Consultar Transação</h2>
 
         <div class="container">
             <div th:fragment="tabelaTransacao">
-                <table class="main-table" id="listaDeTransacaoSelecinavel">
+                <table class="main-table" id="listaDeTransacaoSelecionavel">
                     <thead>
                     <tr>
-                        <th>N°</th>
                         <th>Tipo Transação</th>
                         <th>Valor</th>
-                        <th>Data Criação</th>
+                        <th>Forma Dinheiro</th>
+                        <th>Conta Principal</th>
+                        <th>Conta Destino</th>
+                        <th>Data</th>
+                        <th>Descrição</th>
                     </tr>
                     </thead>
-                    <tbody th:replace="~{/Coopase/Transacao/Fragments/TabelaTransacao :: corpoTabela}"></tbody>
+                    <tbody th:replace="~{/Coopase/Transacao/Fragments/tabelaTransacao :: corpoTabela}"></tbody>
                 </table>
             </div>
         </div>
 
         <div id="formWrapper" class="container" style="display: none;">
-            <form id="deletarContaDepositoForm" action="/Coopase/Transacao/Inativar" method="post">
-                <div class="form-group">
-                    <label for="IdTransacao">Id</label>
-                    <input type="text" class="form-control" name="IdTransacao" id="IdTransacao" value="" readonly>
+            <form id="ConsultarTransacao" method="post" action="Coopase/Transacao/Servicos/Inativar">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="idTransacao">Id</label>
+                        <input type="text" class="form-control" name="idTransacao" id="idTransacao" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="TipoTransacao">Tipo de Transação</label>
+                        <input type="text" class="form-control" name="TipoTransacao" id="TipoTransacao" readonly>
+                    </div>
+
+                    <div class="form-group NomeOperador-field" id="NomeOperador-field">
+                        <label for="operadorTransacaoIdReadOnly">Operador</label>
+                        <input type="text"
+                               class="form-control"
+                               name="operadorTransacaoIdReadOnly"
+                               id="operadorTransacaoIdReadOnly"
+                               readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="valorTransacao">Valor</label>
+                        <input type="number" class="form-control" name="valorTransacao" id="valorTransacao" readonly>
+                    </div>
+
+                    <div class="form-group ContaPrincipal-field" id="ContaPrincipal-field">
+                        <label for="contaOrigemIdReadOnly">Conta</label>
+                        <input type="text"
+                               class="form-control"
+                               name="contaOrigemIdReadOnly"
+                               id="contaOrigemIdReadOnly"
+                               readonly>
+                    </div>
+                </div>
+
+                <div class="form-group transferencia-field" id="transferencia-field" style="display: none;">
+                    <label for="ContaDestinoIdReadOnly">Conta de Destino</label>
+                    <input type="text"
+                           class="form-control"
+                           name="ContaDestinoIdReadOnly"
+                           id="ContaDestinoIdReadOnly"
+                           readonly>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dataTransacao">Data</label>
+                        <input type="date" class="form-control" name="dataTransacao" id="dataTransacao" readonly>
+                    </div>
+
+                    <div class="form-group" id="forma-field">
+                        <label for="formaDinheiroTransacao">Forma Transação</label>
+                        <select class="form-control" name="formaDinheiroTransacao" id="formaDinheiroTransacao" disabled>
+                            <option value="">Selecione uma forma</option>
+                            <option value="DINHEIRO">Dinheiro</option>
+                            <option value="PIX">Pix</option>
+                            <option value="CHEQUE">Cheque</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="ContaDepositoNome">Nome</label>
-                    <input type="text" class="form-control" name="ContaDepositoNome" id="ContaDepositoNome" placeholder="Nome da Conta Deposito" readonly>
-                </div>
-
-                <div class="form-group">
-                    <label for="ContaDepositoMontante">Montante</label>
-                    <input type="text" class="form-control" name="ContaDepositoMontante" id="ContaDepositoMontante" placeholder="Montante da Conta Deposito" readonly>
-                </div>
-
-                <div class="form-group">
-                    <label for="ContaDepositoDataCriacao">Data criação</label>
-                    <input type="date" class="form-control" name="ContaDepositoDataCriacao" id="ContaDepositoDataCriacao" placeholder="Data Criação da Conta Deposito" readonly>
+                    <label for="Descricao">Descrição</label>
+                    <input type="text" class="form-control" name="Descricao" id="Descricao" readonly>
                 </div>
 
                 <div class="d-flex justify-content-center">
                     <button type="submit" class="btn btn-warning mt-4">Inativar</button>
                 </div>
+
             </form>
         </div>
     </div>
 
 </div>
+
+
 

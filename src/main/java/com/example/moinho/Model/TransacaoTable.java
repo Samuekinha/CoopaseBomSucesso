@@ -70,5 +70,7 @@ public class TransacaoTable {
     @Column(name = "saldo_posterior", columnDefinition = "DECIMAL(10,3)")
     private BigDecimal saldoPosterior;  // Optional: balance after transaction
 
+    @Column(name = "ativa", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean ativa;
 }
 

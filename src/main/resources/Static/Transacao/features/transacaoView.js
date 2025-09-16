@@ -42,6 +42,20 @@ function initTransactionView() {
             return;
         }
 
+        // Aplica classes de tipo em todas as linhas da tabela
+        table.querySelectorAll('.main-row').forEach(row => {
+            const tipoTransacao = row.cells[0]?.textContent.trim().toUpperCase();
+            row.classList.remove('deposit', 'withdraw', 'transfer');
+
+            if (tipoTransacao.includes("DEPOSIT")) {
+                row.classList.add("deposit");
+            } else if (tipoTransacao.includes("WITHDRAW")) {
+                row.classList.add("withdraw");
+            } else if (tipoTransacao.includes("TRANSFER")) {
+                row.classList.add("transfer");
+            }
+        });
+
         table.removeEventListener('click', handleTableClick);
         table.addEventListener('click', handleTableClick);
     }
@@ -50,13 +64,23 @@ function initTransactionView() {
         const row = e.target.closest('.main-row');
         if (!row) return;
 
+        // Se a linha já está selecionada, "desmarca" e fecha o formulário
+        if (row.classList.contains('selected')) {
+            row.classList.remove('selected');
+            document.querySelectorAll('.expanded-form-row').forEach(r => r.remove());
+            return;
+        }
+
         toggleRowSelection(row);
         showFormForRow(row);
         fillFormFromRow(row);
     }
 
     function toggleRowSelection(selectedRow) {
-        document.querySelectorAll('.main-row.selected').forEach(r => r.classList.remove('selected'));
+        document.querySelectorAll('.main-row.selected').forEach(r => {
+            r.classList.remove('selected');
+        });
+
         selectedRow.classList.add('selected');
     }
 
@@ -84,6 +108,15 @@ function initTransactionView() {
     function fillFormFromRow(row) {
         const cells = row.cells;
 
+        function setSelectValue(select, textOrId) {
+            if (!select) return;
+            select.value = textOrId;
+            if (select.value !== textOrId) {
+                const opt = Array.from(select.options).find(o => o.textContent.trim() === textOrId);
+                if (opt) select.value = opt.value;
+            }
+        }
+
         ['formWrapper', 'formWrapper-expanded'].forEach(wrapperId => {
             const wrapper = document.getElementById(wrapperId);
             if (!wrapper) return;
@@ -91,81 +124,63 @@ function initTransactionView() {
             const form = wrapper.querySelector('form');
             if (!form) return;
 
-            // Mapear os campos baseados na estrutura da tabela HTML
-            // Colunas: Valor, Tipo, Conta Principal, Conta Destino, Data, Saldo Anterior, Saldo Posterior
-            const valorTransacaoField = form.querySelector('[name="valorTransacao"]');
-            const tipoTransacaoField = form.querySelector('[name="TipoTransacao"]');
-            const contaPrincipalField = form.querySelector('[name="ContaPrincipal"]') ||
-                                       form.querySelector('input[id*="ContaPrincipal"]') ||
-                                       form.querySelector('select[id*="ContaPrincipal"]');
-            const contaDestinoField = form.querySelector('[name="ContaDestino"]') ||
-                                     form.querySelector('input[id*="ContaDestino"]') ||
-                                     form.querySelector('select[id*="ContaDestino"]');
+            const idTransacaoField = form.querySelector('#idTransacao');
+            const tipoTransacaoField = form.querySelector('#TipoTransacao');
+            const valorTransacaoField = form.querySelector('#valorTransacao');
+            const formaDinheiroField = form.querySelector('#formaDinheiroTransacao');
+            const contaPrincipalField = form.querySelector('#contaOrigemIdReadOnly');
+            const contaDestinoField = form.querySelector('#ContaDestinoIdReadOnly');
+            const operadorField = form.querySelector('#operadorTransacaoIdReadOnly');
+            const descricaoField = form.querySelector('#Descricao');
+            const dataField = form.querySelector('#dataTransacao');
 
-            // Preencher os campos com os dados da linha
-            if (valorTransacaoField && cells[0]) {
-                valorTransacaoField.value = cells[0].textContent.trim();
+            if (tipoTransacaoField && cells[0]) {
+                tipoTransacaoField.value = cells[0].textContent.trim();
             }
 
-            if (tipoTransacaoField && cells[1]) {
-                const tipoTransacao = cells[1].textContent.trim();
-                tipoTransacaoField.value = tipoTransacao;
+            if (valorTransacaoField && cells[1]) {
+                valorTransacaoField.value = cells[1].textContent.trim().replace(",", ".");
+            }
 
-                // Mostrar/ocultar campo de transferência baseado no tipo
-                const transferenciaField = form.querySelector('#transferencia-field');
-                if (transferenciaField) {
-                    if (tipoTransacao.toLowerCase().includes('transferencia') ||
-                        tipoTransacao.toLowerCase().includes('transferência')) {
-                        transferenciaField.style.display = 'block';
-                    } else {
-                        transferenciaField.style.display = 'none';
-                    }
+            if (formaDinheiroField && cells[2]) {
+                setSelectValue(formaDinheiroField, cells[2].textContent.trim());
+            }
+
+            if (contaPrincipalField && cells[3]) {
+                contaPrincipalField.value = cells[3].textContent.trim();
+            }
+
+            if (contaDestinoField && cells[4]) {
+                contaDestinoField.value = cells[4].textContent.trim();
+            }
+
+            if (dataField && cells[5]) {
+                dataField.value = formatarDataParaInput(cells[5].textContent.trim());
+            }
+
+            if (descricaoField && cells[6]) {
+                descricaoField.value = cells[6].textContent.trim();
+            }
+
+            if (idTransacaoField && cells[7]) {
+                idTransacaoField.value = cells[7].textContent.trim(); // coloca o id da transação
+            }
+
+            if (operadorField && cells[8]) {
+                operadorField.value = cells[8].textContent.trim(); // mostra o nome do operador
+                operadorField.dataset.operadorId = cells[8].dataset.operadorId; // mantém id do operador para uso interno
+            }
+
+
+            const transferenciaField = form.querySelector('#transferencia-field');
+            if (transferenciaField && tipoTransacaoField) {
+                if (tipoTransacaoField.value.toLowerCase().includes('transferencia') ||
+                    tipoTransacaoField.value.toLowerCase().includes('transferência')) {
+                    transferenciaField.style.display = 'block';
+                } else {
+                    transferenciaField.style.display = 'none';
                 }
             }
-
-            if (contaPrincipalField && cells[2]) {
-                const contaPrincipal = cells[2].textContent.trim();
-                contaPrincipalField.value = contaPrincipal;
-
-                // Se for um campo de texto readonly, pode incluir o nome da conta
-                const contaPrincipalNomeField = form.querySelector('[name="ContaPrincipalNome"]');
-                if (contaPrincipalNomeField) {
-                    contaPrincipalNomeField.value = contaPrincipal;
-                }
-            }
-
-            if (contaDestinoField && cells[3]) {
-                const contaDestino = cells[3].textContent.trim();
-                if (contaDestino && contaDestino !== '-' && contaDestino !== '') {
-                    contaDestinoField.value = contaDestino;
-
-                    // Se for um campo de texto readonly, pode incluir o nome da conta
-                    const contaDestinoNomeField = form.querySelector('[name="ContaDestinoNome"]');
-                    if (contaDestinoNomeField) {
-                        contaDestinoNomeField.value = contaDestino;
-                    }
-                }
-            }
-
-            // Campo de data (se necessário no futuro)
-            if (cells[4]) {
-                const dataField = form.querySelector('[name="dataTransacao"]') ||
-                                form.querySelector('[name="DataTransacao"]');
-                if (dataField) {
-                    dataField.value = formatarDataParaInput(cells[4].textContent);
-                }
-            }
-
-            // Campos adicionais que podem estar nos dados da transação
-            // Saldo Anterior (cells[5]) e Saldo Posterior (cells[6]) - não utilizados no form atual
-
-            console.log('Formulário preenchido com dados da transação:', {
-                valor: cells[0]?.textContent.trim(),
-                tipo: cells[1]?.textContent.trim(),
-                contaPrincipal: cells[2]?.textContent.trim(),
-                contaDestino: cells[3]?.textContent.trim(),
-                data: cells[4]?.textContent.trim()
-            });
         });
     }
 

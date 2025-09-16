@@ -8,12 +8,5 @@
   </select>
 </div>
 
-<div th:fragment="NomeOperadorReadOnly">
-  <label for="operadorTransacaoIdReadOnly">Operador</label>
-  <select class="form-control" name="operadorTransacaoIdReadOnly" id="operadorTransacaoIdReadOnly">
-    <option value="">Selecione operador</option>
-    <option th:each="operador : ${Operadores}"
-            th:value="${operador.id}"
-            th:text="${operador.name}">Vendedor</option>
-  </select>
-</div>
+
+

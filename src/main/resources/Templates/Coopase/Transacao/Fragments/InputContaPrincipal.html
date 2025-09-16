@@ -9,13 +9,3 @@
 </div>
 
 
-
-<div th:fragment="ContaPrincipalReadOnly">
-  <label for="contaOrigemIdReadOnly" id="ContaPrincipalLabelReadOnly">Conta</label>
-  <select class="form-control" name="contaOrigemIdReadOnly" id="contaOrigemIdReadOnly" required>
-    <option value="" selected>Selecione uma conta</option>
-    <option th:each="conta : ${contasDeposito}"
-            th:value="${conta.id}"
-            th:text="${conta.vaultName}">Conta</option>
-  </select>
-</div>
