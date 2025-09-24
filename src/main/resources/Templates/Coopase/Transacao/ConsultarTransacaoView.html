@@ -9,53 +9,190 @@
             background-color: #f5f5f5;
         }
 
-        /* --- BORDAS SEMPRE VISÍVEIS --- */
         .main-row.deposit {
-            border-left: 4px solid #2196F3; /* Azul */
+            border-left: 4px solid #2196F3;
         }
         .main-row.withdraw {
-            border-left: 4px solid #FF9800; /* Laranja */
+            border-left: 4px solid #FF9800;
         }
         .main-row.transfer {
-            border-left: 4px solid #4CAF50; /* Verde */
+            border-left: 4px solid #4CAF50;
         }
 
-        /* --- BACKGROUND SÓ QUANDO SELECIONADO --- */
         .main-row.selected.deposit {
-            background-color: #e3f2fd; /* Azul claro */
+            background-color: #e3f2fd;
         }
         .main-row.selected.withdraw {
-            background-color: #fff3e0; /* Laranja claro */
+            background-color: #fff3e0;
         }
         .main-row.selected.transfer {
-            background-color: #e8f5e9; /* Verde claro */
+            background-color: #e8f5e9;
         }
+
+        .table-container {
+            display: none;
+        }
+
+        .table-container.active {
+            display: block;
+        }
+
     </style>
 
-    <div>
-        <h2 class="d-flex justify-content-center">Consultar Transação</h2>
+    <div data-mode="ATIVAS" id="transactionContainer">
+        <h2 class="d-flex justify-content-center" id="tituloTransacao">Consultar Transações Ativas</h2>
 
         <div class="container">
-            <div th:fragment="tabelaTransacao">
-                <table class="main-table" id="listaDeTransacaoSelecionavel">
-                    <thead>
-                    <tr>
-                        <th>Tipo Transação</th>
-                        <th>Valor</th>
-                        <th>Forma Dinheiro</th>
-                        <th>Conta Principal</th>
-                        <th>Conta Destino</th>
-                        <th>Data</th>
-                        <th>Descrição</th>
-                    </tr>
-                    </thead>
-                    <tbody th:replace="~{/Coopase/Transacao/Fragments/tabelaTransacao :: corpoTabela}"></tbody>
-                </table>
+
+            <div class="status-options">
+                <button type="button" class="status-option btn-ativas active" data-status="ATIVAS">ATIVAS
+                    <div class="status-underline"></div>
+                </button>
+                <button type="button" class="status-option btn-inativas" data-status="INATIVAS">INATIVAS
+                    <div class="status-underline"></div>
+                </button>
+                <button type="button" class="status-option btn-todas" data-status="TODAS">TODAS
+                    <div class="status-underline"></div>
+                </button>
+                <div class="container-fluid vh-10 d-flex justify-content-end align-items-center">
+                    <div class="status-ball-container">
+                        <div class="status-ball" data-tooltip="As bolinhas coloridas (verde ou laranja) indicam se a transação foi feita manualmente (por uma pessoa) ou automaticamente (pelo sistema), respectivamente."></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Transações Ativas -->
+            <div class="table-container active" id="container-ativas">
+                <div th:fragment="tabelaTransacao">
+                    <table class="main-table" id="listaDeTransacaoSelecionavel-ativas">
+                        <thead>
+                        <tr>
+                            <th>Tipo Transação</th>
+                            <th>Valor</th>
+                            <th>Forma Dinheiro</th>
+                            <th>Conta Principal</th>
+                            <th>Conta Destino</th>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th style="display:none;">Id</th>
+                            <th style="display:none;">Operador</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="main-row" th:each="resultado : ${ListaTransacoesAtivas}"
+                            th:data-id="${resultado.id}"
+                            th:data-ativa="${resultado.ativa}">
+                            <td th:text="${resultado.tipoTransacao}"></td>
+                            <td th:text="${resultado.valor}"></td>
+                            <td th:text="${resultado.tipoDinheiro}"></td>
+                            <td th:text="${resultado.contaDepositoNome}"></td>
+                            <td th:text="${resultado.contaDestinoNome}"></td>
+                            <td th:text="${resultado.data != null ? #temporals.format(resultado.data, 'dd/MM/yyyy') : ''}"></td>
+                            <td th:text="${resultado.descricao}"></td>
+
+                            <!-- hidden fields -->
+                            <td th:text="${resultado.id}" hidden></td>
+                            <td th:text="${resultado.operadorName}" hidden></td>
+                            <td th:text="${resultado.saldoAnterior}" hidden></td>
+                            <td th:text="${resultado.saldoPosterior}" hidden></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tabela de Transações Inativas -->
+            <div class="table-container" id="container-inativas">
+                <div th:fragment="tabelaTransacaoInativas">
+                    <table class="main-table" id="listaDeTransacaoSelecionavel-inativas">
+                        <thead>
+                        <tr>
+                            <th>Tipo Transação</th>
+                            <th>Valor</th>
+                            <th>Forma Dinheiro</th>
+                            <th>Conta Principal</th>
+                            <th>Conta Destino</th>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th style="display:none;">Id</th>
+                            <th style="display:none;">Operador</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="main-row" th:each="resultado : ${ListaTransacoesInativas}"
+                            th:data-id="${resultado.id}"
+                            th:data-ativa="${resultado.ativa}">
+                            <td th:text="${resultado.tipoTransacao}"></td>
+                            <td th:text="${resultado.valor}"></td>
+                            <td th:text="${resultado.tipoDinheiro}"></td>
+                            <td th:text="${resultado.contaDepositoNome}"></td>
+                            <td th:text="${resultado.contaDestinoNome}"></td>
+                            <td th:text="${resultado.data != null ? #temporals.format(resultado.data, 'dd/MM/yyyy') : ''}"></td>
+                            <td th:text="${resultado.descricao}"></td>
+
+                            <!-- hidden fields -->
+                            <td th:text="${resultado.id}" hidden></td>
+                            <td th:text="${resultado.operadorName}" hidden></td>
+                            <td th:text="${resultado.saldoAnterior}" hidden></td>
+                            <td th:text="${resultado.saldoPosterior}" hidden></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tabela de Todas as Transações -->
+            <div class="table-container" id="container-todas">
+                <div th:fragment="tabelaTransacaoTodas">
+                    <table class="main-table" id="listaDeTransacaoSelecionavel-todas">
+                        <thead>
+                        <tr>
+                            <th>Tipo Transação</th>
+                            <th>Valor</th>
+                            <th>Forma Dinheiro</th>
+                            <th>Conta Principal</th>
+                            <th>Conta Destino</th>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th style="display:none;">Id</th>
+                            <th style="display:none;">Operador</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="main-row" th:each="resultado : ${ListaTransacoes}"
+                            th:data-id="${resultado.id}"
+                            th:data-ativa="${resultado.ativa}">
+                            <td th:text="${resultado.tipoTransacao}"></td>
+                            <td th:text="${resultado.valor}"></td>
+                            <td th:text="${resultado.tipoDinheiro}"></td>
+                            <td th:text="${resultado.contaDepositoNome}"></td>
+                            <td th:text="${resultado.contaDestinoNome}"></td>
+                            <td th:text="${resultado.data != null ? #temporals.format(resultado.data, 'dd/MM/yyyy') : ''}"></td>
+                            <td th:text="${resultado.descricao}"></td>
+
+                            <!-- hidden fields -->
+                            <td th:text="${resultado.id}" hidden></td>
+                            <td th:text="${resultado.operadorName}" hidden></td>
+                            <td th:text="${resultado.saldoAnterior}" hidden></td>
+                            <td th:text="${resultado.saldoPosterior}" hidden></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
+        <!-- form base escondido -->
         <div id="formWrapper" class="container" style="display: none;">
-            <form id="ConsultarTransacao">
+            <form id="AlterarStatusTransacao" method="post" action="/Coopase/Transacao/Inativar">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="idTransacao">Id</label>
+                        <input type="text" class="form-control" name="idTransacao" id="idTransacao" readonly>
+                    </div>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="TipoTransacao">Tipo de Transação</label>
@@ -64,8 +201,7 @@
 
                     <div class="form-group NomeOperador-field" id="NomeOperador-field">
                         <label for="operadorTransacaoIdReadOnly">Operador</label>
-                        <input type="text"
-                               class="form-control"
+                        <input type="text" class="form-control"
                                name="operadorTransacaoIdReadOnly"
                                id="operadorTransacaoIdReadOnly"
                                readonly>
@@ -80,21 +216,13 @@
 
                     <div class="form-group ContaPrincipal-field" id="ContaPrincipal-field">
                         <label for="contaOrigemIdReadOnly">Conta</label>
-                        <input type="text"
-                               class="form-control"
-                               name="contaOrigemIdReadOnly"
-                               id="contaOrigemIdReadOnly"
-                               readonly>
+                        <input type="text" class="form-control" name="contaOrigemIdReadOnly" id="contaOrigemIdReadOnly" readonly>
                     </div>
                 </div>
 
                 <div class="form-group transferencia-field" id="transferencia-field" style="display: none;">
                     <label for="ContaDestinoIdReadOnly">Conta de Destino</label>
-                    <input type="text"
-                           class="form-control"
-                           name="ContaDestinoIdReadOnly"
-                           id="ContaDestinoIdReadOnly"
-                           readonly>
+                    <input type="text" class="form-control" name="ContaDestinoIdReadOnly" id="ContaDestinoIdReadOnly" readonly>
                 </div>
 
                 <div class="form-row">
@@ -118,11 +246,12 @@
                     <label for="Descricao">Descrição</label>
                     <input type="text" class="form-control" name="Descricao" id="Descricao" readonly>
                 </div>
+
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-warning mt-4" id="btnAlterarStatus">Inativar</button>
+                </div>
+
             </form>
         </div>
     </div>
-
 </div>
-
-
-

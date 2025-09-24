@@ -14,15 +14,40 @@ function initTransactionView() {
         }
 
         tableObserver = new MutationObserver(function(mutations) {
-            const table = document.getElementById('listaDeTransacaoSelecionavel');
-            if (table) {
-                setupTableEvents();
+            // Procura por todas as tabelas possíveis
+            const tables = [
+                document.getElementById('listaDeTransacaoSelecionavel'),
+                document.getElementById('listaDeTransacaoSelecionavel-ativas'),
+                document.getElementById('listaDeTransacaoSelecionavel-inativas'),
+                document.getElementById('listaDeTransacaoSelecionavel-todas')
+            ].filter(Boolean);
+
+            if (tables.length > 0) {
+                tables.forEach(table => setupTableEvents(table));
             }
+
+            // Verifica os botões de status
+            setupStatusButtons();
 
             mutations.forEach(mutation => {
                 mutation.addedNodes.forEach(node => {
                     if (node.nodeType === 1) {
                         transactionViewManager.checkForTransactionView(node);
+
+                        // Verifica se novos botões de status foram adicionados
+                        if (node.querySelector && node.querySelector('.status-option')) {
+                            setupStatusButtons();
+                        }
+
+                        // Verifica se novas tabelas foram adicionadas
+                        const newTables = [
+                            node.querySelector('#listaDeTransacaoSelecionavel'),
+                            node.querySelector('#listaDeTransacaoSelecionavel-ativas'),
+                            node.querySelector('#listaDeTransacaoSelecionavel-inativas'),
+                            node.querySelector('#listaDeTransacaoSelecionavel-todas')
+                        ].filter(Boolean);
+
+                        newTables.forEach(table => setupTableEvents(table));
                     }
                 });
             });
@@ -34,8 +59,81 @@ function initTransactionView() {
         });
     }
 
-    function setupTableEvents() {
-        const table = document.getElementById('listaDeTransacaoSelecionavel');
+    function setupStatusButtons() {
+        const statusButtons = document.querySelectorAll('.status-option');
+        const titulo = document.getElementById('tituloTransacao');
+
+        if (statusButtons.length === 0) return;
+
+        statusButtons.forEach(button => {
+            // Remove listeners anteriores para evitar duplicação
+            button.removeEventListener('click', handleStatusClick);
+            button.addEventListener('click', handleStatusClick);
+        });
+
+        function handleStatusClick(e) {
+            const clickedButton = e.currentTarget;
+            const status = clickedButton.dataset.status;
+
+            // Remove classe active de todos os botões
+            statusButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Adiciona classe active ao botão clicado
+            clickedButton.classList.add('active');
+
+            // Esconde todos os containers de tabela
+            const containers = document.querySelectorAll('.table-container');
+            containers.forEach(container => container.classList.remove('active'));
+
+            // Mostra o container correspondente
+            if (status === 'ATIVAS') {
+                const containerAtivas = document.getElementById('container-ativas');
+                if (containerAtivas) {
+                    containerAtivas.classList.add('active');
+                }
+                if (titulo) {
+                    titulo.textContent = 'Consultar Transações Ativas';
+                }
+            } else if (status === 'INATIVAS') {
+                const containerInativas = document.getElementById('container-inativas');
+                if (containerInativas) {
+                    containerInativas.classList.add('active');
+                }
+                if (titulo) {
+                    titulo.textContent = 'Consultar Transações Inativas';
+                }
+            } else if (status === 'TODAS') {
+                const containerTodas = document.getElementById('container-todas');
+                if (containerTodas) {
+                    containerTodas.classList.add('active');
+                }
+                if (titulo) {
+                    titulo.textContent = 'Consultar Todas as Transações';
+                }
+            }
+
+            // Remove seleções anteriores e formulários expandidos
+            document.querySelectorAll('.main-row.selected').forEach(row => {
+                row.classList.remove('selected');
+            });
+            document.querySelectorAll('.expanded-form-row').forEach(row => row.remove());
+
+            // Configura eventos para a tabela que acabou de ficar ativa
+            setTimeout(() => {
+                const activeTable = document.querySelector('.table-container.active .main-table');
+                if (activeTable) {
+                    setupTableEvents(activeTable);
+                }
+            }, 10);
+        }
+    }
+
+    function setupTableEvents(table) {
+        if (!table) {
+            // Fallback para compatibilidade - procura pelo ID original
+            table = document.getElementById('listaDeTransacaoSelecionavel');
+        }
+
         const formWrapper = document.getElementById('formWrapper');
 
         if (!table || !formWrapper) {
@@ -171,7 +269,6 @@ function initTransactionView() {
                 operadorField.dataset.operadorId = cells[8].dataset.operadorId; // mantém id do operador para uso interno
             }
 
-
             const transferenciaField = form.querySelector('#transferencia-field');
             if (transferenciaField && tipoTransacaoField) {
                 if (tipoTransacaoField.value.toLowerCase().includes('transferencia') ||
@@ -184,11 +281,21 @@ function initTransactionView() {
         });
     }
 
+    // Inicialização
     setupTableObserver();
 
-    if (document.getElementById('listaDeTransacaoSelecionavel')) {
-        setupTableEvents();
-    }
+    // Configura botões de status se já existirem
+    setupStatusButtons();
+
+    // Configura tabelas existentes
+    const existingTables = [
+        document.getElementById('listaDeTransacaoSelecionavel'),
+        document.getElementById('listaDeTransacaoSelecionavel-ativas'),
+        document.getElementById('listaDeTransacaoSelecionavel-inativas'),
+        document.getElementById('listaDeTransacaoSelecionavel-todas')
+    ].filter(Boolean);
+
+    existingTables.forEach(table => setupTableEvents(table));
 }
 
 export default initTransactionView;

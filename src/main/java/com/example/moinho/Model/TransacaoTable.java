@@ -72,5 +72,9 @@ public class TransacaoTable {
 
     @Column(name = "ativa", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private Boolean ativa;
+
+    @Column(name = "manual", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean manual = true;
+
 }
 

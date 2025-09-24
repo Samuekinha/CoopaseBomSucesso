@@ -19,6 +19,7 @@ public class TransacaoResumoDTO {
     private String descricao;
     private BigDecimal saldoAnterior;
     private BigDecimal saldoPosterior;
+    private boolean ativa;
 
     public TransacaoResumoDTO(
             Long id,
@@ -31,7 +32,8 @@ public class TransacaoResumoDTO {
             LocalDateTime data,
             String descricao,
             BigDecimal saldoAnterior,
-            BigDecimal saldoPosterior
+            BigDecimal saldoPosterior,
+            boolean ativa
     ) {
         this.id = id;
         this.contaDepositoNome = contaDepositoNome;
@@ -44,5 +46,6 @@ public class TransacaoResumoDTO {
         this.descricao = descricao;
         this.saldoAnterior = saldoAnterior;
         this.saldoPosterior = saldoPosterior;
+        this.ativa = ativa;
     }
 }

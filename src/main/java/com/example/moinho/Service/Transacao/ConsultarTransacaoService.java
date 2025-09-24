@@ -25,4 +25,12 @@ public class ConsultarTransacaoService {
         return transacaoRepository.buscarResumo();
     }
 
+    public List<TransacaoResumoDTO> consultarTodasTransacaoAtivas() {
+        return transacaoRepository.buscarResumoAtivas();
+    }
+
+    public List<TransacaoResumoDTO> consultarTodasTransacaoInativas() {
+        return transacaoRepository.buscarResumoInativas();
+    }
+
 }

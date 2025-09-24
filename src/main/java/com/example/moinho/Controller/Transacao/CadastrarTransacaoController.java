@@ -70,7 +70,7 @@ public class CadastrarTransacaoController {
         TransacaoTable.TypeTransaction tipo = form.getTipoTransacao(); // já é enum
 
         switch (tipo) {
-            case DEPOSIT -> cadastrarTransacaoService.criarTransacaoEntrada(form);
+            case DEPOSIT -> cadastrarTransacaoService.criarTransacaoEntrada(form, true);
 //            case WITHDRAW -> cadastrarTransacaoService.criarTransacaoSaida(form);
 //            case TRANSFER -> cadastrarTransacaoService.criarTransacaoTransferencia(form);
         }

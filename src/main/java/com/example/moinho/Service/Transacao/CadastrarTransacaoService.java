@@ -32,7 +32,7 @@ public class CadastrarTransacaoService {
     }
 
     @Transactional
-    public TransacaoTable criarTransacaoEntrada(TransacaoRequestDTO request) {
+    public TransacaoTable criarTransacaoEntrada(TransacaoRequestDTO request, boolean manual) {
 
         // Valida conta de destino
         E_ContaDeposito conta = contaDepositoRepository.findById(request.getContaPrincipalId())
@@ -68,6 +68,7 @@ public class CadastrarTransacaoService {
         transacao.setDescricao(request.getDescricaoTransacao());
         transacao.setSaldoAnterior(saldoAnterior);
         transacao.setSaldoPosterior(conta.getTotal_amount());
+        transacao.setManual(manual);
 
         return transacaoRepository.save(transacao);
     }

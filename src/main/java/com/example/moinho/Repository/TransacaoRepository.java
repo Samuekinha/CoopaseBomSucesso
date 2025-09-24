@@ -22,7 +22,8 @@ public interface TransacaoRepository extends JpaRepository<TransacaoTable, Long>
             t.dataTransacao,
             t.descricao,
             t.saldoAnterior,
-            t.saldoPosterior
+            t.saldoPosterior,
+            t.ativa
         )
         FROM TransacaoTable t
         LEFT JOIN t.contaDeposito cd
@@ -30,5 +31,51 @@ public interface TransacaoRepository extends JpaRepository<TransacaoTable, Long>
         LEFT JOIN t.operador op
     """)
     List<TransacaoResumoDTO> buscarResumo();
+
+    @Query("""
+        SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
+            t.id,
+            cd.vaultName,
+            coalesce(cd2.vaultName, ''),
+            op.name,
+            t.typeTransaction,
+            t.value,
+            t.typeMoney,
+            t.dataTransacao,
+            t.descricao,
+            t.saldoAnterior,
+            t.saldoPosterior,
+            t.ativa
+        )
+        FROM TransacaoTable t
+        LEFT JOIN t.contaDeposito cd
+        LEFT JOIN t.contaDestino cd2
+        LEFT JOIN t.operador op
+        WHERE t.ativa = false
+    """)
+    List<TransacaoResumoDTO> buscarResumoInativas();
+
+    @Query("""
+        SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
+            t.id,
+            cd.vaultName,
+            coalesce(cd2.vaultName, ''),
+            op.name,
+            t.typeTransaction,
+            t.value,
+            t.typeMoney,
+            t.dataTransacao,
+            t.descricao,
+            t.saldoAnterior,
+            t.saldoPosterior,
+            t.ativa
+        )
+        FROM TransacaoTable t
+        LEFT JOIN t.contaDeposito cd
+        LEFT JOIN t.contaDestino cd2
+        LEFT JOIN t.operador op
+        WHERE t.ativa = true
+    """)
+    List<TransacaoResumoDTO> buscarResumoAtivas();
 
 }

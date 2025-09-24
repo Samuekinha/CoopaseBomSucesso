@@ -1,9 +1,11 @@
 package com.example.moinho.Controller.Transacao;
 
+import com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO;
 import com.example.moinho.Model.E_ContaDeposito;
 import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Service.ClienteService.ConsultarClienteService;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
+import com.example.moinho.Service.Transacao.ConsultarTransacaoService;
 import com.example.moinho.Util.FormatadorUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,12 +22,14 @@ public class ServicosTransacaoController {
 
     private final ConsultarContaDepositoService contaDepositoService;
     private final ConsultarClienteService consultarClienteService;
+    private final ConsultarTransacaoService consultarTransacaoService;
 
     // Injeção via construtor
     public ServicosTransacaoController(ConsultarContaDepositoService contaDepositoService,
-                                       ConsultarClienteService consultarClienteService) {
+                                       ConsultarClienteService consultarClienteService, ConsultarTransacaoService consultarTransacaoService) {
         this.contaDepositoService = contaDepositoService;
         this.consultarClienteService = consultarClienteService;
+        this.consultarTransacaoService = consultarTransacaoService;
     }
 
     @GetMapping

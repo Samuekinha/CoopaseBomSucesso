@@ -26,7 +26,13 @@
               <input type="text" class="form-control" name="tipoTransacao" id="tipoTransacao" required readonly>
             </div>
             <div class="form-group NomeOperador-field" id="NomeOperador-field">
-              <div th:replace="Coopase/Transacao/Fragments/InputOperador:: NomeOperador"></div>
+              <label for="operadorTransacaoId">Operador</label>
+              <select class="form-control" name="operadorTransacaoId" id="operadorTransacaoId">
+                <option value="">Selecione operador</option>
+                <option th:each="operador : ${Operadores}"
+                        th:value="${operador.id}"
+                        th:text="${operador.name}">Vendedor</option>
+              </select>
             </div>
           </div>
 
@@ -37,12 +43,24 @@
             </div>
 
             <div class="form-group ContaPrincipal-field" id="ContaPrincipal-field">
-              <div th:replace="Coopase/Transacao/Fragments/InputContaPrincipal :: ContaPrincipal"></div>
+              <label for="contaPrincipalId" id="ContaPrincipalLabel">Conta</label>
+              <select class="form-control" name="contaPrincipalId" id="contaPrincipalId" required>
+                <option value="" selected>Selecione uma conta</option>
+                <option th:each="conta : ${contasDeposito}"
+                        th:value="${conta.id}"
+                        th:text="${conta.vaultName}">Conta</option>
+              </select>
             </div>
           </div>
 
           <div class="form-group transferencia-field" id="transferencia-field" style="display: none;">
-            <div th:replace="Coopase/Transacao/Fragments/InputContaDestino :: ContaDestino"></div>
+              <label for="contaDestinoId">Conta de Destino</label>
+              <select class="form-control" name="contaDestinoId" id="contaDestinoId">
+                <option value="" selected>Selecione uma conta</option>
+                <option th:each="conta : ${contasDeposito}"
+                        th:value="${conta.id}"
+                        th:text="${conta.vaultName}">Conta</option>
+              </select>
           </div>
 
           <div class="form-row">

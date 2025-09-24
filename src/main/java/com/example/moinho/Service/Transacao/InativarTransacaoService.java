@@ -37,7 +37,8 @@ public class InativarTransacaoService {
             throw new TransacaoInativaException("A transação já está inativa");
         }
 
-        transacaoRepository.delete(transacao);
+        transacao.setAtiva(false);
+        transacaoRepository.save(transacao);
     }
 
 }

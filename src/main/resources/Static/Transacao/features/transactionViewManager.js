@@ -46,10 +46,13 @@ class TransactionViewManager {
         const transactionOptions = container.querySelectorAll('.transaction-option');
         const transferenciaField = container.querySelector('#transferencia-field');
         const tipoTransacaoInput = container.querySelector('#tipoTransacao');
-        const contaPrincipalSelect = container.querySelector('#ContaPrincipal');
-        const contaDestinoSelect = container.querySelector('#ContaDestino');
-        const nomeOperadorSelect = container.querySelector('#NomeOperador');
+
+        // IDs CORRETOS do HTML
+        const contaPrincipalSelect = container.querySelector('#contaPrincipalId');
+        const contaDestinoSelect = container.querySelector('#contaDestinoId');
+        const nomeOperadorSelect = container.querySelector('#operadorTransacaoId');
         const operatorNameSpan = container.querySelector('#NomeOperadorSpan');
+        const valorInput = container.querySelector('#valorTransacao');
 
         const Toast = Swal.mixin({
             toast: true,
@@ -63,118 +66,150 @@ class TransactionViewManager {
             }
         });
 
-        transactionOptions.forEach((option) => {
-            const newOption = option.cloneNode(true);
-            option.parentNode.replaceChild(newOption, option);
-
-            newOption.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('🔄 Botão clicado:', newOption.getAttribute('data-type'));
-                this.handleTransactionClick(newOption, container);
-                setTimeout(atualizarPreview, 50);
-            });
-        });
-
-        if (contaPrincipalSelect) {
-            let newPrincipal = contaPrincipalSelect.cloneNode(true);
-            contaPrincipalSelect.parentNode.replaceChild(newPrincipal, contaPrincipalSelect);
-
-            newPrincipal.addEventListener('change', () => {
-                const contaDestinoAtual = container.querySelector('#ContaDestino');
-                const tipoAtual = container.querySelector('#tipoTransacao')?.value;
-
-                if (tipoAtual === "TRANSFER" && newPrincipal.value && contaDestinoAtual && newPrincipal.value === contaDestinoAtual.value) {
-                    Toast.fire({
-                        icon: "error",
-                        title: `Erro: a conta principal e de destino não podem ser iguais`
-                    });
-                    newPrincipal.value = "";
-                    this.clearTable(container, "principal");
-                    return;
-                }
-
-                if (newPrincipal.value) {
-                    this.fillTable(newPrincipal.value, container, "principal");
-                } else {
-                    this.clearTable(container, "principal");
-                }
-
-                setTimeout(atualizarPreview, 50);
-            });
-        }
-
-        if (contaDestinoSelect) {
-            let newDestino = contaDestinoSelect.cloneNode(true);
-            contaDestinoSelect.parentNode.replaceChild(newDestino, contaDestinoSelect);
-
-            newDestino.addEventListener('change', () => {
-                const contaPrincipalAtual = container.querySelector('#ContaPrincipal');
-                const tipoAtual = container.querySelector('#tipoTransacao')?.value;
-
-                if (tipoAtual === "TRANSFER" && newDestino.value && contaPrincipalAtual && newDestino.value === contaPrincipalAtual.value) {
-                    Toast.fire({
-                        icon: "error",
-                        title: `Erro: a conta principal e de destino não podem ser iguais`
-                    });
-                    newDestino.value = "";
-                    this.clearTable(container, "destino");
-                    return;
-                }
-
-                if (newDestino.value) {
-                    this.fillTable(newDestino.value, container, "destino");
-                } else {
-                    this.clearTable(container, "destino");
-                }
-
-                setTimeout(atualizarPreview, 50);
-            });
-        }
-
         // Atualização do preview com base no valor e tipo
-        const valorInput = container.querySelector('#Valor');
         const atualizarPreview = () => {
+            console.log('🔄 Atualizando preview...');
             const tipo = container.querySelector('#tipoTransacao')?.value;
-            const valor = parseFloat((valorInput?.value ?? "0").replace(',', '.')) || 0;
+            const valorAtual = container.querySelector('#valorTransacao')?.value || "0";
+            const valor = parseFloat(valorAtual.replace(',', '.')) || 0;
+
+            console.log('💰 Valor atual:', valorAtual, '-> Valor parseado:', valor);
+            console.log('📝 Tipo de transação:', tipo);
 
             const principalAtual = container.querySelector('#preview-principal td:nth-child(2)');
             const principalDepois = container.querySelector('#preview-principal td:nth-child(3)');
             const destinoAtual = container.querySelector('#preview-destino td:nth-child(2)');
             const destinoDepois = container.querySelector('#preview-destino td:nth-child(3)');
 
-            const principalSaldo = parseFloat(principalAtual?.textContent.replace(',', '.')) || 0;
+            if (!principalAtual || !principalDepois) {
+                console.log('⚠️ Elementos de preview principal não encontrados');
+                return;
+            }
+
+            const principalSaldo = parseFloat(principalAtual.textContent.replace(',', '.')) || 0;
             const destinoSaldo = parseFloat(destinoAtual?.textContent.replace(',', '.')) || 0;
 
-            if (!tipo) return;
+            console.log('💳 Saldo principal atual:', principalSaldo);
+            if (destinoAtual) console.log('💳 Saldo destino atual:', destinoSaldo);
+
+            if (!tipo) {
+                console.log('❌ Tipo de transação não definido');
+                return;
+            }
 
             switch (tipo) {
                 case "DEPOSIT":
-                    if (principalDepois) principalDepois.textContent = (principalSaldo + valor).toFixed(2);
+                    principalDepois.textContent = (principalSaldo + valor).toFixed(2);
+                    console.log('💸 DEPOSIT - Novo saldo:', (principalSaldo + valor).toFixed(2));
                     break;
                 case "WITHDROW":
-                    if (principalDepois) principalDepois.textContent = (principalSaldo - valor).toFixed(2);
+                    principalDepois.textContent = (principalSaldo - valor).toFixed(2);
+                    console.log('💸 WITHDROW - Novo saldo:', (principalSaldo - valor).toFixed(2));
                     break;
                 case "TRANSFER":
-                    if (principalDepois) principalDepois.textContent = (principalSaldo - valor).toFixed(2);
-                    if (destinoDepois) destinoDepois.textContent = (destinoSaldo + valor).toFixed(2);
+                    principalDepois.textContent = (principalSaldo - valor).toFixed(2);
+                    if (destinoDepois) {
+                        destinoDepois.textContent = (destinoSaldo + valor).toFixed(2);
+                        console.log('💸 TRANSFER - Principal:', (principalSaldo - valor).toFixed(2), 'Destino:', (destinoSaldo + valor).toFixed(2));
+                    }
                     break;
             }
         };
 
-        // Atualiza preview ao digitar valor
-        if (valorInput) valorInput.addEventListener('input', atualizarPreview);
+        // VERSÃO SEGURA SEM CLONENODE - Apenas adiciona listeners únicos
+        transactionOptions.forEach((option) => {
+            // Evita listeners duplicados
+            if (option.dataset.listenerAdded) return;
 
-        const newNomeOperadorSelect = container.querySelector('#NomeOperador');
-        if (newNomeOperadorSelect) {
-            const newOperatorSelect = newNomeOperadorSelect.cloneNode(true);
-            newNomeOperadorSelect.parentNode.replaceChild(newOperatorSelect, newNomeOperadorSelect);
-
-            newOperatorSelect.addEventListener('change', () => {
-                console.log('👤 Operador selecionado:', newOperatorSelect.value);
-                this.updateOperatorDisplay(newOperatorSelect, container);
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('🔄 Botão clicado:', option.getAttribute('data-type'));
+                this.handleTransactionClick(option, container);
+                setTimeout(atualizarPreview, 100);
             });
+
+            option.dataset.listenerAdded = 'true';
+        });
+
+        if (contaPrincipalSelect && !contaPrincipalSelect.dataset.listenerAdded) {
+            contaPrincipalSelect.addEventListener('change', () => {
+                const contaDestinoAtual = container.querySelector('#contaDestinoId');
+                const tipoAtual = container.querySelector('#tipoTransacao')?.value;
+
+                if (tipoAtual === "TRANSFER" && contaPrincipalSelect.value && contaDestinoAtual && contaPrincipalSelect.value === contaDestinoAtual.value) {
+                    Toast.fire({
+                        icon: "error",
+                        title: `Erro: a conta principal e de destino não podem ser iguais`
+                    });
+                    contaPrincipalSelect.value = "";
+                    this.clearTable(container, "principal");
+                    return;
+                }
+
+                if (contaPrincipalSelect.value) {
+                    this.fillTable(contaPrincipalSelect.value, container, "principal", atualizarPreview);
+                } else {
+                    this.clearTable(container, "principal");
+                }
+            });
+            contaPrincipalSelect.dataset.listenerAdded = 'true';
         }
 
+        if (contaDestinoSelect && !contaDestinoSelect.dataset.listenerAdded) {
+            contaDestinoSelect.addEventListener('change', () => {
+                const contaPrincipalAtual = container.querySelector('#contaPrincipalId');
+                const tipoAtual = container.querySelector('#tipoTransacao')?.value;
+
+                if (tipoAtual === "TRANSFER" && contaDestinoSelect.value && contaPrincipalAtual && contaDestinoSelect.value === contaPrincipalAtual.value) {
+                    Toast.fire({
+                        icon: "error",
+                        title: `Erro: a conta principal e de destino não podem ser iguais`
+                    });
+                    contaDestinoSelect.value = "";
+                    this.clearTable(container, "destino");
+                    return;
+                }
+
+                if (contaDestinoSelect.value) {
+                    this.fillTable(contaDestinoSelect.value, container, "destino", atualizarPreview);
+                } else {
+                    this.clearTable(container, "destino");
+                }
+            });
+            contaDestinoSelect.dataset.listenerAdded = 'true';
+        }
+
+        // Atualiza preview ao digitar valor
+        if (valorInput && !valorInput.dataset.listenerAdded) {
+            // Usar tanto 'input' quanto 'keyup' para garantir que funcione
+            valorInput.addEventListener('input', () => {
+                console.log('⌨️ Input event disparado - Valor:', valorInput.value);
+                atualizarPreview();
+            });
+
+            valorInput.addEventListener('keyup', () => {
+                console.log('⌨️ Keyup event disparado - Valor:', valorInput.value);
+                atualizarPreview();
+            });
+
+            valorInput.addEventListener('change', () => {
+                console.log('⌨️ Change event disparado - Valor:', valorInput.value);
+                atualizarPreview();
+            });
+
+            valorInput.dataset.listenerAdded = 'true';
+        }
+
+        // Operador select com ID correto
+        if (nomeOperadorSelect && !nomeOperadorSelect.dataset.listenerAdded) {
+            nomeOperadorSelect.addEventListener('change', () => {
+                console.log('👤 Operador selecionado:', nomeOperadorSelect.value);
+                this.updateOperatorDisplay(nomeOperadorSelect, container);
+            });
+            nomeOperadorSelect.dataset.listenerAdded = 'true';
+        }
+
+        // Inicialização padrão
         if (transactionOptions.length > 0) {
             const firstOption = container.querySelector('.transaction-option');
             firstOption.classList.add('active');
@@ -184,15 +219,11 @@ class TransactionViewManager {
                 tipoTransacaoInput.value = transactionType;
             }
 
-            if (nomeOperadorSelect && nomeOperadorSelect.value) {
-                this.updateOperatorDisplay(nomeOperadorSelect, container);
+            // Atualizar display do operador se já houver um selecionado
+            const operadorAtual = container.querySelector('#operadorTransacaoId');
+            if (operadorAtual && operadorAtual.value) {
+                this.updateOperatorDisplay(operadorAtual, container);
             }
-        }
-
-        const dataInput = container.querySelector('#Data');
-        if (dataInput && !dataInput.value) {
-            const hoje = new Date().toISOString().split('T')[0];
-            dataInput.value = hoje;
         }
 
         console.log('✅ Botões de transação inicializados com sucesso!');
@@ -219,9 +250,11 @@ class TransactionViewManager {
         const transactionOptions = container.querySelectorAll('.transaction-option');
         const transferenciaField = container.querySelector('#transferencia-field');
         const tipoTransacaoInput = container.querySelector('#tipoTransacao');
-        const contaPrincipalSelect = container.querySelector('#ContaPrincipal');
-        const nomeOperadorSelect = container.querySelector('#NomeOperador');
+        const contaPrincipalSelect = container.querySelector('#contaPrincipalId');
+        const contaDestinoSelect = container.querySelector('#contaDestinoId');
+        const nomeOperadorSelect = container.querySelector('#operadorTransacaoId');
         const operatorNameSpan = container.querySelector('#NomeOperadorSpan');
+        const previewDestino = container.querySelector('#preview-destino');
 
         transactionOptions.forEach(opt => opt.classList.remove('active'));
         clickedButton.classList.add('active');
@@ -240,44 +273,62 @@ class TransactionViewManager {
             if (clickedButton.getAttribute('data-type') === 'TRANSFER') {
                 transferenciaField.classList.add('show');
                 transferenciaField.style.display = 'block';
+                if (previewDestino) previewDestino.style.display = 'table-row-group';
                 console.log('👁️ Campo transferência mostrado');
             } else {
                 transferenciaField.classList.remove('show');
                 transferenciaField.style.display = 'none';
+                if (previewDestino) previewDestino.style.display = 'none';
                 console.log('🙈 Campo transferência escondido');
 
-                if (contaPrincipalSelect) {
-                    contaPrincipalSelect.value = '';
-                    this.clearTable(container);
+                // Limpar conta de destino quando não é transferência
+                if (contaDestinoSelect) {
+                    contaDestinoSelect.value = '';
+                    this.clearTable(container, "destino");
                 }
             }
         }
     }
 
-    fillTable(contaId, container, tipo) {
+    fillTable(contaId, container, tipo, callbackPreview = null) {
+        console.log(`🔄 Fazendo fetch para conta ${contaId}, tipo: ${tipo}`);
+
         fetch(`/Coopase/ContaDeposito/${contaId}`)
             .then(response => {
-                if (!response.ok) throw new Error("Erro na resposta");
+                console.log('📡 Resposta do fetch:', response.status);
+                if (!response.ok) throw new Error(`Erro na resposta: ${response.status}`);
                 return response.json();
             })
             .then(data => {
+                console.log('💾 Dados recebidos:', data);
+
                 const tbody = container.querySelector(
                     tipo === "principal" ? "#preview-principal" : "#preview-destino"
                 );
-                if (!tbody) return;
+                if (!tbody) {
+                    console.error('❌ Tbody não encontrado para tipo:', tipo);
+                    return;
+                }
 
                 tbody.style.display = "table-row-group";
 
                 tbody.innerHTML = `
                     <tr>
-                        <td>${data.nomeConta ?? "—"}</td>
-                        <td>${data.saldoAtual != null ? data.saldoAtual : "—"}</td>
-                        <td>${data.saldoPrevisto != null ? data.saldoPrevisto : "—"}</td>
+                        <td>${data.nomeConta ?? data.vaultName ?? "—"}</td>
+                        <td>${data.saldoAtual != null ? data.saldoAtual.toFixed(2) : "0.00"}</td>
+                        <td>${data.saldoAtual != null ? data.saldoAtual.toFixed(2) : "0.00"}</td>
                     </tr>
                 `;
+
+                console.log('✅ Tabela preenchida com sucesso');
+
+                // Chamar o callback de preview se fornecido
+                if (callbackPreview) {
+                    setTimeout(callbackPreview, 50);
+                }
             })
             .catch(err => {
-                console.error("Erro ao carregar conta:", err);
+                console.error("❌ Erro ao carregar conta:", err);
                 this.clearTable(container, tipo);
             });
     }

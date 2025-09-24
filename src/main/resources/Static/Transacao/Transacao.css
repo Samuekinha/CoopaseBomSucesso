@@ -40,7 +40,6 @@ h2 {
     border-bottom: 1px solid #ddd;
 }
 
-/* qué isso? */
 @keyframes slideDown {
     from {
         opacity: 0;
@@ -101,11 +100,6 @@ h2 {
     color: #666;
 }
 
-.form-group {
-    flex: 1;
-    margin-bottom: 0;
-}
-
 /*8. Botões de envio de formulário (cadastrar, editar e deletar) */
 .btn {
     padding: 10px 20px;
@@ -129,7 +123,6 @@ h2 {
     margin-top: 1.5rem;
 }
 
-/**/
 .cooperado-fields {
     background-color: #e8f5e8;
     padding: 15px;
@@ -153,11 +146,10 @@ h2 {
 }
 
 /* Estilo para os blocos de serviço */
-/* Estilo aprimorado para os blocos de serviço com animação de borda */
 .bloco-link {
     position: relative;
     text-decoration: none;
-    overflow: hidden; /* Para conter o pseudo-elemento */
+    overflow: hidden;
 }
 
 .bloco {
@@ -169,7 +161,6 @@ h2 {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-/* Efeito de borda animada */
 .bloco-link::before {
     content: '';
     position: absolute;
@@ -184,7 +175,6 @@ h2 {
     z-index: 1;
 }
 
-/* Cores e animação quando selecionado */
 .bloco-link[data-action="Cadastrar"].selected::before {
     width: 6px;
     height: 80%;
@@ -203,24 +193,20 @@ h2 {
     background-color: #fd7e14;
 }
 
-/* Efeito hover */
 .bloco-link:hover .bloco {
     transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Efeito de "compressão" quando não selecionado */
 .bloco-link:not(.selected) .bloco {
     opacity: 0.85;
     transform: scale(0.98);
 }
 
-/* Transição suave para o estado normal */
 .bloco-link .bloco {
     transition: all 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* cooperado inputs adiiconais de cadastro */
 /* NOVO CSS PARA O LAYOUT DE CADASTRO */
 .cadastro-container {
     max-width: 1200px;
@@ -237,12 +223,10 @@ h2 {
   margin-bottom: 20px;
 }
 
-/* Melhor espaçamento entre os campos */
 .form-main-column .form-group {
     margin-bottom: 20px;
 }
 
-/* Ajuste fino para labels */
 .form-main-column .form-group label {
     font-size: 15px;
     margin-bottom: 8px;
@@ -250,7 +234,7 @@ h2 {
 
 .form-cooperado-column .form-control {
     width: 100%;
-    min-width: 250px; /* Largura mínima */
+    min-width: 250px;
 }
 
 .form-actions {
@@ -276,55 +260,51 @@ h2 {
     }
 }
 
-/* Linha divisória com efeito de transição - sempre visível */
 .divisoria-vertical {
     height: 3px;
-
     margin: 20px 0;
-    opacity: 0.8; /* Opacidade fixa */
+    opacity: 0.8;
 }
 
-/* Linha divisória clicável com efeito de gradiente */
 #clear-view-trigger {
     cursor: pointer;
     height: 25px;
     margin: 5px 0;
     width: 100%;
     border: none;
-    opacity: 0.8; /* Opacidade fixa */
+    opacity: 0.8;
     box-shadow: 0 2px 8px rgba(13, 110, 253, 0.2);
     transition: all 0.4s ease;
     position: relative;
     background: linear-gradient(
         90deg,
-        rgba(8, 51, 120, 0.9) 0%,      /* Azul muito escuro */
-        rgba(13, 71, 161, 0.8) 25%,    /* Azul escuro */
-        #2196F3 50%,                   /* Cor original no centro */
-        rgba(13, 71, 161, 0.8) 75%,    /* Azul escuro */
-        rgba(8, 51, 120, 0.9) 100%    /* Azul muito escuro */
+        rgba(8, 51, 120, 0.9) 0%,
+        rgba(13, 71, 161, 0.8) 25%,
+        #2196F3 50%,
+        rgba(13, 71, 161, 0.8) 75%,
+        rgba(8, 51, 120, 0.9) 100%
     );
 }
 
 #clear-view-trigger:hover {
     background: linear-gradient(
         90deg,
-        rgba(6, 41, 98, 0.9) 0%,       /* Azul hover mais escuro */
-        rgba(10, 58, 132, 0.8) 25%,    /* Azul hover escuro */
-        #1a7de8 50%,                   /* Azul hover mais claro no centro */
-        rgba(10, 58, 132, 0.8) 75%,    /* Azul hover escuro */
-        rgba(6, 41, 98, 0.9) 100%     /* Azul hover mais escuro */
+        rgba(6, 41, 98, 0.9) 0%,
+        rgba(10, 58, 132, 0.8) 25%,
+        #1a7de8 50%,
+        rgba(10, 58, 132, 0.8) 75%,
+        rgba(6, 41, 98, 0.9) 100%
     );
     box-shadow: 0 2px 12px rgba(13, 110, 253, 0.4);
 }
 
 /* Estilos para as opções de transação */
-/* Estilos para as opções de transação - VERSÃO CORRIGIDA */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-/* ------------------------------------------------------------------ */
+
 .transaction-options {
     display: flex;
     gap: 0;
@@ -378,41 +358,10 @@ h2 {
     align-items: flex-start;
 }
 
-.form-container {
-    flex: 1;
-    min-width: 400px;
-}
-
 .form-row {
     display: flex;
     gap: 20px;
     margin-bottom: 20px;
-}
-
-.form-group {
-    flex: 1;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #495057;
-}
-
-.form-control {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #dee2e6;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border-color 0.3s ease;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
 }
 
 .transferencia-field {
@@ -513,5 +462,186 @@ h2 {
     .transaction-option {
         flex: 1;
         text-align: center;
+    }
+}
+
+/* BOTÕES DE STATUS */
+.status-options {
+    display: flex;
+    gap: 0;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 9999;
+    border-bottom: 2px solid #dee2e6;
+    justify-content: center;
+}
+
+.status-option {
+    background: none;
+    border: none;
+    padding: 15px 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #6c757d;
+    position: relative;
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.status-option:hover {
+    color: #495057;
+    background-color: rgba(0,123,255,0.05);
+}
+
+.status-option.active {
+    font-weight: bold;
+}
+
+/* Cores específicas quando ativo */
+.status-option.btn-ativas.active {
+    color: #28a745;
+}
+
+.status-option.btn-inativas.active {
+    color: #6c757d;
+}
+
+.status-option.btn-todas.active {
+    color: #007bff;
+}
+
+/* Animação da linha inferior */
+.status-underline {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    transition: width 0.3s ease;
+    z-index: 10000;
+}
+
+/* Cores do underline por tipo */
+.status-option.btn-ativas.active .status-underline {
+    background: linear-gradient(90deg, #28a745, #1e7e34);
+    width: 100%;
+}
+
+.status-option.btn-inativas.active .status-underline {
+    background: linear-gradient(90deg, #6c757d, #495057);
+    width: 100%;
+}
+
+.status-option.btn-todas.active .status-underline {
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    width: 100%;
+}
+
+/* Container da bolinha */
+.status-ball-container {
+    position: relative;
+    margin-right: 10px;
+}
+
+/* Bolinha principal */
+.status-ball {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #FF9800 50%, #4CAF50 50%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    animation: pulse 2s infinite;
+}
+
+/* Efeito hover na bolinha */
+.status-ball:hover {
+    transform: scale(1.2);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Animação de pulsação sutil */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+    50% {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(76, 175, 80, 0.1);
+    }
+    100% {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* Tooltip - balãozinho */
+.status-ball::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    max-width: 200px;
+    white-space: normal;
+    line-height: 1.3;
+}
+
+/* Setinha do tooltip */
+.status-ball::after {
+    content: '';
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-left-color: #333;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+/* Mostrar tooltip no hover */
+.status-ball:hover::before,
+.status-ball:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .status-ball-container {
+        margin-right: 8px;
+    }
+
+    .status-ball {
+        width: 18px;
+        height: 18px;
+    }
+
+    .status-ball::before {
+        right: 26px;
+        font-size: 11px;
+        padding: 6px 10px;
+        max-width: 180px;
+    }
+
+    .status-ball::after {
+        right: 20px;
+        border-width: 5px;
     }
 }

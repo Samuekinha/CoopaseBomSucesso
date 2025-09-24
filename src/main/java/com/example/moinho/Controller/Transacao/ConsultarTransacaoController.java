@@ -24,10 +24,15 @@ public class ConsultarTransacaoController {
     // Rotas para processar os formulários (POST)
     @GetMapping("/ConsultarTransacaoView")
     public String consultarTransacaoView(Model model) {
-
         List<TransacaoResumoDTO> listaTransacoes = consultarTransacaoService.consultarTodasTransacao();
+        List<TransacaoResumoDTO> listaTransacoesAtivas = consultarTransacaoService.
+                consultarTodasTransacaoAtivas();
+        List<TransacaoResumoDTO> listaTransacoesInativas = consultarTransacaoService.
+                consultarTodasTransacaoInativas();
 
         model.addAttribute("ListaTransacoes", listaTransacoes);
+        model.addAttribute("ListaTransacoesAtivas", listaTransacoesAtivas);
+        model.addAttribute("ListaTransacoesInativas", listaTransacoesInativas);
 
         return "/Coopase/Transacao/ConsultarTransacaoView";
     }
