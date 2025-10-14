@@ -22,6 +22,9 @@ public class E_Cliente {
     @Column(unique=true, length = 14)
     private String document; // CPF ou CNPJ
 
+    @Column(unique=true, length = 14)
+    private String documento_rg; // rg
+
     @Column(columnDefinition = "DECIMAL(10,3)")
     private Double balance_kg;
 
@@ -40,7 +43,7 @@ public class E_Cliente {
     @Column(columnDefinition = "BOOLEAN", nullable = false)
     private boolean operator;
 
-    @Column(unique = true, length = 50)
+    @Column(length = 50)
     private String caf;
 
     @Column(columnDefinition = "DATE")

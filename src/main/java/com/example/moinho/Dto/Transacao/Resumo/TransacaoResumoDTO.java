@@ -20,6 +20,7 @@ public class TransacaoResumoDTO {
     private BigDecimal saldoAnterior;
     private BigDecimal saldoPosterior;
     private boolean ativa;
+    private boolean auto; // se é automatica ou não (manual)
 
     public TransacaoResumoDTO(
             Long id,
@@ -33,7 +34,8 @@ public class TransacaoResumoDTO {
             String descricao,
             BigDecimal saldoAnterior,
             BigDecimal saldoPosterior,
-            boolean ativa
+            boolean ativa,
+            boolean auto
     ) {
         this.id = id;
         this.contaDepositoNome = contaDepositoNome;
@@ -47,5 +49,6 @@ public class TransacaoResumoDTO {
         this.saldoAnterior = saldoAnterior;
         this.saldoPosterior = saldoPosterior;
         this.ativa = ativa;
+        this.auto = auto;
     }
 }

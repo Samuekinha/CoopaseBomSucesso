@@ -125,6 +125,25 @@ function initTransactionView() {
                     setupTableEvents(activeTable);
                 }
             }, 10);
+            updateFormActionAndButton(status);
+        }
+
+        function updateFormActionAndButton(status) {
+            const form = document.querySelector('#AlterarStatusTransacao');
+            const btn = document.querySelector('#btnAlterarStatus');
+            if (!form || !btn) return;
+
+            if (status === 'ATIVAS') {
+                form.action = '/Coopase/Transacao/Inativar';
+                btn.textContent = 'Inativar';
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-warning');
+            } else if (status === 'INATIVAS') {
+                form.action = '/Coopase/Transacao/Reativar';
+                btn.textContent = 'Ativar';
+                btn.classList.remove('btn-warning');
+                btn.classList.add('btn-success');
+            }
         }
     }
 
@@ -260,19 +279,18 @@ function initTransactionView() {
                 descricaoField.value = cells[6].textContent.trim();
             }
 
-            if (idTransacaoField && cells[7]) {
-                idTransacaoField.value = cells[7].textContent.trim(); // coloca o id da transação
+            if (idTransacaoField && cells[8]) {
+                idTransacaoField.value = cells[8].textContent.trim();
             }
 
-            if (operadorField && cells[8]) {
-                operadorField.value = cells[8].textContent.trim(); // mostra o nome do operador
-                operadorField.dataset.operadorId = cells[8].dataset.operadorId; // mantém id do operador para uso interno
+            if (operadorField && cells[9]) {
+                operadorField.value = cells[9].textContent.trim();
             }
 
             const transferenciaField = form.querySelector('#transferencia-field');
             if (transferenciaField && tipoTransacaoField) {
-                if (tipoTransacaoField.value.toLowerCase().includes('transferencia') ||
-                    tipoTransacaoField.value.toLowerCase().includes('transferência')) {
+                const tipo = tipoTransacaoField.value.toLowerCase();
+                if (tipo.includes('transferencia') || tipo.includes('transferência')) {
                     transferenciaField.style.display = 'block';
                 } else {
                     transferenciaField.style.display = 'none';

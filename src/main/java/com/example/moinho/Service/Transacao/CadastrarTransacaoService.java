@@ -1,10 +1,7 @@
 package com.example.moinho.Service.Transacao;
 
 import com.example.moinho.Dto.Transacao.TransacaoRequestDTO;
-import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.ContaDestinoInativaException;
-import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.ContaDestinoNaoEncontradaException;
-import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.OperadorNaoEncontradoException;
-import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.OperadorSemPermissaoException;
+import com.example.moinho.Exception.TransacaoExceptions.CadastroTransacaoException.*;
 import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Model.E_ContaDeposito;
 import com.example.moinho.Model.TransacaoTable;
@@ -24,26 +21,33 @@ public class CadastrarTransacaoService {
     private final R_Cliente clienteRepository;
 
     public CadastrarTransacaoService(ContaDepositoRepository contaDepositoRepository,
-                            TransacaoRepository transacaoRepository,
-                            R_Cliente clienteRepository) {
+                                     TransacaoRepository transacaoRepository,
+                                     R_Cliente clienteRepository) {
         this.contaDepositoRepository = contaDepositoRepository;
         this.transacaoRepository = transacaoRepository;
         this.clienteRepository = clienteRepository;
     }
 
     @Transactional
-    public TransacaoTable criarTransacaoEntrada(TransacaoRequestDTO request, boolean manual) {
+    public TransacaoTable criarTransacao(TransacaoRequestDTO request, boolean auto) {
 
-        // Valida conta de destino
-        E_ContaDeposito conta = contaDepositoRepository.findById(request.getContaPrincipalId())
-                .orElseThrow(() -> new ContaDestinoNaoEncontradaException
-                        ("Conta destino não encontrada"));
+        E_ContaDeposito contaPrincipal = contaDepositoRepository.findById(request.getContaPrincipalId())
+                .orElseThrow(() -> new ContaPrincipalNaoEncontradaException("Conta principal não encontrada"));
 
-        if (!conta.isActive()) {
-            throw new ContaDestinoInativaException("Conta destino está inativa");
+        if (!contaPrincipal.isActive()) {
+            throw new ContaPrincipalInativaException("Conta principal está inativa");
         }
 
-        // Valida operador
+        E_ContaDeposito contaDestino = null;
+        if (request.getTipoTransacao().equals(TransacaoTable.TypeTransaction.TRANSFER)) {
+            contaDestino = contaDepositoRepository.findById(request.getContaDestinoId())
+                    .orElseThrow(() -> new ContaDestinoNaoEncontradaException("Conta destino não encontrada"));
+
+            if (!contaDestino.isActive()) {
+                throw new ContaDestinoInativaException("Conta destino está inativa");
+            }
+        }
+
         E_Cliente operador = clienteRepository.findById(request.getOperadorTransacaoId())
                 .orElseThrow(() -> new OperadorNaoEncontradoException("Operador não encontrado"));
 
@@ -51,24 +55,33 @@ public class CadastrarTransacaoService {
             throw new OperadorSemPermissaoException("Operador não tem permissão");
         }
 
-        // Atualiza saldo da conta
-        BigDecimal saldoAnterior = conta.getTotal_amount();
+        BigDecimal saldoAnterior = contaPrincipal.getTotal_amount();
 
-        // Calcula o saldo posterior da conta
-        conta.aplicarTransacao(request.getValorTransacao(), request.getTipoTransacao());
-        contaDepositoRepository.save(conta);
+        switch (request.getTipoTransacao()) {
+            case DEPOSIT -> contaPrincipal.aplicarTransacao(request.getValorTransacao(), TransacaoTable.TypeTransaction.DEPOSIT);
+            case WITHDRAW -> contaPrincipal.aplicarTransacao(request.getValorTransacao(), TransacaoTable.TypeTransaction.WITHDRAW);
+            case TRANSFER -> {
+                contaPrincipal.aplicarTransacao(request.getValorTransacao(), TransacaoTable.TypeTransaction.WITHDRAW);
+                contaDestino.aplicarTransacao(request.getValorTransacao(), TransacaoTable.TypeTransaction.DEPOSIT);
+                contaDepositoRepository.save(contaDestino);
+            }
+        }
 
-        // Cria transação
+        contaDepositoRepository.save(contaPrincipal);
+
         TransacaoTable transacao = new TransacaoTable();
         transacao.setOperador(operador);
-        transacao.setContaDeposito(conta);
+        transacao.setContaDeposito(contaPrincipal);
+        if (request.getTipoTransacao().equals(TransacaoTable.TypeTransaction.TRANSFER)) {
+            transacao.setContaDestino(contaDestino);
+        }
         transacao.setValue(request.getValorTransacao());
         transacao.setTypeMoney(request.getFormaDinheiroTransacao());
         transacao.setTypeTransaction(request.getTipoTransacao());
         transacao.setDescricao(request.getDescricaoTransacao());
         transacao.setSaldoAnterior(saldoAnterior);
-        transacao.setSaldoPosterior(conta.getTotal_amount());
-        transacao.setManual(manual);
+        transacao.setSaldoPosterior(contaPrincipal.getTotal_amount());
+        transacao.setAuto(auto);
 
         return transacaoRepository.save(transacao);
     }

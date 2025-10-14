@@ -23,7 +23,8 @@ public interface TransacaoRepository extends JpaRepository<TransacaoTable, Long>
             t.descricao,
             t.saldoAnterior,
             t.saldoPosterior,
-            t.ativa
+            t.ativa,
+            t.auto
         )
         FROM TransacaoTable t
         LEFT JOIN t.contaDeposito cd
@@ -45,7 +46,8 @@ public interface TransacaoRepository extends JpaRepository<TransacaoTable, Long>
             t.descricao,
             t.saldoAnterior,
             t.saldoPosterior,
-            t.ativa
+            t.ativa,
+            t.auto
         )
         FROM TransacaoTable t
         LEFT JOIN t.contaDeposito cd
@@ -68,7 +70,8 @@ public interface TransacaoRepository extends JpaRepository<TransacaoTable, Long>
             t.descricao,
             t.saldoAnterior,
             t.saldoPosterior,
-            t.ativa
+            t.ativa,
+            t.auto
         )
         FROM TransacaoTable t
         LEFT JOIN t.contaDeposito cd

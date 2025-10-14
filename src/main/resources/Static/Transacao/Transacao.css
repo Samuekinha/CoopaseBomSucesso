@@ -622,6 +622,21 @@ h2 {
     visibility: visible;
 }
 
+.status-ball.auto-true {
+    background: #FF9800;
+}
+
+.status-ball.auto-false {
+    background: #4CAF50;
+}
+
+/* Ajuste para alinhar a bolinha verticalmente na célula */
+.status-ball-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Responsividade para telas menores */
 @media (max-width: 768px) {
     .status-ball-container {

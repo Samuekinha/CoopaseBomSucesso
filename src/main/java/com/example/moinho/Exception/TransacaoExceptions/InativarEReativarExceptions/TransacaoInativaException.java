@@ -1,4 +1,4 @@
-package com.example.moinho.Exception.TransacaoExceptions.InativarExceptions;
+package com.example.moinho.Exception.TransacaoExceptions.InativarEReativarExceptions;
 
 import com.example.moinho.Exception.BusinessException;
 

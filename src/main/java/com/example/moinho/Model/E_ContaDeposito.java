@@ -41,7 +41,6 @@ public class E_ContaDeposito {
                 }
                 this.total_amount = this.total_amount.subtract(valor);
             }
-            case TRANSFER -> throw new UnsupportedOperationException("Transferência não implementada aqui");
         }
     }
 

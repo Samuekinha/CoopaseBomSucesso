@@ -49,7 +49,7 @@ public class TransacaoTable {
 
     @ManyToOne
     @JoinColumn(name = "conta_destino_id", referencedColumnName = "id")  // Correct FK reference
-    private E_ContaDeposito contaDestino;  // conta principal origem
+    private E_ContaDeposito contaDestino;  // conta apenas para transacao
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")  // Correct FK reference
@@ -71,10 +71,10 @@ public class TransacaoTable {
     private BigDecimal saldoPosterior;  // Optional: balance after transaction
 
     @Column(name = "ativa", columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean ativa;
+    private Boolean ativa = true;
 
-    @Column(name = "manual", columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean manual = true;
+    @Column(name = "auto", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean auto = false; // transação manual ou automatica
 
 }
 

@@ -3,7 +3,6 @@ package com.example.moinho.Controller.Transacao;
 import com.example.moinho.Dto.Transacao.TransacaoRequestDTO;
 import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Model.E_ContaDeposito;
-import com.example.moinho.Model.TransacaoTable;
 import com.example.moinho.Service.ClienteService.ConsultarClienteService;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import com.example.moinho.Service.Transacao.CadastrarTransacaoService;
@@ -66,16 +65,7 @@ public class CadastrarTransacaoController {
             return "redirect:/Coopase/Transacao/Servicos";
         }
 
-
-        TransacaoTable.TypeTransaction tipo = form.getTipoTransacao(); // já é enum
-
-        switch (tipo) {
-            case DEPOSIT -> cadastrarTransacaoService.criarTransacaoEntrada(form, true);
-//            case WITHDRAW -> cadastrarTransacaoService.criarTransacaoSaida(form);
-//            case TRANSFER -> cadastrarTransacaoService.criarTransacaoTransferencia(form);
-        }
-
-
+        cadastrarTransacaoService.criarTransacao(form, false);
 
         redirectAttributes.addFlashAttribute("Sucesso", "Transação cadastrada com sucesso!");
         return "redirect:/Coopase/Transacao/Servicos";

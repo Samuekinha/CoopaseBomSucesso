@@ -102,9 +102,9 @@ class TransactionViewManager {
                     principalDepois.textContent = (principalSaldo + valor).toFixed(2);
                     console.log('💸 DEPOSIT - Novo saldo:', (principalSaldo + valor).toFixed(2));
                     break;
-                case "WITHDROW":
+                case "WITHDRAW":
                     principalDepois.textContent = (principalSaldo - valor).toFixed(2);
-                    console.log('💸 WITHDROW - Novo saldo:', (principalSaldo - valor).toFixed(2));
+                    console.log('💸 WITHDRAW - Novo saldo:', (principalSaldo - valor).toFixed(2));
                     break;
                 case "TRANSFER":
                     principalDepois.textContent = (principalSaldo - valor).toFixed(2);
