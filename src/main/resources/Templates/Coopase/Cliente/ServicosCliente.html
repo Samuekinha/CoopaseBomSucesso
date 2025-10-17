@@ -129,9 +129,9 @@
           <tbody>
           <tr class="main-row" th:each="listaCoop : ${listaCooperados}" data-id="listaCoop.id">
             <td th:text="${listaCoop.id}"></td>
-            <td th:text="${listaCoop.name}"></td>
-            <td th:text="${listaCoop.maturity_caf != null} ? ${#temporals.format(listaCoop.maturity_caf, 'dd/MM/yyyy')} : ''"></td>
-            <td th:text="${listaCoop.caf}"></td>
+            <td th:text="${listaCoop.nome}"></td>
+            <td th:text="${listaCoop.validade_caf_fisica != null} ? ${#temporals.format(listaCoop.validade_caf_fisica, 'dd/MM/yyyy')} : ''"></td>
+            <td th:text="${listaCoop.caf_fisica}"></td>
           </tr>
           </tbody>
           <thead>
@@ -165,8 +165,8 @@
           <tbody>
           <tr class="main-row" th:each="listaVend : ${listaVendedores}" data-id="listaVend.id">
             <td th:text="${listaVend.id}"></td>
-            <td th:text="${listaVend.name}"></td>
-            <td th:with="doc=${listaVend.document != null ? listaVend.document : ''}">
+            <td th:text="${listaVend.nome}"></td>
+            <td th:with="doc=${listaVend.cpf != null ? listaVend.cpf : ''}">
                         <span th:if="${#strings.length(doc) == 11}"
                               th:text="${#strings.substring(doc,0,3) + '.' +
                             #strings.substring(doc,3,6) + '.' +
@@ -181,7 +181,7 @@
               <span th:if="${!#strings.isEmpty(doc) && #strings.length(doc) != 11 && #strings.length(doc) != 14}"
                     th:text="${doc}"></span>
             </td>
-            <td th:text="${listaVend.cooperated}"></td>
+            <td th:text="${listaVend.papeis.contains(T(com.example.moinho.Entity.Pessoa.Papel).COOPERADO) ? 'Sim' : 'Não'}"></td>
           </tr>
           </tbody>
         </table>

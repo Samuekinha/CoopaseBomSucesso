@@ -1,7 +1,7 @@
 package com.example.moinho.Service.CofreService;
 
-import com.example.moinho.Model.E_ContaDeposito;
-import com.example.moinho.Repository.ContaDepositoRepository;
+import com.example.moinho.Entity.ContaDeposito.ContaBase;
+import com.example.moinho.Repository.ContaBaseRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,37 +11,37 @@ import java.util.Optional;
 @Service
 public class ConsultarContaDepositoService {
 
-    private final ContaDepositoRepository r_ContaD;
+    private final ContaBaseRepository r_ContaD;
 
-    public ConsultarContaDepositoService(ContaDepositoRepository r_ContaD) {
+    public ConsultarContaDepositoService(ContaBaseRepository r_ContaD) {
         this.r_ContaD = r_ContaD;
     }
 
-    public List<E_ContaDeposito> consultarTodasContaDeposito() {
-        return r_ContaD.findAllContasD();
+    public List<ContaBase> consultarTodasContaDeposito() {
+        return r_ContaD.findTodasContaDeposito();
     }
 
     // Metodo alternativo para buscar apenas contas ativas
-    public List<E_ContaDeposito> consultarContasAtivas() {
-        return r_ContaD.findAllContasD().stream()
-                .filter(E_ContaDeposito::isActive)
+    public List<ContaBase> consultarContasAtivas() {
+        return r_ContaD.findTodasContaDeposito().stream()
+                .filter(ContaBase::isAtiva)
                 .toList();
     }
 
     public BigDecimal ConsultarValorTotalContas() {
         BigDecimal valorTotal = BigDecimal.ZERO;
-        List<E_ContaDeposito> todasContas = r_ContaD.findAllContasD();
+        List<ContaBase> todasContas = r_ContaD.findTodasContaDeposito();
 
-        for (E_ContaDeposito conta : todasContas) {
-            if (conta.getTotal_amount() != null) {
-                valorTotal = valorTotal.add(conta.getTotal_amount());
+        for (ContaBase conta : todasContas) {
+            if (conta.getValor_total() != null) {
+                valorTotal = valorTotal.add(conta.getValor_total());
             }
         }
 
         return valorTotal;
     }
 
-    public Optional<E_ContaDeposito> consultarContaPorId (Long id) {
+    public Optional<ContaBase> consultarContaPorId (Long id) {
         return r_ContaD.findById(id);
     }
 }

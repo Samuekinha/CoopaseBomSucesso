@@ -1,4 +1,4 @@
-package com.example.moinho.Model.Response;
+package com.example.moinho.Entity.Response;
 
 import lombok.Getter;
 

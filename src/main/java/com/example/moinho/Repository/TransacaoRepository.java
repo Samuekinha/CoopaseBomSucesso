@@ -1,84 +1,84 @@
 package com.example.moinho.Repository;
 
 import com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO;
-import com.example.moinho.Model.TransacaoTable;
+import com.example.moinho.Entity.Transacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-
-public interface TransacaoRepository extends JpaRepository<TransacaoTable, Long> {
+public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
     @Query("""
-        SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
-            t.id,
-            cd.vaultName,
-            coalesce(cd2.vaultName, ''),
-            op.name,
-            t.typeTransaction,
-            t.value,
-            t.typeMoney,
-            t.dataTransacao,
-            t.descricao,
-            t.saldoAnterior,
-            t.saldoPosterior,
-            t.ativa,
-            t.auto
-        )
-        FROM TransacaoTable t
-        LEFT JOIN t.contaDeposito cd
-        LEFT JOIN t.contaDestino cd2
-        LEFT JOIN t.operador op
-    """)
+    SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
+        t.id,
+        cd.nome_conta,
+        cd2.nome_conta,
+        op.nome,
+        t.tipo_transacao,
+        t.valor,
+        t.tipo_dinheiro,
+        t.data_transacao,
+        t.descricao,
+        t.saldo_anterior,
+        t.saldo_posterior,
+        t.ativa,
+        t.automatica
+    )
+    FROM Transacao t
+    LEFT JOIN t.conta_principal cd
+    LEFT JOIN t.conta_destino cd2
+    LEFT JOIN t.operador op
+""")
     List<TransacaoResumoDTO> buscarResumo();
 
+
     @Query("""
-        SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
-            t.id,
-            cd.vaultName,
-            coalesce(cd2.vaultName, ''),
-            op.name,
-            t.typeTransaction,
-            t.value,
-            t.typeMoney,
-            t.dataTransacao,
-            t.descricao,
-            t.saldoAnterior,
-            t.saldoPosterior,
-            t.ativa,
-            t.auto
-        )
-        FROM TransacaoTable t
-        LEFT JOIN t.contaDeposito cd
-        LEFT JOIN t.contaDestino cd2
-        LEFT JOIN t.operador op
-        WHERE t.ativa = false
-    """)
+    SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
+        t.id,
+        cd.nome_conta,
+        cd2.nome_conta,
+        op.nome,
+        t.tipo_transacao,
+        t.valor,
+        t.tipo_dinheiro,
+        t.data_transacao,
+        t.descricao,
+        t.saldo_anterior,
+        t.saldo_posterior,
+        t.ativa,
+        t.automatica
+    )
+    FROM Transacao t
+    LEFT JOIN t.conta_principal cd
+    LEFT JOIN t.conta_destino cd2
+    LEFT JOIN t.operador op
+    WHERE t.ativa = false
+""")
     List<TransacaoResumoDTO> buscarResumoInativas();
 
-    @Query("""
-        SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
-            t.id,
-            cd.vaultName,
-            coalesce(cd2.vaultName, ''),
-            op.name,
-            t.typeTransaction,
-            t.value,
-            t.typeMoney,
-            t.dataTransacao,
-            t.descricao,
-            t.saldoAnterior,
-            t.saldoPosterior,
-            t.ativa,
-            t.auto
-        )
-        FROM TransacaoTable t
-        LEFT JOIN t.contaDeposito cd
-        LEFT JOIN t.contaDestino cd2
-        LEFT JOIN t.operador op
-        WHERE t.ativa = true
-    """)
-    List<TransacaoResumoDTO> buscarResumoAtivas();
 
+    @Query("""
+    SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
+        t.id,
+        cd.nome_conta,
+        cd2.nome_conta,
+        op.nome,
+        t.tipo_transacao,
+        t.valor,
+        t.tipo_dinheiro,
+        t.data_transacao,
+        t.descricao,
+        t.saldo_anterior,
+        t.saldo_posterior,
+        t.ativa,
+        t.automatica
+    )
+    FROM Transacao t
+    LEFT JOIN t.conta_principal cd
+    LEFT JOIN t.conta_destino cd2
+    LEFT JOIN t.operador op
+    WHERE t.ativa = true
+""")
+    List<TransacaoResumoDTO> buscarResumoAtivas();
 }

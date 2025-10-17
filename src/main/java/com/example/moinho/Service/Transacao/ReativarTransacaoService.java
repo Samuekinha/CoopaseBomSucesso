@@ -1,11 +1,11 @@
 package com.example.moinho.Service.Transacao;
 
+import com.example.moinho.Entity.ContaDeposito.ContaBase;
 import com.example.moinho.Exception.TransacaoExceptions.InativarEReativarExceptions.TransacaoAtivaException;
 import com.example.moinho.Exception.TransacaoExceptions.InativarEReativarExceptions.IdInvalidoException;
 import com.example.moinho.Exception.TransacaoExceptions.InativarEReativarExceptions.TransacaoNaoEncontradaException;
-import com.example.moinho.Model.E_ContaDeposito;
-import com.example.moinho.Model.TransacaoTable;
-import com.example.moinho.Repository.ContaDepositoRepository;
+import com.example.moinho.Entity.Transacao;
+import com.example.moinho.Repository.ContaBaseRepository;
 import com.example.moinho.Repository.TransacaoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,12 @@ import java.math.BigDecimal;
 public class ReativarTransacaoService {
 
     private final TransacaoRepository transacaoRepository;
-    private final ContaDepositoRepository contaDepositoRepository;
+    private final ContaBaseRepository contaBaseRepository;
 
     public ReativarTransacaoService(TransacaoRepository transacaoRepository,
-                                    ContaDepositoRepository contaDepositoRepository) {
+                                    ContaBaseRepository contaBaseRepository) {
         this.transacaoRepository = transacaoRepository;
-        this.contaDepositoRepository = contaDepositoRepository;
+        this.contaBaseRepository = contaBaseRepository;
     }
 
     @Transactional
@@ -30,28 +30,28 @@ public class ReativarTransacaoService {
             throw new IdInvalidoException("O id da transação é inválido");
         }
 
-        TransacaoTable transacao = transacaoRepository.findById(transacaoId)
+        Transacao transacao = transacaoRepository.findById(transacaoId)
                 .orElseThrow(() -> new TransacaoNaoEncontradaException("Transação não encontrada"));
 
         if (transacao.getAtiva()) {
             throw new TransacaoAtivaException("A transação já está ativa");
         }
 
-        E_ContaDeposito contaPrincipal = transacao.getContaDeposito();
-        E_ContaDeposito contaDestino = transacao.getContaDestino();
-        BigDecimal valor = transacao.getValue();
+        ContaBase contaPrincipal = transacao.getConta_principal();
+        ContaBase contaDestino = transacao.getConta_destino();
+        BigDecimal valor = transacao.getValor();
 
-        switch (transacao.getTypeTransaction()) {
-            case DEPOSIT -> contaPrincipal.aplicarTransacao(valor, TransacaoTable.TypeTransaction.DEPOSIT);
-            case WITHDRAW -> contaPrincipal.aplicarTransacao(valor, TransacaoTable.TypeTransaction.WITHDRAW);
-            case TRANSFER -> {
-                contaPrincipal.aplicarTransacao(valor, TransacaoTable.TypeTransaction.WITHDRAW);
-                contaDestino.aplicarTransacao(valor, TransacaoTable.TypeTransaction.DEPOSIT);
-                contaDepositoRepository.save(contaDestino);
+        switch (transacao.getTipo_transacao()) {
+            case DEPOSITO -> contaPrincipal.aplicarTransacao(valor, Transacao.TypeTransaction.DEPOSITO);
+            case SAQUE -> contaPrincipal.aplicarTransacao(valor, Transacao.TypeTransaction.SAQUE);
+            case TRANSFERENCIA -> {
+                contaPrincipal.aplicarTransacao(valor, Transacao.TypeTransaction.SAQUE);
+                contaDestino.aplicarTransacao(valor, Transacao.TypeTransaction.DEPOSITO);
+                contaBaseRepository.save(contaDestino);
             }
         }
 
-        contaDepositoRepository.save(contaPrincipal);
+        contaBaseRepository.save(contaPrincipal);
 
         transacao.setAtiva(true);
         transacaoRepository.save(transacao);

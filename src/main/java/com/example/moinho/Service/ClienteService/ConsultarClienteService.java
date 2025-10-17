@@ -1,7 +1,11 @@
 package com.example.moinho.Service.ClienteService;
 
-import com.example.moinho.Model.E_Cliente;
-import com.example.moinho.Repository.R_Cliente;
+import com.example.moinho.Entity.Pessoa.Papel;
+import com.example.moinho.Entity.Pessoa.PessoaBase;
+import com.example.moinho.Entity.Pessoa.PessoaFisica;
+import com.example.moinho.Repository.Pessoa;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -10,60 +14,62 @@ import java.util.List;
 @Service
 public class ConsultarClienteService {
 
-    private final R_Cliente r_cliente;
+    private final Pessoa pessoa;
 
-    public ConsultarClienteService(R_Cliente r_cliente) {
-        this.r_cliente = r_cliente;
+    public ConsultarClienteService(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 
-    public List<E_Cliente> consultarCliente() {
-        return r_cliente.findAllOrderById();
+    public List<PessoaBase> consultarCliente() {
+        return pessoa.findAll();
     }
 
-    public List<E_Cliente> consultarComFiltros(String pesquisaPorNome, String pesquisaPorDocumento,
-           String pesquisaPorCodCaf, Boolean apenasCooperados, boolean deZaA) {
+    public List<PessoaFisica> consultarComFiltros(String pesquisaPorNome, String pesquisaPorDocumento,
+                                                                   String pesquisaPorCodCaf, Boolean apenasCooperados, boolean deZaA) {
         if (deZaA) {
-            return r_cliente.findAllWithFiltersDesc(pesquisaPorNome, pesquisaPorDocumento,
+            return pessoa.findTodosComFiltrosDesc(pesquisaPorNome, pesquisaPorDocumento,
                     pesquisaPorCodCaf, apenasCooperados);
 
         } else {
-            return r_cliente.findAllWithFiltersAsc(pesquisaPorNome, pesquisaPorDocumento,
+            return pessoa.findTodosComFiltrosAsc(pesquisaPorNome, pesquisaPorDocumento,
                     pesquisaPorCodCaf, apenasCooperados);
         }
 
     }
 
-    public List<E_Cliente> consultar10Cooperados() {
-        return r_cliente.findCooperatedsLimited(10);
+    public List<PessoaFisica> consultar10Cooperados() {
+        return pessoa.findPorPapelLimitados(Papel.COOPERADO, PageRequest.of(0, 10));
     }
 
-    public List<E_Cliente> consultarTodosCooperados() {
-        return r_cliente.findAllCooperateds();
+    public List<PessoaFisica> consultarTodosCooperados() {
+        return pessoa.findPorPapel(Papel.COOPERADO);
     }
 
-    public List<E_Cliente> consultarVendedoresLimitados() {
-        return r_cliente.findSellersLimited(5);
+    public List<PessoaFisica> consultarVendedoresLimitados() {
+        return pessoa.findPorPapelLimitados(Papel.VENDEDOR,PageRequest.of(0, 5));
     }
 
-    public List<E_Cliente> consultarVendedores() {
-        return r_cliente.findSellersLimited(5);
+    public List<PessoaFisica> consultarVendedores() {
+        return pessoa.findPorPapel(Papel.VENDEDOR);
     }
 
     public int[] consultarInfosProcessadasCooperados() {
-        List<E_Cliente> todosCooperados = consultarTodosCooperados();
+        List<PessoaFisica> todosCooperados = consultarTodosCooperados();
 
         int qtdeCoop = 0;
         int qtdeDapAtiva = 0;
 
 
-        for (int i = 0; i < todosCooperados.toArray().length ; i++) {
-            LocalDate maturityCaf = todosCooperados.get(i).getMaturity_caf();
-            if (maturityCaf != null) {
-                if (maturityCaf.isAfter(LocalDate.now())) {
-                    qtdeDapAtiva++;
+        if (todosCooperados instanceof PessoaFisica pf) {
+            for (int i = 0; i < todosCooperados.toArray().length ; i++) {
+                LocalDate maturityCaf = pf.getValidade_caf_fisica();
+                if (maturityCaf != null) {
+                    if (maturityCaf.isAfter(LocalDate.now())) {
+                        qtdeDapAtiva++;
+                    }
                 }
+                qtdeCoop++;
             }
-            qtdeCoop++;
         }
 
         int[] resultados = {qtdeCoop, qtdeDapAtiva};
@@ -71,12 +77,12 @@ public class ConsultarClienteService {
         return resultados;
     }
 
-    public List<E_Cliente> consultarOperadores() {
-        return r_cliente.findAllOperadores();
+    public List<PessoaFisica> consultarOperadores() {
+        return pessoa.findPorPapel(Papel.OPERADOR);
     }
 
         public Integer consultarQuantidadeClientes() {
-        List<E_Cliente> listaCompleta = r_cliente.findAll();
+        List<PessoaBase> listaCompleta = pessoa.findAll();
         return listaCompleta.size();
     }
 

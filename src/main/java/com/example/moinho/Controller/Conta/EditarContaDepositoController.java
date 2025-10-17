@@ -1,6 +1,6 @@
-package com.example.moinho.Controller.ContaDeposito;
+package com.example.moinho.Controller.Conta;
 
-import com.example.moinho.Model.E_ContaDeposito;
+import com.example.moinho.Entity.ContaDeposito.ContaBase;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import com.example.moinho.Service.CofreService.EditarContaDepositoService;
 import org.springframework.stereotype.Controller;
@@ -30,7 +30,7 @@ public class EditarContaDepositoController {
     @GetMapping("/EditarContaDepositoView")
     public String editarContaDepositoView(Model model) {
 
-        List<E_ContaDeposito> resultadoConsulta = consultarContaDeposito.consultarTodasContaDeposito();
+        List<ContaBase> resultadoConsulta = consultarContaDeposito.consultarTodasContaDeposito();
 
         model.addAttribute("resultadoConsulta", resultadoConsulta);
 

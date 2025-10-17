@@ -1,6 +1,7 @@
 package com.example.moinho.Controller.Cliente;
 
-import com.example.moinho.Model.E_Cliente;
+import com.example.moinho.Entity.Pessoa.PessoaBase;
+import com.example.moinho.Entity.Pessoa.PessoaFisica;
 import com.example.moinho.Service.ClienteService.ConsultarClienteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,15 +35,15 @@ public class ConsultarClienteController {
     @GetMapping("/ConsultarPorPesquisa")
     public String consultarPorPesquisa(
             @RequestParam(value = "pesquisaPorNome", required = false) String pesquisaNome,
-            @RequestParam(value = "pesquisaPorDocumento", required = false) String pesquisaPorDocumento,
+            @RequestParam(value = "pesquisaPorDocumento", required = false) String pesquisaPorCpf,
             @RequestParam(value = "pesquisaPorCodCaf", required = false) String pesquisaPorCodCaf,
             @RequestParam(value = "apenasCooperados", required = false) Boolean apenasCooperados,
             @RequestParam(value = "deZaA", required = false) boolean deZaA,
             Model model) {
 
-        List<E_Cliente> resultados = consultarClientes.consultarComFiltros(
+        List<PessoaFisica> resultados = consultarClientes.consultarComFiltros(
                 emptyToNull(pesquisaNome),
-                emptyToNull(pesquisaPorDocumento),
+                emptyToNull(pesquisaPorCpf),
                 emptyToNull(pesquisaPorCodCaf),
                 apenasCooperados,
                 deZaA);

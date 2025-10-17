@@ -3,16 +3,16 @@
 
   <div class="container">
     <div class="transaction-options">
-      <button class="transaction-option active" data-type="DEPOSIT">
-        DEPOSIT
+      <button class="transaction-option active" data-type="DEPOSITO">
+        DEPOSITO
         <div class="underline-animation"></div>
       </button>
-      <button class="transaction-option" data-type="WITHDRAW">
-        WITHDRAW
+      <button class="transaction-option" data-type="SAQUE">
+        SAQUE
         <div class="underline-animation"></div>
       </button>
-      <button class="transaction-option" data-type="TRANSFER">
-        TRANSFER
+      <button class="transaction-option" data-type="TRANSFERENCIA">
+        TRANSFERENCIA
         <div class="underline-animation"></div>
       </button>
     </div>
@@ -31,7 +31,7 @@
                 <option value="">Selecione operador</option>
                 <option th:each="operador : ${Operadores}"
                         th:value="${operador.id}"
-                        th:text="${operador.name}">Vendedor</option>
+                        th:text="${operador.nome}">Vendedor</option>
               </select>
             </div>
           </div>
@@ -48,7 +48,7 @@
                 <option value="" selected>Selecione a conta Principal</option>
                 <option th:each="conta : ${contasDeposito}"
                         th:value="${conta.id}"
-                        th:text="${conta.vaultName}">Conta</option>
+                        th:text="${conta.nome_conta}">Conta</option>
               </select>
             </div>
           </div>
@@ -59,7 +59,7 @@
                 <option value="" selected>Selecione uma conta</option>
                 <option th:each="conta : ${contasDeposito}"
                         th:value="${conta.id}"
-                        th:text="${conta.vaultName}">Conta</option>
+                        th:text="${conta.nome_conta}">Conta</option>
               </select>
           </div>
 

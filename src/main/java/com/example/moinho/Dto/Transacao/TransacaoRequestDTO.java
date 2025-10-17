@@ -1,6 +1,6 @@
 package com.example.moinho.Dto.Transacao;
 
-import com.example.moinho.Model.TransacaoTable;
+import com.example.moinho.Entity.Transacao;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class TransacaoRequestDTO {
 
     @NotNull(message = "O tipo da transação é obrigatório")
-    private TransacaoTable.TypeTransaction tipoTransacao;
+    private Transacao.TypeTransaction tipoTransacao;
 
     @NotNull(message = "O valor da transação é obrigatório")
     @DecimalMin(value = "0.01", message = "O valor deve ser maior que zero")
@@ -27,7 +27,7 @@ public class TransacaoRequestDTO {
     private Long operadorTransacaoId;
 
     @NotNull(message = "A forma da transação é obrigatória")
-    private TransacaoTable.TypeMoney formaDinheiroTransacao;
+    private Transacao.TypeMoney formaDinheiroTransacao;
 
     private String descricaoTransacao;
 }

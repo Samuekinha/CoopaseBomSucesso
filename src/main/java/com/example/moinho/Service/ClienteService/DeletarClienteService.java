@@ -1,7 +1,7 @@
 package com.example.moinho.Service.ClienteService;
 
-import com.example.moinho.Model.E_Cliente;
-import com.example.moinho.Repository.R_Cliente;
+import com.example.moinho.Entity.Pessoa.PessoaBase;
+import com.example.moinho.Repository.Pessoa;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -9,19 +9,19 @@ import java.util.Optional;
 @Service
 public class DeletarClienteService {
 
-    private final R_Cliente r_cliente;
+    private final Pessoa pessoa;
 
-    public DeletarClienteService(R_Cliente r_cliente) {
-        this.r_cliente = r_cliente;
+    public DeletarClienteService(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 
     public String validaDeletarCliente(Long id) {
 
         try {
-            Optional<E_Cliente> clienteParaDeletar = r_cliente.findById(id);
+            Optional<PessoaBase> clienteParaDeletar = pessoa.findById(id);
 
             if (clienteParaDeletar.isPresent()) {
-                r_cliente.deleteById(id);
+                pessoa.deleteById(id);
                 return "Deletado com Sucesso!";
             } else {
                 return "Erro: Cliente não foi encontrado!";

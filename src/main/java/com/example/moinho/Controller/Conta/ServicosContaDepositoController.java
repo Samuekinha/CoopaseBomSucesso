@@ -1,4 +1,4 @@
-package com.example.moinho.Controller.ContaDeposito;
+package com.example.moinho.Controller.Conta;
 
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import com.example.moinho.Util.FormatadorUtil;

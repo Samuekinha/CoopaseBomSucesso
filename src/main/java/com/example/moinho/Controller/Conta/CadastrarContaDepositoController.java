@@ -1,6 +1,6 @@
-package com.example.moinho.Controller.ContaDeposito;
+package com.example.moinho.Controller.Conta;
 
-import com.example.moinho.Service.ClienteService.CadastrarClienteService;
+import com.example.moinho.Dto.Conta.ContaRequestDTO;
 import com.example.moinho.Service.CofreService.CadastrarContaDepositoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/Coopase/ContaDeposito")
@@ -30,10 +28,10 @@ public class CadastrarContaDepositoController {
     }
 
     @PostMapping("/Cadastrar")
-    public String cadastrarContaDeposito(@RequestParam(value = "ContaDepositoNome") String nome,
+    public String cadastrarContaDeposito(ContaRequestDTO requestDTO,
                            RedirectAttributes redirectAttributes) {
 
-        String resposta = cadastrarContaD.cadastrarContaDeposito(nome);
+        String resposta = cadastrarContaD.cadastrarContaDeposito(requestDTO);
 
         redirectAttributes.addFlashAttribute("resposta", resposta);
 

@@ -1,8 +1,5 @@
 package com.example.moinho.Controller.Transacao;
 
-import com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO;
-import com.example.moinho.Model.E_ContaDeposito;
-import com.example.moinho.Model.E_Cliente;
 import com.example.moinho.Service.ClienteService.ConsultarClienteService;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import com.example.moinho.Service.Transacao.ConsultarTransacaoService;
@@ -12,9 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/Coopase/Transacao/Servicos")

@@ -1,7 +1,7 @@
 <tbody th:fragment="corpoTabela">
 <tr class="main-row" th:each="resultado : ${resultadoConsulta}" data-id="${resultado.id}">
   <td th:text="${resultado.id}"></td>
-  <td th:text="${resultado.vaultName}"></td>
-  <td th:text="${resultado.total_amount}"></td>
-  <td th:text="${resultado.creation_date != null} ? ${#temporals.format(resultado.creation_date, 'dd/MM/yyyy')} : ''"></td>
+  <td th:text="${resultado.nome_conta}"></td>
+  <td th:text="${resultado.valor_total}"></td>
+  <td th:text="${resultado.data_criacao != null} ? ${#temporals.format(resultado.data_criacao, 'dd/MM/yyyy')} : ''"></td>
 </tbody>

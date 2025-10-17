@@ -1,6 +1,6 @@
-package com.example.moinho.Controller.ContaDeposito;
+package com.example.moinho.Controller.Conta;
 
-import com.example.moinho.Model.Response.OperationResult;
+import com.example.moinho.Entity.Response.OperationResult;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import com.example.moinho.Service.CofreService.DeletarContaDepositoService;
 import org.springframework.stereotype.Controller;

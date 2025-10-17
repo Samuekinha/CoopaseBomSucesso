@@ -1,7 +1,6 @@
 package com.example.moinho.Controller.Transacao;
 
 import com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO;
-import com.example.moinho.Model.TransacaoTable;
 import com.example.moinho.Service.Transacao.ConsultarTransacaoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

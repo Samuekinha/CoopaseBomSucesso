@@ -1,6 +1,6 @@
-package com.example.moinho.Controller.ContaDeposito;
+package com.example.moinho.Controller.Conta;
 
-import com.example.moinho.Model.E_ContaDeposito;
+import com.example.moinho.Entity.ContaDeposito.ContaBase;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.lang.reflect.Array;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,17 +33,17 @@ public class ConsultarContaDepositoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> consultarConta(@PathVariable Long id) {
-        Optional<E_ContaDeposito> conta = consultarContaDeposito.consultarContaPorId(id);
+        Optional<ContaBase> conta = consultarContaDeposito.consultarContaPorId(id);
         if (conta.isEmpty() || conta == null) {
             return ResponseEntity.notFound().build();
         }
 
-        E_ContaDeposito contaDados = conta.get();
+        ContaBase contaDados = conta.get();
 
         Map<String, Object> resposta = new HashMap<>();
         resposta.put("id", contaDados.getId());
-        resposta.put("nomeConta", contaDados.getVaultName());
-        resposta.put("saldoAtual", contaDados.getTotal_amount());
+        resposta.put("nomeConta", contaDados.getNome_conta());
+        resposta.put("saldoAtual", contaDados.getValor_total());
 
         return ResponseEntity.ok(resposta);
     }

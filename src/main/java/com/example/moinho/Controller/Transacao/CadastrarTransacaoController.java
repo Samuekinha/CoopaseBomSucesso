@@ -1,8 +1,9 @@
 package com.example.moinho.Controller.Transacao;
 
 import com.example.moinho.Dto.Transacao.TransacaoRequestDTO;
-import com.example.moinho.Model.E_Cliente;
-import com.example.moinho.Model.E_ContaDeposito;
+import com.example.moinho.Entity.ContaDeposito.ContaBase;
+import com.example.moinho.Entity.Pessoa.PessoaBase;
+import com.example.moinho.Entity.Pessoa.PessoaFisica;
 import com.example.moinho.Service.ClienteService.ConsultarClienteService;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;
 import com.example.moinho.Service.Transacao.CadastrarTransacaoService;
@@ -37,7 +38,7 @@ public class CadastrarTransacaoController {
     public String cadastrarTransacaoView(Model model) {
         //Buscar todas as contas depósito para o select
         try {
-            List<E_ContaDeposito> contasDeposito = contaDepositoService.consultarTodasContaDeposito();
+            List<ContaBase> contasDeposito = contaDepositoService.consultarTodasContaDeposito();
             model.addAttribute("contasDeposito", contasDeposito);
         } catch (Exception e) {
             System.err.println("Erro ao carregar contas de depósito: " + e.getMessage());
@@ -46,7 +47,7 @@ public class CadastrarTransacaoController {
 
         // Buscar todos os operadores para o select
         try {
-            List<E_Cliente> Operadores = consultarClienteService.consultarOperadores();
+            List<PessoaFisica> Operadores = consultarClienteService.consultarOperadores();
             model.addAttribute("Operadores", Operadores);
         } catch (Exception e) {
             System.err.println("Erro ao carregar vendedores: " + e.getMessage());

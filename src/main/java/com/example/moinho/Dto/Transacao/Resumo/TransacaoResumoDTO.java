@@ -1,6 +1,6 @@
 package com.example.moinho.Dto.Transacao.Resumo;
 
-import com.example.moinho.Model.TransacaoTable;
+import com.example.moinho.Entity.Transacao;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -9,46 +9,46 @@ import java.time.LocalDateTime;
 @Getter
 public class TransacaoResumoDTO {
     private Long id;
-    private String contaDepositoNome;
-    private String contaDestinoNome;
-    private String operadorName;
-    private TransacaoTable.TypeTransaction tipoTransacao;
+    private String conta_principal_nome;
+    private String conta_destino_nome;
+    private String operador_nome;
+    private Transacao.TypeTransaction tipo_transacao;
     private BigDecimal valor;
-    private TransacaoTable.TypeMoney tipoDinheiro;
+    private Transacao.TypeMoney tipo_dinheiro;
     private LocalDateTime data;
     private String descricao;
-    private BigDecimal saldoAnterior;
-    private BigDecimal saldoPosterior;
+    private BigDecimal saldo_anterior;
+    private BigDecimal saldo_posterior;
     private boolean ativa;
-    private boolean auto; // se é automatica ou não (manual)
+    private boolean automatica; // se é automatica ou não (manual)
 
     public TransacaoResumoDTO(
             Long id,
-            String contaDepositoNome,
-            String contaDestinoNome,
-            String operadorName,
-            TransacaoTable.TypeTransaction tipoTransacao,
+            String conta_principal_nome,
+            String conta_destino_nome,
+            String operador_nome,
+            Transacao.TypeTransaction tipo_transacao,
             BigDecimal valor,
-            TransacaoTable.TypeMoney tipoDinheiro,
+            Transacao.TypeMoney tipo_dinheiro,
             LocalDateTime data,
             String descricao,
-            BigDecimal saldoAnterior,
-            BigDecimal saldoPosterior,
+            BigDecimal saldo_anterior,
+            BigDecimal saldo_posterior,
             boolean ativa,
-            boolean auto
+            boolean automatica
     ) {
         this.id = id;
-        this.contaDepositoNome = contaDepositoNome;
-        this.contaDestinoNome = contaDestinoNome;
-        this.operadorName = operadorName;
-        this.tipoTransacao = tipoTransacao;
+        this.conta_principal_nome = conta_principal_nome;
+        this.conta_destino_nome = conta_destino_nome;
+        this.operador_nome = operador_nome;
+        this.tipo_transacao = tipo_transacao;
         this.valor = valor;
-        this.tipoDinheiro = tipoDinheiro;
+        this.tipo_dinheiro = tipo_dinheiro;
         this.data = data;
         this.descricao = descricao;
-        this.saldoAnterior = saldoAnterior;
-        this.saldoPosterior = saldoPosterior;
+        this.saldo_anterior = saldo_anterior;
+        this.saldo_posterior = saldo_posterior;
         this.ativa = ativa;
-        this.auto = auto;
+        this.automatica = automatica;
     }
 }

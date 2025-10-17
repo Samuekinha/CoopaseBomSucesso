@@ -1,7 +1,8 @@
 package com.example.moinho.Service.ClienteService;
 
-import com.example.moinho.Model.E_Cliente;
-import com.example.moinho.Repository.R_Cliente;
+import com.example.moinho.Entity.Pessoa.Papel;
+import com.example.moinho.Entity.Pessoa.PessoaFisica;
+import com.example.moinho.Repository.Pessoa;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -9,10 +10,10 @@ import java.util.regex.Pattern;
 
 @Service
 public class CadastrarClienteService {
-    private final R_Cliente r_cliente;
+    private final Pessoa pessoa;
 
-    public CadastrarClienteService(R_Cliente r_cliente) {
-        this.r_cliente = r_cliente;
+    public CadastrarClienteService(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 
     // Constantes de configuração
@@ -21,7 +22,7 @@ public class CadastrarClienteService {
     private static final int TAMANHO_CPF = 11;
     private static final int TAMANHO_CNPJ = 14;
 
-    public String cadastrarCliente(String nome, String documento, LocalDate dataNascimento,
+    public String cadastrarCliente(String nome, String cpf, LocalDate dataNascimento,
                                    boolean cooperado, LocalDate validadeCaf, String codigoCaf,
                                    boolean operatorSelect, boolean sellerSelect) {
         try {
@@ -32,10 +33,10 @@ public class CadastrarClienteService {
             }
 
             // Validação do documento
-            if (documento != null && !documento.trim().isEmpty()) {
-                String erroDocumento = validarDocumento(documento);
-                if (erroDocumento != null) {
-                    return erroDocumento;
+            if (cpf != null && !cpf.trim().isEmpty()) {
+                String erroCpf = validarCpf(cpf);
+                if (erroCpf != null) {
+                    return erroCpf;
                 }
             }
 
@@ -60,20 +61,23 @@ public class CadastrarClienteService {
             }
 
             // Salvar cliente
-            E_Cliente cliente = new E_Cliente();
-            cliente.setName(nome.trim());
-            cliente.setDocument(documento.trim());
-            cliente.setBirthDate(dataNascimento);
-            cliente.setCooperated(cooperado);
-            cliente.setOperator(operatorSelect);
-            cliente.setSeller(sellerSelect);
-
+            PessoaFisica pf = new PessoaFisica();
+            pf.setNome(nome.trim());
+            pf.setCpf(cpf.trim());
+            pf.setData_nascimento(dataNascimento);
             if (cooperado) {
-                cliente.setMaturity_caf(validadeCaf);
-                cliente.setCaf(codigoCaf.trim());
+                pf.getPapeis().add(Papel.COOPERADO);
+                pf.setCaf_fisica(codigoCaf);
+                pf.setValidade_caf_fisica(validadeCaf);
+            }
+            if (operatorSelect) {
+                pf.getPapeis().add(Papel.OPERADOR);
+            }
+            if (sellerSelect) {
+                pf.getPapeis().add(Papel.VENDEDOR);
             }
 
-            r_cliente.save(cliente);
+            pessoa.save(pf);
             return "Sucesso: Cliente cadastrado com sucesso!";
 
         } catch (Exception e) {
@@ -107,14 +111,14 @@ public class CadastrarClienteService {
             return "Erro: Nome não pode conter números";
         }
 
-        if (r_cliente.findByName(nome).isPresent()) {
+        if (pessoa.findByNome(nome).isPresent()) {
             return "Erro: Nome já cadastrado";
         }
 
         return null;
     }
 
-    private String validarDocumento(String documento) {
+    private String validarCpf(String documento) {
         documento = documento.trim();
         if (contemLetras(documento)) {
             return "Erro: Documento não pode conter letras";
@@ -124,7 +128,7 @@ public class CadastrarClienteService {
             return "Erro: Documento deve ter " + TAMANHO_CPF + " (CPF) ou " + TAMANHO_CNPJ + " (CNPJ) caracteres";
         }
 
-        if (r_cliente.findByDocument(documento).isPresent()) {
+        if (pessoa.findByCpf(documento).isPresent()) {
             return "Erro: Documento já cadastrado";
         }
 

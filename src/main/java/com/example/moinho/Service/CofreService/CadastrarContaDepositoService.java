@@ -1,35 +1,48 @@
 package com.example.moinho.Service.CofreService;
 
-import com.example.moinho.Model.E_ContaDeposito;
-import com.example.moinho.Repository.ContaDepositoRepository;
+import com.example.moinho.Dto.Conta.ContaRequestDTO;
+import com.example.moinho.Entity.ContaDeposito.ContaBase;
+import com.example.moinho.Entity.ContaDeposito.ContaFisica;
+import com.example.moinho.Entity.ContaDeposito.ContaVirtual;
+import com.example.moinho.Exception.ContaDepositoExceptions.Cadastro.TipoDeContaInvalidoException;
+import com.example.moinho.Repository.ContaBaseRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Service
 public class CadastrarContaDepositoService {
-    private final ContaDepositoRepository contaDepositoRepository;
+    private final ContaBaseRepository contaBaseRepository;
 
     private static final int TAMANHO_MAXIMO_NOME = 40;
 
-    public CadastrarContaDepositoService(ContaDepositoRepository contaDepositoRepository) {
-        this.contaDepositoRepository = contaDepositoRepository;
+    public CadastrarContaDepositoService(ContaBaseRepository contaBaseRepository) {
+        this.contaBaseRepository = contaBaseRepository;
     }
 
-    public String cadastrarContaDeposito(String nome) {
+    public String cadastrarContaDeposito(ContaRequestDTO requestDTO) {
         try {
             // Validação do nome
-            String erroNome = validarNome(nome);
+            String erroNome = validarNome(requestDTO.getNomeConta());
             if (erroNome != null) {
                 return erroNome;
             }
 
             // Criar e salvar a conta
-            E_ContaDeposito conta = new E_ContaDeposito();
-            conta.setVaultName(nome.trim());
-            conta.setTotal_amount(BigDecimal.valueOf(0.0)); // Saldo inicial zero
+            ContaBase conta = null;
+            if (Objects.equals(requestDTO.getTipoConta(), "fisica")) {
+                conta = new ContaFisica();
+            } else if (Objects.equals(requestDTO.getTipoConta(), "virtual")) {
+                conta = new ContaVirtual();
+            } else {
+                throw new TipoDeContaInvalidoException
+                        ("Tipo de conta inválido. Escolha fisíca ou virtual.");
+            }
+            conta.setNome_conta(requestDTO.getNomeConta().trim());
+            conta.setValor_total(BigDecimal.valueOf(0.0)); // Saldo inicial zero
 
-            contaDepositoRepository.save(conta);
+            contaBaseRepository.save(conta);
 
             return "Sucesso: Conta depósito cadastrada com sucesso!";
 
@@ -49,7 +62,7 @@ public class CadastrarContaDepositoService {
         }
 
         // Verifica se já existe conta com este nome (opcional)
-        if (contaDepositoRepository.findByVaultName(nome).isPresent()) {
+        if (contaBaseRepository.findPorNome(nome).isPresent()) {
             return "Erro: Já existe uma conta com este nome";
         }
 

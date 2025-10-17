@@ -83,27 +83,27 @@
                         <tr class="main-row" th:each="resultado : ${ListaTransacoesAtivas}"
                             th:data-id="${resultado.id}"
                             th:data-ativa="${resultado.ativa}">
-                            <td th:text="${resultado.tipoTransacao}"></td>
+                            <td th:text="${resultado.tipo_transacao}"></td>
                             <td th:text="${resultado.valor}"></td>
-                            <td th:text="${resultado.tipoDinheiro}"></td>
-                            <td th:text="${resultado.contaDepositoNome}"></td>
-                            <td th:text="${resultado.contaDestinoNome}"></td>
-                            <td th:text="${resultado.data != null ? #temporals.format(resultado.data, 'dd/MM/yyyy') : ''}"></td>
+                            <td th:text="${resultado.tipo_dinheiro}"></td>
+                            <td th:text="${resultado.conta_principalNome}"></td>
+                            <td th:text="${resultado.conta_destinoNome}"></td>
+                            <td th:text="${resultado.data_transacao != null ? #temporals.format(resultado.data_transacao, 'dd/MM/yyyy') : ''}"></td>
                             <td th:text="${resultado.descricao}"></td>
                             <td>
                                 <div class="status-ball-container">
                                     <div class="status-ball"
-                                         th:classappend="${resultado.auto} ? 'auto-true' : 'auto-false'"
-                                         th:attr="data-tooltip=${resultado.auto} ? 'Transação automática pelo sistema' : 'Transação feita manualmente'">
+                                         th:classappend="${resultado.automatica} ? 'automatica-true' : 'automatica-false'"
+                                         th:attr="data-tooltip=${resultado.automatica} ? 'Transação automática pelo sistema' : 'Transação feita manualmente'">
                                     </div>
                                 </div>
                             </td>
 
                             <!-- hidden fields -->
                             <td th:text="${resultado.id}" hidden></td>
-                            <td th:text="${resultado.operadorName}" hidden></td>
-                            <td th:text="${resultado.saldoAnterior}" hidden></td>
-                            <td th:text="${resultado.saldoPosterior}" hidden></td>
+                            <td th:text="${resultado.operadorNome}" hidden></td>
+                            <td th:text="${resultado.saldo_anterior}" hidden></td>
+                            <td th:text="${resultado.saldo_posterior}" hidden></td>
                         </tr>
                         </tbody>
                     </table>
@@ -132,27 +132,27 @@
                         <tr class="main-row" th:each="resultado : ${ListaTransacoesInativas}"
                             th:data-id="${resultado.id}"
                             th:data-ativa="${resultado.ativa}">
-                            <td th:text="${resultado.tipoTransacao}"></td>
+                            <td th:text="${resultado.tipo_transacao}"></td>
                             <td th:text="${resultado.valor}"></td>
-                            <td th:text="${resultado.tipoDinheiro}"></td>
-                            <td th:text="${resultado.contaDepositoNome}"></td>
-                            <td th:text="${resultado.contaDestinoNome}"></td>
-                            <td th:text="${resultado.data != null ? #temporals.format(resultado.data, 'dd/MM/yyyy') : ''}"></td>
+                            <td th:text="${resultado.tipo_dinheiro}"></td>
+                            <td th:text="${resultado.conta_depositoNome}"></td>
+                            <td th:text="${resultado.conta_destinoNome}"></td>
+                            <td th:text="${resultado.data_transacao != null ? #temporals.format(resultado.data_transacao, 'dd/MM/yyyy') : ''}"></td>
                             <td th:text="${resultado.descricao}"></td>
                             <td>
                                 <div class="status-ball-container">
                                     <div class="status-ball"
-                                         th:classappend="${resultado.auto} ? 'auto-true' : 'auto-false'"
-                                         th:attr="data-tooltip=${resultado.auto} ? 'Transação automática pelo sistema' : 'Transação feita manualmente'">
+                                         th:classappend="${resultado.automatica} ? 'automatica-true' : 'automatica-false'"
+                                         th:attr="data-tooltip=${resultado.automatica} ? 'Transação automática pelo sistema' : 'Transação feita manualmente'">
                                     </div>
                                 </div>
                             </td>
 
                             <!-- hidden fields -->
                             <td th:text="${resultado.id}" hidden></td>
-                            <td th:text="${resultado.operadorName}" hidden></td>
-                            <td th:text="${resultado.saldoAnterior}" hidden></td>
-                            <td th:text="${resultado.saldoPosterior}" hidden></td>
+                            <td th:text="${resultado.operadorNome}" hidden></td>
+                            <td th:text="${resultado.saldo_anterior}" hidden></td>
+                            <td th:text="${resultado.saldo_posterior}" hidden></td>
                         </tr>
                         </tbody>
                     </table>
@@ -181,12 +181,12 @@
                         <tr class="main-row" th:each="resultado : ${ListaTransacoes}"
                             th:data-id="${resultado.id}"
                             th:data-ativa="${resultado.ativa}">
-                            <td th:text="${resultado.tipoTransacao}"></td>
+                            <td th:text="${resultado.tipo_transacao}"></td>
                             <td th:text="${resultado.valor}"></td>
-                            <td th:text="${resultado.tipoDinheiro}"></td>
-                            <td th:text="${resultado.contaDepositoNome}"></td>
-                            <td th:text="${resultado.contaDestinoNome}"></td>
-                            <td th:text="${resultado.data != null ? #temporals.format(resultado.data, 'dd/MM/yyyy') : ''}"></td>
+                            <td th:text="${resultado.tipo_dinheiro}"></td>
+                            <td th:text="${resultado.conta_depositoNome}"></td>
+                            <td th:text="${resultado.conta_destinoNome}"></td>
+                            <td th:text="${resultado.data_transacao != null ? #temporals.format(resultado.data_transacao, 'dd/MM/yyyy') : ''}"></td>
                             <td th:text="${resultado.descricao}"></td>
                             <td>
                                 <div class="status-ball-container">
@@ -199,9 +199,9 @@
 
                             <!-- hidden fields -->
                             <td th:text="${resultado.id}" hidden></td>
-                            <td th:text="${resultado.operadorName}" hidden></td>
-                            <td th:text="${resultado.saldoAnterior}" hidden></td>
-                            <td th:text="${resultado.saldoPosterior}" hidden></td>
+                            <td th:text="${resultado.operadorNome}" hidden></td>
+                            <td th:text="${resultado.saldo_anterior}" hidden></td>
+                            <td th:text="${resultado.saldo_posterior}" hidden></td>
                         </tr>
                         </tbody>
                     </table>

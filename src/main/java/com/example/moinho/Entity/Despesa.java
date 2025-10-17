@@ -1,14 +1,9 @@
-package com.example.moinho.Model;
-
-import jakarta.persistence.*;
-import lombok.Data;
-
-import java.time.LocalDate;
+package com.example.moinho.Entity;
 
 //@Entity
 //@Table(name = "deposito_transacoes") // Define o nome da tabela no banco
 //@Data
-public class E_Despesas {
+public class Despesa {
 //
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
