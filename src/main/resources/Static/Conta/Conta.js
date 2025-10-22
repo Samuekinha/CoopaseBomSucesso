@@ -24,6 +24,37 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // 🔔 Configuração do Toast
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        // 🚨 Captura de mensagens do backend
+        const flashError = document.getElementById('flash-error');
+        const flashSuccess = document.getElementById('flash-success');
+
+        if (flashError && flashError.textContent.trim()) {
+            Toast.fire({
+                icon: "error",
+                title: flashError.textContent.trim()
+            });
+        }
+
+        if (flashSuccess && flashSuccess.textContent.trim()) {
+            Toast.fire({
+                icon: "success",
+                title: flashSuccess.textContent.trim()
+            });
+        }
+
     // Inicializa a view
     initContaDepositoView();
 });

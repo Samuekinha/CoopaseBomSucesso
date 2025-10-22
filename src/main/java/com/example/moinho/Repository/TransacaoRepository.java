@@ -9,6 +9,13 @@ import java.util.List;
 
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
+    @Query(value = """
+    SELECT DISTINCT conta_principal AS conta_id FROM transacao
+    UNION
+    SELECT DISTINCT conta_destino AS conta_id FROM transacao
+    """, nativeQuery = true)
+    List<Long> findAllContasUsadas();
+
     @Query("""
     SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
         t.id,

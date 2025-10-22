@@ -14,21 +14,21 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/Coopase/ContaDeposito")
-public class ConsultarContaDepositoController {
+@RequestMapping("/Coopase/Conta")
+public class ConsultarContaController {
 
     private final ConsultarContaDepositoService consultarContaDeposito;
 
     // Injeção via construtor
-    public ConsultarContaDepositoController(ConsultarContaDepositoService consultarContaDeposito) {
+    public ConsultarContaController(ConsultarContaDepositoService consultarContaDeposito) {
         this.consultarContaDeposito = consultarContaDeposito;
     }
 
     // Rotas para processar os formulários (POST)
-    @GetMapping("/ConsultarContaDepositoView")
-    public String consultarContaDepositoView(Model model) {
+    @GetMapping("/ConsultarContaView")
+    public String consultarContaView(Model model) {
         model.addAttribute("resultadoConsulta", consultarContaDeposito.consultarTodasContaDeposito());
-        return "/Coopase/ContaDeposito/ConsultarContaDepositoView";
+        return "/Coopase/Conta/ConsultarContaView";
     }
 
     @GetMapping("/{id}")
@@ -50,7 +50,7 @@ public class ConsultarContaDepositoController {
 
     @GetMapping("/Consultar")
     public String redirecionamento(Model model) {
-        return "/Coopase/ContaDeposito/ServicosContaDeposito";
+        return "/Coopase/Conta/ServicosConta";
     }
 
 }

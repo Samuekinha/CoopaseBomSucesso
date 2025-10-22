@@ -14,31 +14,31 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequestMapping("/Coopase/ContaDeposito")
-public class EditarContaDepositoController {
+@RequestMapping("/Coopase/Conta")
+public class EditarContaController {
 
     private final ConsultarContaDepositoService consultarContaDeposito;
     private final EditarContaDepositoService contaDeposito;
 
     // Injeção via construtor
-    public EditarContaDepositoController(ConsultarContaDepositoService consultarContaDeposito, EditarContaDepositoService contaDeposito) {
+    public EditarContaController(ConsultarContaDepositoService consultarContaDeposito, EditarContaDepositoService contaDeposito) {
         this.consultarContaDeposito = consultarContaDeposito;
         this.contaDeposito = contaDeposito;
     }
 
     // Rotas para processar os formulários (POST)
-    @GetMapping("/EditarContaDepositoView")
-    public String editarContaDepositoView(Model model) {
+    @GetMapping("/EditarContaView")
+    public String editarContaView(Model model) {
 
         List<ContaBase> resultadoConsulta = consultarContaDeposito.consultarTodasContaDeposito();
 
         model.addAttribute("resultadoConsulta", resultadoConsulta);
 
-        return "/Coopase/ContaDeposito/EditarContaDepositoView";
+        return "/Coopase/Conta/EditarContaView";
     }
 
     @PostMapping("/Editar")
-    public String editarContaDeposito(@RequestParam("ContaDepositoId") Long id,
+    public String editarConta(@RequestParam("ContaDepositoId") Long id,
                                 @RequestParam(value = "ContaDepositoNome", required = false) String nome,
                                 RedirectAttributes redirectAttributes){
 
@@ -46,12 +46,12 @@ public class EditarContaDepositoController {
 
         redirectAttributes.addFlashAttribute("resposta", resposta);
 
-        return "redirect:/Coopase/ContaDeposito/Servicos";
+        return "redirect:/Coopase/Conta/Servicos";
     }
 
     @GetMapping("/Editar")
     public String redirecionamento(Model model) {
-        return "/Coopase/ContaDeposito/ServicosContaDeposito";
+        return "redirect:/Coopase/Conta/Servicos";
     }
 
 }

@@ -1,19 +1,19 @@
-<div th:fragment="Cadastrar" data-view="cadastrar-ContaDeposito">
+<div th:fragment="Cadastrar" data-view="cadastrar-Conta">
   <h2 class="d-flex justify-content-center">Cadastrar Conta Depósito</h2>
 
   <div class="container">
     <div class="cadastro-container"> <!-- Container específico para cadastro -->
-      <form id="ContaDepositoForm" action="/Coopase/ContaDeposito/Cadastrar" method="post">
+      <form id="ContaDepositoForm" action="/Coopase/Conta/Cadastrar" method="post">
         <div class="form-rows">
           <!-- Coluna principal -->
           <div class="form-main-column">
             <div class="form-group">
-              <label for="ContaDepositoNome">Nome</label>
-              <input type="text" class="form-control" name="ContaDepositoNome" id="ContaDepositoNome" placeholder="Nome da conta" required>
+              <label for="nomeConta">Nome</label>
+              <input type="text" class="form-control" name="nomeConta" id="nomeConta" placeholder="Nome da conta" required>
             </div>
             <div class="form-group">
-              <label for="TipoDeConta" id="TipoDeContaLabel">Tipo De Conta</label>
-              <select class="form-control" name="TipoDeConta" id="TipoDeConta" required>
+              <label for="TipoConta" id="TipoDeContaLabel">Tipo De Conta</label>
+              <select class="form-control" name="TipoConta" id="TipoConta" required>
                 <option value="" selected>Selecione Tipo De Conta</option>
                 <option>fisica</option>
                 <option>virtual</option>

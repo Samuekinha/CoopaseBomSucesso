@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const contentContainer = document.getElementById('dynamic-content');
     contentContainer.innerHTML = '<p>Carregando...</p>';
 
-    const viewFileName = `/Coopase/ContaDeposito/${viewName}ContaDepositoView`;
+    const viewFileName = `/Coopase/Conta/${viewName}ContaView`;
 
     fetch(viewFileName)
       .then(response => {

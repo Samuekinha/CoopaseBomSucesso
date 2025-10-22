@@ -1,4 +1,4 @@
-<div th:fragment="Deletar" data-view="deletar-ContaDeposito">
+<div th:fragment="Deletar" data-view="deletar-Conta">
     <style>
         .main-row {
             transition: background-color 0.2s ease;
@@ -27,16 +27,16 @@
                         <th>Data Criação</th>
                     </tr>
                     </thead>
-                    <tbody th:replace="~{/Coopase/ContaDeposito/Fragments/TabelaContaDeposito :: corpoTabela}"></tbody>
+                    <tbody th:replace="~{/Coopase/Conta/Fragments/TabelaConta :: corpoTabela}"></tbody>
                 </table>
             </div>
         </div>
 
         <div id="formWrapper" class="container" style="display: none;">
-            <form id="deletarContaDepositoForm" action="/Coopase/ContaDeposito/Deletar" method="post">
+            <form id="deletarContaDepositoForm" action="/Coopase/Conta/Deletar" method="post">
                 <div class="form-group">
                     <label for="ContaDepositoId">Id</label>
-                    <input type="text" class="form-control" name="ContaDepositoId" id="ContaDepositoId" value="" readonly>
+                    <input type="number" class="form-control" name="ContaDepositoId" id="ContaDepositoId" value="" readonly>
                 </div>
 
                 <div class="form-group">
@@ -46,7 +46,7 @@
 
                 <div class="form-group">
                     <label for="ContaDepositoMontante">Montante</label>
-                    <input type="text" class="form-control" name="ContaDepositoMontante" id="ContaDepositoMontante" placeholder="Montante da Conta Deposito" readonly>
+                    <input type="number" class="form-control" name="ContaDepositoMontante" id="ContaDepositoMontante" placeholder="Montante da Conta Deposito" readonly>
                 </div>
 
                 <div class="form-group">

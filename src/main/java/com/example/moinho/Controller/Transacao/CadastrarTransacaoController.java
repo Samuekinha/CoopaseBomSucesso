@@ -2,7 +2,6 @@ package com.example.moinho.Controller.Transacao;
 
 import com.example.moinho.Dto.Transacao.TransacaoRequestDTO;
 import com.example.moinho.Entity.ContaDeposito.ContaBase;
-import com.example.moinho.Entity.Pessoa.PessoaBase;
 import com.example.moinho.Entity.Pessoa.PessoaFisica;
 import com.example.moinho.Service.ClienteService.ConsultarClienteService;
 import com.example.moinho.Service.CofreService.ConsultarContaDepositoService;

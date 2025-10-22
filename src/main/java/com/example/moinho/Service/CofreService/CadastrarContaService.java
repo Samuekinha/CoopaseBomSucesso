@@ -4,6 +4,8 @@ import com.example.moinho.Dto.Conta.ContaRequestDTO;
 import com.example.moinho.Entity.ContaDeposito.ContaBase;
 import com.example.moinho.Entity.ContaDeposito.ContaFisica;
 import com.example.moinho.Entity.ContaDeposito.ContaVirtual;
+import com.example.moinho.Exception.ContaDepositoExceptions.ErroDesconhecidoException;
+import com.example.moinho.Exception.ContaDepositoExceptions.Cadastro.NomeInvalidoException;
 import com.example.moinho.Exception.ContaDepositoExceptions.Cadastro.TipoDeContaInvalidoException;
 import com.example.moinho.Repository.ContaBaseRepository;
 import org.springframework.stereotype.Service;
@@ -12,21 +14,21 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Service
-public class CadastrarContaDepositoService {
+public class CadastrarContaService {
     private final ContaBaseRepository contaBaseRepository;
 
     private static final int TAMANHO_MAXIMO_NOME = 40;
 
-    public CadastrarContaDepositoService(ContaBaseRepository contaBaseRepository) {
+    public CadastrarContaService(ContaBaseRepository contaBaseRepository) {
         this.contaBaseRepository = contaBaseRepository;
     }
 
-    public String cadastrarContaDeposito(ContaRequestDTO requestDTO) {
+    public ContaBase cadastrarConta(ContaRequestDTO requestDTO) {
         try {
             // Validação do nome
             String erroNome = validarNome(requestDTO.getNomeConta());
             if (erroNome != null) {
-                return erroNome;
+                throw new NomeInvalidoException(erroNome);
             }
 
             // Criar e salvar a conta
@@ -42,20 +44,15 @@ public class CadastrarContaDepositoService {
             conta.setNome_conta(requestDTO.getNomeConta().trim());
             conta.setValor_total(BigDecimal.valueOf(0.0)); // Saldo inicial zero
 
-            contaBaseRepository.save(conta);
 
-            return "Sucesso: Conta depósito cadastrada com sucesso!";
+            return contaBaseRepository.save(conta);
 
         } catch (Exception e) {
-            return "Erro durante o cadastro: " + e.getMessage();
+            throw new ErroDesconhecidoException("Erro durante o cadastro: " + e.getMessage());
         }
     }
 
     private String validarNome(String nome) {
-        if (nome == null || nome.trim().isEmpty()) {
-            return "Erro: Nome é obrigatório";
-        }
-
         nome = nome.trim();
         if (nome.length() > TAMANHO_MAXIMO_NOME) {
             return "Erro: Nome deve ter no máximo " + TAMANHO_MAXIMO_NOME + " caracteres";

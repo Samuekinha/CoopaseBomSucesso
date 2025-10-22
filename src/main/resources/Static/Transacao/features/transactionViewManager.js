@@ -98,19 +98,19 @@ class TransactionViewManager {
             }
 
             switch (tipo) {
-                case "DEPOSIT":
+                case "DEPOSITO":
                     principalDepois.textContent = (principalSaldo + valor).toFixed(2);
-                    console.log('💸 DEPOSIT - Novo saldo:', (principalSaldo + valor).toFixed(2));
+                    console.log('💸 DEPOSITO - Novo saldo:', (principalSaldo + valor).toFixed(2));
                     break;
-                case "WITHDRAW":
+                case "SAQUE":
                     principalDepois.textContent = (principalSaldo - valor).toFixed(2);
-                    console.log('💸 WITHDRAW - Novo saldo:', (principalSaldo - valor).toFixed(2));
+                    console.log('💸 SAQUE - Novo saldo:', (principalSaldo - valor).toFixed(2));
                     break;
-                case "TRANSFER":
+                case "TRANSFERENCIA":
                     principalDepois.textContent = (principalSaldo - valor).toFixed(2);
                     if (destinoDepois) {
                         destinoDepois.textContent = (destinoSaldo + valor).toFixed(2);
-                        console.log('💸 TRANSFER - Principal:', (principalSaldo - valor).toFixed(2), 'Destino:', (destinoSaldo + valor).toFixed(2));
+                        console.log('💸 TRANSFERENCIA - Principal:', (principalSaldo - valor).toFixed(2), 'Destino:', (destinoSaldo + valor).toFixed(2));
                     }
                     break;
             }
@@ -293,7 +293,7 @@ class TransactionViewManager {
     fillTable(contaId, container, tipo, callbackPreview = null) {
         console.log(`🔄 Fazendo fetch para conta ${contaId}, tipo: ${tipo}`);
 
-        fetch(`/Coopase/ContaDeposito/${contaId}`)
+        fetch(`/Coopase/Conta/${contaId}`)
             .then(response => {
                 console.log('📡 Resposta do fetch:', response.status);
                 if (!response.ok) throw new Error(`Erro na resposta: ${response.status}`);

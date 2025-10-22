@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/Coopase/ContaDeposito/Servicos")
-public class ServicosContaDepositoController {
+@RequestMapping("/Coopase/Conta/Servicos")
+public class ServicosContaController {
 
     private final ConsultarContaDepositoService consultarContaD;
 
     // Injeção via construtor
-    public ServicosContaDepositoController(ConsultarContaDepositoService consultarContaD) {
+    public ServicosContaController(ConsultarContaDepositoService consultarContaD) {
         this.consultarContaD = consultarContaD;
     }
 
@@ -25,13 +25,11 @@ public class ServicosContaDepositoController {
         // Define o fragmento padrão se action for nulo
         String fragment = (action != null) ? action : "Cadastrar";
 
-
-
         model.addAttribute("valorTotalContas",
                 consultarContaD.ConsultarValorTotalContas());
         model.addAttribute("formatador", new FormatadorUtil());
         model.addAttribute("fragmentToLoad", fragment);
-        return "Coopase/ContaDeposito/ServicosContaDeposito"; // Sua página principal
+        return "/Coopase/Conta/ServicosConta"; // Sua página principal
     }
 
 }

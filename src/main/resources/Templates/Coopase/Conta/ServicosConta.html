@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="/Index.css">
-    <link rel="stylesheet" href="/ContaDeposito/ContaDeposito.css">
+    <link rel="stylesheet" href="/Conta/Conta.css">
     <title>Área de Conta Depósito</title>
 </head>
 <body>
@@ -93,6 +93,9 @@
 
     <hr>
 
+    <div id="flash-error" th:if="${Erro}" th:text="${Erro}" style="display:none;"></div>
+    <div id="flash-success" th:if="${Sucesso}" th:text="${Sucesso}" style="display:none;"></div>
+
     <h2>Acesso Rápido</h2>
 
     <div class="row justify-content-center">
@@ -130,8 +133,8 @@
 
     <script src="/Index.js" defer></script> <!-- defer = executa após o HTML -->
 
-    <script src="/ContaDeposito/RequisicoesAjax/RequisicoesAjax.js" defer></script>
-    <script src="/ContaDeposito/ContaDeposito.js" defer></script>
+    <script src="/Conta/RequisicoesAjax/RequisicoesAjax.js" defer></script>
+    <script src="/Conta/Conta.js" defer></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="sweetalert2.all.min.js" defer></script>
