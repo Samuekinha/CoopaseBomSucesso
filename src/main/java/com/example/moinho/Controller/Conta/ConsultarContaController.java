@@ -27,7 +27,13 @@ public class ConsultarContaController {
     // Rotas para processar os formulários (POST)
     @GetMapping("/ConsultarContaView")
     public String consultarContaView(Model model) {
-        model.addAttribute("resultadoConsulta", consultarContaDeposito.consultarTodasContaDeposito());
+        model.addAttribute("ContasAtivas",
+                consultarContaDeposito.consultarContasAtivas());
+        model.addAttribute("TodasContas",
+                consultarContaDeposito.consultarTodasContaDeposito());
+        model.addAttribute("ContasInativas",
+                consultarContaDeposito.consultarContasInativas());
+
         return "/Coopase/Conta/ConsultarContaView";
     }
 

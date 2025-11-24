@@ -55,12 +55,13 @@ public class CadastrarContaService {
     private String validarNome(String nome) {
         nome = nome.trim();
         if (nome.length() > TAMANHO_MAXIMO_NOME) {
-            return "Erro: Nome deve ter no máximo " + TAMANHO_MAXIMO_NOME + " caracteres";
+            throw new NomeInvalidoException("Erro: Nome deve ter no máximo " + TAMANHO_MAXIMO_NOME
+                    + " caracteres");
         }
 
         // Verifica se já existe conta com este nome (opcional)
         if (contaBaseRepository.findPorNome(nome).isPresent()) {
-            return "Erro: Já existe uma conta com este nome";
+            throw new TipoDeContaInvalidoException("Erro: Já existe uma conta com este nome");
         }
 
         return null;

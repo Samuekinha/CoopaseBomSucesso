@@ -4,12 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (clearViewTrigger) {
         clearViewTrigger.addEventListener('click', function() {
             const contentContainer = document.getElementById('dynamic-content');
-
             if (contentContainer) {
-                // Limpa o conteúdo sem passar pelo controller
                 contentContainer.innerHTML = '';
-
-                // Remove a seleção de todos os blocos
                 document.querySelectorAll('.bloco-link.selected').forEach(b => {
                     b.classList.remove('selected');
                     const bloco = b.querySelector('.bloco');
@@ -17,45 +13,46 @@ document.addEventListener('DOMContentLoaded', function() {
                         bloco.style.transform = 'scale(0.98)';
                     }
                 });
-
-                // Opcional: Mostra uma mensagem ou estado vazio
                 contentContainer.innerHTML = '<p class="text-muted">Nenhuma view selecionada</p>';
             }
         });
     }
 
     // 🔔 Configuração do Toast
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+
+    // 🚨 Captura de mensagens do backend
+    const flashError = document.getElementById('flash-error');
+    const flashSuccess = document.getElementById('flash-success');
+
+    if (flashError && flashError.textContent.trim()) {
+        Toast.fire({
+            icon: "error",
+            title: flashError.textContent.trim()
         });
+    }
 
-        // 🚨 Captura de mensagens do backend
-        const flashError = document.getElementById('flash-error');
-        const flashSuccess = document.getElementById('flash-success');
+    if (flashSuccess && flashSuccess.textContent.trim()) {
+        Toast.fire({
+            icon: "success",
+            title: flashSuccess.textContent.trim()
+        });
+    }
 
-        if (flashError && flashError.textContent.trim()) {
-            Toast.fire({
-                icon: "error",
-                title: flashError.textContent.trim()
-            });
-        }
+    // Inicializa os blocos de serviço
+    setupServiceBlocks();
 
-        if (flashSuccess && flashSuccess.textContent.trim()) {
-            Toast.fire({
-                icon: "success",
-                title: flashSuccess.textContent.trim()
-            });
-        }
-
-    // Inicializa a view
+    // Inicializa a view de conta depósito
     initContaDepositoView();
 });
 
@@ -63,9 +60,7 @@ function setupServiceBlocks() {
     const blocosLinks = document.querySelectorAll('.bloco-link');
     const closeAllBtn = document.getElementById('clear-view-trigger');
 
-    // Função para resetar todos os estados
     function resetAllStates() {
-        // Remove seleção de todos os blocos
         document.querySelectorAll('.bloco-link.selected').forEach(b => {
             b.classList.remove('selected');
             const bloco = b.querySelector('.bloco');
@@ -74,21 +69,18 @@ function setupServiceBlocks() {
             }
         });
 
-        // Limpa o conteúdo dinâmico
         const contentContainer = document.getElementById('dynamic-content');
         if (contentContainer) {
             contentContainer.innerHTML = '<p>Nenhuma view selecionada</p>';
         }
     }
 
-    // Inicializa a página no estado correto (limpo)
     resetAllStates();
 
     blocosLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
 
-            // Remove a seleção de todos os blocos
             document.querySelectorAll('.bloco-link.selected').forEach(b => {
                 b.classList.remove('selected');
                 const bloco = b.querySelector('.bloco');
@@ -97,198 +89,255 @@ function setupServiceBlocks() {
                 }
             });
 
-            // Adiciona a seleção no bloco clicado
             this.classList.add('selected');
             const selectedBloco = this.querySelector('.bloco');
             if (selectedBloco) {
                 selectedBloco.style.transform = 'scale(1) translateY(-3px)';
             }
 
-            // Carrega a view correspondente
             const action = this.getAttribute('data-action');
             if (action && typeof loadView === 'function') {
                 loadView(action);
-            } else {
-                console.log(`Ação selecionada: ${action}`);
             }
         });
     });
 
-    // Manipula o clique na divisória para limpar seleções
     if (closeAllBtn) {
         closeAllBtn.addEventListener('click', function() {
             resetAllStates();
         });
     }
 
-    // Expõe a função para uso externo se necessário
     window.resetServiceBlocks = resetAllStates;
 }
 
-// Variável para controlar o observador
-let tableObserver;
-
 function initContaDepositoView() {
-    // coloração de blocos de serviço quando selecionados
-    setupServiceBlocks();
+    console.log('Inicializando view de conta depósito...');
 
-//    // 1. Controle do campo cooperado - PARA O FORMULÁRIO DE CADASTRO
-//    function handleCooperadoCadastro() {
-//        const cooperadoSelect = document.getElementById('cooperadoSelect');
-//        const camposCooperado = document.getElementById('camposCooperado');
-//        console.log(`kur: ${camposCooperado}`);
+    // Configura os botões de status
+    setupStatusToggle();
 
-//        if (cooperadoSelect && camposCooperado) {
-//            cooperadoSelect.addEventListener('change', function() {
-//                camposCooperado.classList.toggle('hidden-cooperado', this.value !== 'true');
-//            });
-//            // Dispara o evento inicialmente
-//            cooperadoSelect.dispatchEvent(new Event('change'));
-//        }
-//    }
+    // Configura eventos das tabelas
+    setupTableEvents();
 
-//    // 2. Controle do campo cooperado - PARA O FORMULÁRIO DE EDIÇÃO (existente)
-//    function handleCooperadoChange(event) {
-//        const camposCooperado = document.getElementById('camposCooperado');
-//        if (event && event.target && event.target.id === 'cooperadoSelect' && camposCooperado) {
-//            camposCooperado.classList.toggle('hidden-cooperado', event.target.value !== 'true');
-//        }
-//    }
+    // Configura observador para tabelas carregadas dinamicamente
+    setupTableObserver();
+}
 
-//    // Configura os event listeners
-//    handleCooperadoCadastro(); // Para o formulário de cadastro
-//    document.addEventListener('change', handleCooperadoChange); // Para o formulário de edição
+function setupStatusToggle() {
+    const statusButtons = document.querySelectorAll('.status-option');
+    const containerAtivas = document.getElementById('container-ativas');
+    const containerInativas = document.getElementById('container-inativas');
+    const containerTodas = document.getElementById('container-todas');
+    const contaContainer = document.getElementById('contaContainer');
 
-    // 2. Observador de mutação para detectar a tabela dinamicamente
-    function setupTableObserver() {
-        // Se já existe um observador, desconecta antes de criar um novo
-        if (tableObserver) {
-            tableObserver.disconnect();
-        }
-
-        tableObserver = new MutationObserver(function(mutations) {
-            const table = document.getElementById('listadeContasDepositoSelecinavel');
-            if (table) {
-                setupTableEvents();
-            }
-        });
-
-        tableObserver.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
+    if (!statusButtons.length) {
+        console.log('Botões de status não encontrados');
+        return;
     }
 
-    // 3. Configura os eventos da tabela
-    function setupTableEvents() {
-        const table = document.getElementById('listadeContasDepositoSelecinavel');
-        const formWrapper = document.getElementById('formWrapper');
+    console.log('Configurando', statusButtons.length, 'botões de status');
 
-        if (!table || !formWrapper) {
-            return;
-        }
+    statusButtons.forEach(button => {
+        // Remove event listeners existentes
+        button.replaceWith(button.cloneNode(true));
+    });
 
-        // Remove event listener antigo se existir
+    // Re-seleciona os botões após o clone
+    const refreshedButtons = document.querySelectorAll('.status-option');
+
+    refreshedButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const status = this.getAttribute('data-status');
+            console.log('Botão clicado:', status);
+
+            // Remove active de todos os botões
+            refreshedButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Adiciona active no botão clicado
+            this.classList.add('active');
+
+            // Esconde todos os containers
+            if (containerAtivas) containerAtivas.classList.remove('active');
+            if (containerInativas) containerInativas.classList.remove('active');
+            if (containerTodas) containerTodas.classList.remove('active');
+
+            // Mostra o container correspondente
+            if (status === 'ATIVAS' && containerAtivas) {
+                containerAtivas.classList.add('active');
+                console.log('Mostrando contas ativas');
+            } else if (status === 'INATIVAS' && containerInativas) {
+                containerInativas.classList.add('active');
+                console.log('Mostrando contas inativas');
+            } else if (status === 'TODAS' && containerTodas) {
+                containerTodas.classList.add('active');
+                console.log('Mostrando todas as contas');
+            }
+
+            // Atualiza o atributo data-mode
+            if (contaContainer) {
+                contaContainer.setAttribute('data-mode', status);
+            }
+
+            // Limpa seleções
+            document.querySelectorAll('.expanded-form-row').forEach(r => r.remove());
+            document.querySelectorAll('.main-row.selected').forEach(r => r.classList.remove('selected'));
+
+            // Re-configura eventos para a tabela agora visível
+            setTimeout(() => {
+                setupTableEvents();
+            }, 100);
+        });
+    });
+
+    // Garante que ATIVAS está ativo por padrão
+    const ativasBtn = document.querySelector('.status-option[data-status="ATIVAS"]');
+    if (ativasBtn && !ativasBtn.classList.contains('active')) {
+        ativasBtn.classList.add('active');
+    }
+}
+
+function setupTableEvents() {
+    console.log('Configurando eventos das tabelas...');
+
+    const tables = [
+        document.getElementById('listaContasAtivas'),
+        document.getElementById('listaContasInativas'),
+        document.getElementById('listaContasTodas')
+    ];
+
+    let tablesFound = 0;
+
+    tables.forEach(table => {
+        if (!table) return;
+
+        tablesFound++;
+
+        // Remove event listeners antigos
         table.removeEventListener('click', handleTableClick);
+
         // Adiciona novo event listener
         table.addEventListener('click', handleTableClick);
-    }
 
-    // 4. Handler para clicks na tabela
-    function handleTableClick(e) {
-        const row = e.target.closest('.main-row');
-        if (!row) return;
+        console.log('Eventos configurados para tabela:', table.id);
+    });
 
-        toggleRowSelection(row);
-        showFormForRow(row);
-        fillFormFromRow(row);
-    }
+    console.log('Total de tabelas configuradas:', tablesFound);
+}
 
-    // 5. Funções auxiliares (mantidas iguais)
-    function toggleRowSelection(selectedRow) {
-        document.querySelectorAll('.main-row.selected').forEach(r => r.classList.remove('selected'));
-        selectedRow.classList.add('selected');
-    }
+function handleTableClick(e) {
+    const row = e.target.closest('.main-row');
+    if (!row) return;
 
-    function showFormForRow(row) {
-        document.querySelectorAll('.expanded-form-row').forEach(r => r.remove());
+    console.log('Linha clicada:', row);
 
-        const expandedRow = document.createElement('tr');
-        expandedRow.className = 'expanded-form-row';
+    toggleRowSelection(row);
+    showFormForRow(row);
+    fillFormFromRow(row);
+}
 
-        const td = document.createElement('td');
-        td.colSpan = row.cells.length;
-        td.className = 'expanded-form-content';
+function toggleRowSelection(selectedRow) {
+    // Remove seleção de todas as linhas em todas as tabelas
+    document.querySelectorAll('.main-row.selected').forEach(r => {
+        r.classList.remove('selected');
+    });
 
-        const formClone = document.getElementById('formWrapper').cloneNode(true);
+    // Adiciona seleção na linha clicada
+    selectedRow.classList.add('selected');
+}
+
+function showFormForRow(row) {
+    // Remove formulários expandidos existentes
+    document.querySelectorAll('.expanded-form-row').forEach(r => r.remove());
+
+    const expandedRow = document.createElement('tr');
+    expandedRow.className = 'expanded-form-row';
+
+    const td = document.createElement('td');
+    td.colSpan = row.cells.length;
+    td.className = 'expanded-form-content';
+
+    const formWrapper = document.getElementById('formWrapper');
+    if (formWrapper) {
+        const formClone = formWrapper.cloneNode(true);
         formClone.style.display = 'block';
         formClone.id = 'formWrapper-expanded';
         td.appendChild(formClone);
-
-        expandedRow.appendChild(td);
-        row.parentNode.insertBefore(expandedRow, row.nextSibling);
     }
 
-    function fillFormFromRow(row) {
-        const cells = row.cells;
+    expandedRow.appendChild(td);
+    row.parentNode.insertBefore(expandedRow, row.nextSibling);
+}
 
-        ['formWrapper', 'formWrapper-expanded'].forEach(wrapperId => {
-            const wrapper = document.getElementById(wrapperId);
-            if (!wrapper) return;
+function fillFormFromRow(row) {
+    const cells = row.cells;
 
-            const form = wrapper.querySelector('form');
-            if (!form) return;
+    ['formWrapper', 'formWrapper-expanded'].forEach(wrapperId => {
+        const wrapper = document.getElementById(wrapperId);
+        if (!wrapper) return;
 
-//            // Função para limpar caracteres não numéricos
-//            const limparDocumento = (doc) => doc ? doc.replace(/\D/g, '') : '';
-//
-//            // Nova função corrigida para datas
-            const formatarDataParaInput = (dataStr) => {
-                if (!dataStr || dataStr.trim() === '') return '';
+        const form = wrapper.querySelector('form');
+        if (!form) return;
 
-                // Remove qualquer formatação existente
-                const dataLimpa = dataStr.replace(/\D/g, '');
+        const formatarDataParaInput = (dataStr) => {
+            if (!dataStr || dataStr.trim() === '') return '';
+            const dataLimpa = dataStr.replace(/\D/g, '');
+            if (dataLimpa.length < 8) return '';
 
-                // Se não tiver números suficientes, retorna vazio
-                if (dataLimpa.length < 8) return '';
+            const dia = dataLimpa.substring(0, 2);
+            const mes = dataLimpa.substring(2, 4);
+            const ano = dataLimpa.substring(4, 8);
 
-                // Formata para yyyy-MM-dd (padrão do input date)
-                const dia = dataLimpa.substring(0, 2);
-                const mes = dataLimpa.substring(2, 4);
-                const ano = dataLimpa.substring(4, 8);
+            if (dia > 31 || mes > 12) return '';
+            return `${ano}-${mes}-${dia}`;
+        };
 
-                // Validação básica (opcional)
-                if (dia > 31 || mes > 12) return '';
+        // Preenche campos do formulário
+        const ContaDepositoIdField = form.querySelector('[name="ContaDepositoId"]');
+        const ContaDepositoNomeField = form.querySelector('[name="ContaDepositoNome"]');
+        const ContaDepositoMontanteField = form.querySelector('[name="ContaDepositoMontante"]');
+        const ContaDepositoDataCriacaoField = form.querySelector('[name="ContaDepositoDataCriacao"]');
 
-                return `${ano}-${mes}-${dia}`;
-            };
+        if (ContaDepositoIdField) ContaDepositoIdField.value = cells[0].textContent.trim();
+        if (ContaDepositoNomeField) ContaDepositoNomeField.value = cells[1].textContent.trim();
+        if (ContaDepositoMontanteField) {
+            ContaDepositoMontanteField.value = cells[2].textContent.trim();
+        }
+        if (ContaDepositoDataCriacaoField) {
+            ContaDepositoDataCriacaoField.value = formatarDataParaInput(cells[3].textContent);
+        }
+    });
+}
 
-            // Preenche campos básicos
-            const ContaDepositoIdField = form.querySelector('[name="ContaDepositoId"]');
-            const ContaDepositoNomeField = form.querySelector('[name="ContaDepositoNome"]');
-            const ContaDepositoMontanteField = form.querySelector('[name="ContaDepositoMontante"]');
-            const ContaDepositoDataCriacaoField = form.querySelector('[name="ContaDepositoDataCriacao"]');
+let tableObserver;
 
-            if (ContaDepositoIdField) ContaDepositoIdField.value = cells[0].textContent.trim();
-            if (ContaDepositoNomeField) ContaDepositoNomeField.value = cells[1].textContent.trim();
-            if (ContaDepositoMontanteField) {
-                ContaDepositoMontanteField.value = cells[2].textContent.trim();;
-            }
+function setupTableObserver() {
+    if (tableObserver) {
+        tableObserver.disconnect();
+    }
 
-            // Preenche data de nascimento - CORREÇÃO PRINCIPAL AQUI
-            if (ContaDepositoDataCriacaoField) {
-                ContaDepositoDataCriacaoField.value = formatarDataParaInput(cells[3].textContent);
-                console.log('Data formatada:', ContaDepositoDataCriacaoField.value); // Para debug
-            }
-
+    tableObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(mutation => {
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType === 1) { // Element node
+                    if (node.querySelector && (
+                        node.querySelector('#listaContasAtivas') ||
+                        node.querySelector('#listaContasInativas') ||
+                        node.querySelector('#listaContasTodas')
+                    )) {
+                        console.log('Tabela detectada dinamicamente');
+                        setTimeout(() => {
+                            setupStatusToggle();
+                            setupTableEvents();
+                        }, 50);
+                    }
+                }
+            });
         });
-    }
+    });
 
-    // Inicialização
-    setupTableObserver();
-
-    // Verificação inicial
-    if (document.getElementById('listadeContasDepositoSelecinavel')) {
-        setupTableEvents();
-    }
+    tableObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 }

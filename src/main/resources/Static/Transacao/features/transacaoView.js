@@ -162,14 +162,14 @@ function initTransactionView() {
         // Aplica classes de tipo em todas as linhas da tabela
         table.querySelectorAll('.main-row').forEach(row => {
             const tipoTransacao = row.cells[0]?.textContent.trim().toUpperCase();
-            row.classList.remove('deposit', 'withdraw', 'transfer');
+            row.classList.remove('deposito', 'saque', 'transferencia');
 
-            if (tipoTransacao.includes("DEPOSIT")) {
-                row.classList.add("deposit");
-            } else if (tipoTransacao.includes("WITHDRAW")) {
-                row.classList.add("withdraw");
-            } else if (tipoTransacao.includes("TRANSFER")) {
-                row.classList.add("transfer");
+            if (tipoTransacao.includes("DEPOSITO")) {
+                row.classList.add("deposito");
+            } else if (tipoTransacao.includes("SAQUE")) {
+                row.classList.add("saque");
+            } else if (tipoTransacao.includes("TRANSFERENCIA")) {
+                row.classList.add("transferencia");
             }
         });
 

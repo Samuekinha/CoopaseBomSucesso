@@ -26,14 +26,18 @@ public class DeletarContaController {
     @GetMapping("/DeletarContaView")
     public String deletarContaView(Model model) {
 
-        model.addAttribute("resultadoConsulta",
+        model.addAttribute("ContasAtivas",
+                consultarContaDeposito.consultarContasAtivas());
+        model.addAttribute("TodasContas",
                 consultarContaDeposito.consultarTodasContaDeposito());
+        model.addAttribute("ContasInativas",
+                consultarContaDeposito.consultarContasInativas());
 
         return "/Coopase/Conta/DeletarContaView";
     }
 
-    @PostMapping("/Deletar")
-    public String deletarConta(@RequestParam("ContaDepositoId") Long id,
+    @PostMapping("/Inativar")
+    public String deletarConta(@RequestParam("ContaId") Long id,
                                RedirectAttributes redirectAttributes) {
         deletarContaService.DeletarContaDeposito(id);
 

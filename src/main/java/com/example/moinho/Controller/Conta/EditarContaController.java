@@ -30,9 +30,12 @@ public class EditarContaController {
     @GetMapping("/EditarContaView")
     public String editarContaView(Model model) {
 
-        List<ContaBase> resultadoConsulta = consultarContaDeposito.consultarTodasContaDeposito();
-
-        model.addAttribute("resultadoConsulta", resultadoConsulta);
+        model.addAttribute("ContasAtivas",
+                consultarContaDeposito.consultarContasAtivas());
+        model.addAttribute("TodasContas",
+                consultarContaDeposito.consultarTodasContaDeposito());
+        model.addAttribute("ContasInativas",
+                consultarContaDeposito.consultarContasInativas());
 
         return "/Coopase/Conta/EditarContaView";
     }

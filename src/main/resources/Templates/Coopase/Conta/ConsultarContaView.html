@@ -9,57 +9,197 @@
             background-color: #f5f5f5;
         }
         .main-row.selected {
-            background-color: #e3f2fd; /* Azul claro */
-            border-left: 4px solid #2196F3; /* Azul */
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196F3;
+        }
+
+        .table-container {
+            display: none;
+        }
+        .table-container.active {
+            display: block;
+        }
+
+        .status-options {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        .status-option {
+            position: relative;
+            border: none;
+            background: none;
+            font-weight: bold;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+        .status-option.active {
+            color: #2196F3;
+        }
+        .status-underline {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #2196F3;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .status-option.active .status-underline {
+            transform: scaleX(1);
         }
     </style>
 
-    <div>
-        <h2 class="d-flex justify-content-center">Consultar Conta Deposito</h2>
+    <div data-mode="ATIVAS" id="contaContainer">
+        <h2 class="d-flex justify-content-center" id="tituloConta">Consultar Conta</h2>
 
         <div class="container">
-            <div th:fragment="tabelaContasDeposito">
-                <table class="main-table" id="listadeContasDepositoSelecinavel">
-                    <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Nome</th>
-                        <th>Montante</th>
-                        <th>Data Criação</th>
-                    </tr>
-                    </thead>
-                    <tbody th:replace="~{/Coopase/Conta/Fragments/TabelaConta :: corpoTabela}"></tbody>
-                </table>
+            <div class="status-options">
+                <button type="button" class="status-option btn-ativas active" data-status="ATIVAS">
+                    ATIVAS <div class="status-underline"></div>
+                </button>
+                <button type="button" class="status-option btn-inativas" data-status="INATIVAS">
+                    INATIVAS <div class="status-underline"></div>
+                </button>
+                <button type="button" class="status-option btn-todas" data-status="TODAS">
+                    TODAS <div class="status-underline"></div>
+                </button>
+
+                <div class="container-fluid vh-10 d-flex justify-content-end align-items-center">
+                    <div class="status-ball-container">
+                        <div class="status-ball" data-tooltip="As bolinhas coloridas (verde ou laranja) indicam se a conta é virtual (verde) ou física (laranja), respectivamente."></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Contas Ativas -->
+            <div class="table-container active" id="container-ativas">
+                <div th:fragment="tabelaContasAtivas">
+                    <table class="main-table" id="listaContasAtivas">
+                        <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Nome</th>
+                            <th>Montante</th>
+                            <th>Data Criação</th>
+                            <th>-</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="main-row" th:each="contaA : ${ContasAtivas}"
+                            th:data-id="${contaA.id}">
+                            <td th:text="${contaA.id}"></td>
+                            <td th:text="${contaA.nome_conta}"></td>
+                            <td th:text="${contaA.valor_total}"></td>
+                            <td th:text="${contaA.data_criacao != null ? #temporals.format(contaA.data_criacao, 'dd/MM/yyyy') : ''}"></td>
+                            <td>
+                                <div class="status-ball-container">
+                                    <div class="status-ball"
+                                         th:classappend="${contaA.tipoConta == 'ContaFisica'} ? 'fisica-true' : 'fisica-false'"
+                                         th:attr="data-tooltip=${contaA.tipoConta == 'ContaFisica'} ? 'Conta Física' : 'Conta Virtual'">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tabela de Contas Inativas -->
+            <div class="table-container" id="container-inativas">
+                <div th:fragment="tabelaContasInativas">
+                    <table class="main-table" id="listaContasInativas">
+                        <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Nome</th>
+                            <th>Montante</th>
+                            <th>Data Criação</th>
+                            <th>-</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="main-row" th:each="contaI : ${ContasInativas}"
+                            th:data-id="${contaI.id}">
+                            <td th:text="${contaI.id}"></td>
+                            <td th:text="${contaI.nome_conta}"></td>
+                            <td th:text="${contaI.valor_total}"></td>
+                            <td th:text="${contaI.data_criacao != null ? #temporals.format(contaI.data_criacao, 'dd/MM/yyyy') : ''}"></td>
+                            <td>
+                                <div class="status-ball-container">
+                                    <div class="status-ball"
+                                         th:classappend="${contaI.tipoConta == 'ContaFisica'} ? 'fisica-true' : 'fisica-false'"
+                                         th:attr="data-tooltip=${contaI.tipoConta == 'ContaFisica'} ? 'Conta Física' : 'Conta Virtual'">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tabela de Todas as Contas -->
+            <div class="table-container" id="container-todas">
+                <div th:fragment="tabelaContasTodas">
+                    <table class="main-table" id="listaContasTodas">
+                        <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Nome</th>
+                            <th>Montante</th>
+                            <th>Data Criação</th>
+                            <th>-</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="main-row" th:each="conta : ${TodasContas}"
+                            th:data-id="${conta.id}">
+                            <td th:text="${conta.id}"></td>
+                            <td th:text="${conta.nome_conta}"></td>
+                            <td th:text="${conta.valor_total}"></td>
+                            <td th:text="${conta.data_criacao != null ? #temporals.format(conta.data_criacao, 'dd/MM/yyyy') : ''}"></td>
+                            <td>
+                                <div class="status-ball-container">
+                                    <div class="status-ball"
+                                         th:classappend="${conta.tipoConta == 'ContaFisica'} ? 'fisica-true' : 'fisica-false'"
+                                         th:attr="data-tooltip=${conta.tipoConta == 'ContaFisica'} ? 'Conta Física' : 'Conta Virtual'">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
+        <!-- Form escondido -->
         <div id="formWrapper" class="container" style="display: none;">
-            <form id="consultarContaDepositoForm"> <!-- Adicionado o form -->
+            <form id="consultarContaDepositoForm">
                 <div class="form-group">
                     <label for="ContaDepositoId">Id</label>
-                    <input type="text" class="form-control" name="ContaDepositoId" id="ContaDepositoId" value="" readonly>
+                    <input type="text" class="form-control" name="ContaDepositoId" id="ContaDepositoId" readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="ContaDepositoNome">Nome</label>
-                    <input type="text" class="form-control" name="ContaDepositoNome" id="ContaDepositoNome" placeholder="Nome da Conta Deposito" required>
+                    <input type="text" class="form-control" name="ContaDepositoNome" id="ContaDepositoNome" readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="ContaDepositoMontante">Montante</label>
-                    <input type="text" class="form-control" name="ContaDepositoMontante" id="ContaDepositoMontante" placeholder="Montante da Conta Deposito" readonly>
+                    <input type="text" class="form-control" name="ContaDepositoMontante" id="ContaDepositoMontante" readonly>
                 </div>
 
                 <div class="form-group">
-                    <label for="ContaDepositoDataCriacao">Data criação</label>
-                    <input type="date" class="form-control" name="ContaDepositoDataCriacao" id="ContaDepositoDataCriacao" placeholder="Data Criação da Conta Deposito" readonly>
+                    <label for="ContaDepositoDataCriacao">Data Criação</label>
+                    <input type="date" class="form-control" name="ContaDepositoDataCriacao" id="ContaDepositoDataCriacao" readonly>
                 </div>
-
             </form>
         </div>
     </div>
-
 </div>
-
-
-

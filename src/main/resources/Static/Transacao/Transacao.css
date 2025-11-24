@@ -622,11 +622,11 @@ h2 {
     visibility: visible;
 }
 
-.status-ball.auto-true {
+.status-ball.automatica-true {
     background: #FF9800;
 }
 
-.status-ball.auto-false {
+.status-ball.automatica-false {
     background: #4CAF50;
 }
 

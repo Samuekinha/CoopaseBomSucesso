@@ -33,7 +33,7 @@ public class CadastrarContaController {
         cadastrarContaService.cadastrarConta(requestDTO);
 
         redirectAttributes.addFlashAttribute("Sucesso", "Conta cadastrada com sucesso!");
-        return "Coopase/Conta/Servicos";
+        return "redirect:/Coopase/Conta/Servicos";
     }
 
     @GetMapping("/Cadastrar")

@@ -5,6 +5,6 @@ import com.example.moinho.Exception.BusinessException;
 public class NomeInvalidoException extends BusinessException {
 
     public NomeInvalidoException(String message) {
-        super(message, "/Coopase/Servicos/ContaDeposito");
+        super(message, "redirect:/Coopase/Servicos/ContaDeposito");
     }
 }

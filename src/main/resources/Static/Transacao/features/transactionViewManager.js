@@ -136,7 +136,7 @@ class TransactionViewManager {
                 const contaDestinoAtual = container.querySelector('#contaDestinoId');
                 const tipoAtual = container.querySelector('#tipoTransacao')?.value;
 
-                if (tipoAtual === "TRANSFER" && contaPrincipalSelect.value && contaDestinoAtual && contaPrincipalSelect.value === contaDestinoAtual.value) {
+                if (tipoAtual === "TRANSFERERENCIA" && contaPrincipalSelect.value && contaDestinoAtual && contaPrincipalSelect.value === contaDestinoAtual.value) {
                     Toast.fire({
                         icon: "error",
                         title: `Erro: a conta principal e de destino não podem ser iguais`
@@ -160,7 +160,7 @@ class TransactionViewManager {
                 const contaPrincipalAtual = container.querySelector('#contaPrincipalId');
                 const tipoAtual = container.querySelector('#tipoTransacao')?.value;
 
-                if (tipoAtual === "TRANSFER" && contaDestinoSelect.value && contaPrincipalAtual && contaDestinoSelect.value === contaPrincipalAtual.value) {
+                if (tipoAtual === "TRANSFERENCIA" && contaDestinoSelect.value && contaPrincipalAtual && contaDestinoSelect.value === contaPrincipalAtual.value) {
                     Toast.fire({
                         icon: "error",
                         title: `Erro: a conta principal e de destino não podem ser iguais`
@@ -270,7 +270,7 @@ class TransactionViewManager {
         }
 
         if (transferenciaField) {
-            if (clickedButton.getAttribute('data-type') === 'TRANSFER') {
+            if (clickedButton.getAttribute('data-type') === 'TRANSFERENCIA') {
                 transferenciaField.classList.add('show');
                 transferenciaField.style.display = 'block';
                 if (previewDestino) previewDestino.style.display = 'table-row-group';

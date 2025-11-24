@@ -28,6 +28,12 @@ public class ConsultarContaDepositoService {
                 .toList();
     }
 
+    public List<ContaBase> consultarContasInativas() {
+        return r_ContaD.findTodasContaDeposito().stream()
+                .filter(conta -> !conta.isAtiva())
+                .toList();
+    }
+
     public BigDecimal ConsultarValorTotalContas() {
         BigDecimal valorTotal = BigDecimal.ZERO;
         List<ContaBase> todasContas = r_ContaD.findTodasContaDeposito();

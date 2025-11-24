@@ -33,6 +33,10 @@ public abstract class ContaBase {
     @Column(columnDefinition = "BOOLEAN", nullable = false)
     private boolean ativa = true;
 
+    public String getTipoConta() {
+        return this.getClass().getSimpleName();
+    }
+
     public void aplicarTransacao(BigDecimal valor, Transacao.TypeTransaction tipoTransacao) {
         if (valor == null) throw new IllegalArgumentException("Valor nulo");
 

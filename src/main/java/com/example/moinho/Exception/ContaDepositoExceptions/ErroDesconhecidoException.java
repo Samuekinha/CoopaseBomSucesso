@@ -5,6 +5,6 @@ import com.example.moinho.Exception.BusinessException;
 public class ErroDesconhecidoException extends BusinessException {
 
     public ErroDesconhecidoException(String message) {
-        super(message, "/Coopase/Conta/Servicos");
+        super(message, "redirect:/Coopase/Conta/Servicos");
     }
 }
