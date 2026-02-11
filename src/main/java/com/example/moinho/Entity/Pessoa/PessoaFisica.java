@@ -20,6 +20,9 @@ public class PessoaFisica extends PessoaBase {
     @Column(columnDefinition = "DATE")
     private LocalDate data_nascimento;
 
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean diarista = false;
+
     @Column(length = 50, nullable = true)
     private String caf_fisica;
 

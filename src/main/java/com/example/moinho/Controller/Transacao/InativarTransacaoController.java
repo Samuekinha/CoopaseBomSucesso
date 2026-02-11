@@ -26,7 +26,7 @@ public class InativarTransacaoController {
     }
 
     // Rotas para processar os formulários (POST)
-    @GetMapping("/InativarTransacaoView")
+    @GetMapping("/DeletarTransacaoView")
     public String consultarTransacaoView(Model model) {
         List<TransacaoResumoDTO> listaTransacoes = consultarTransacaoService.consultarTodasTransacao();
         List<TransacaoResumoDTO> listaTransacoesAtivas = consultarTransacaoService.
@@ -41,7 +41,7 @@ public class InativarTransacaoController {
         return "/Coopase/Transacao/InativarTransacaoView";
     }
 
-    @PostMapping("/Inativar")
+    @PostMapping("/Deletar")
     public String inativarTransacao(@RequestParam("idTransacao") Long transacaoId,
                                 Model model) {
 

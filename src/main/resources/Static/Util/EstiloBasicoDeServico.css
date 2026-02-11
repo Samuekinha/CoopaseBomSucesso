@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F0E8D8;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.divisoria-vertical {
+    height: 3px;
+    margin: 20px 0;
+    opacity: 0.8;
+}
+
+#clear-view-trigger {
+    cursor: pointer;
+    height: 25px;
+    margin: 5px 0;
+    width: 100%;
+    border: none;
+    opacity: 0.8;
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.2);
+    transition: all 0.4s ease;
+    position: relative;
+    background: linear-gradient(
+        90deg,
+        rgba(8, 51, 120, 0.9) 0%,
+        rgba(13, 71, 161, 0.8) 25%,
+        #2196F3 50%,
+        rgba(13, 71, 161, 0.8) 75%,
+        rgba(8, 51, 120, 0.9) 100%
+    );
+}
+
+#clear-view-trigger:hover {
+    background: linear-gradient(
+        90deg,
+        rgba(6, 41, 98, 0.9) 0%,
+        rgba(10, 58, 132, 0.8) 25%,
+        #1a7de8 50%,
+        rgba(10, 58, 132, 0.8) 75%,
+        rgba(6, 41, 98, 0.9) 100%
+    );
+    box-shadow: 0 2px 12px rgba(13, 110, 253, 0.4);
+}

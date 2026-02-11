@@ -6,7 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link rel="stylesheet" href="/Index.css">
+    <link rel="stylesheet" href="/TelaInicial/Index.css">
+    <link rel="stylesheet" href="/TelaInicial/Style/BlocosCarrousel.css">
     <title>Tela inicial</title>
 </head>
 <body>
@@ -45,40 +46,75 @@
     <div class="titulo-escolha justify-content-center mt-4">
         <p class="titulo-escolha justify-content-center">Selecione algo</p>
     </div>
-    <div class="blocos-container">
-        <!-- Bloco 1 -->
-        <a href="/Coopase/Cliente/Servicos" class="bloco-link">
-            <div class="bloco">
-                <h3>Área Cliente</h3>
-                <p>Área de serviços do cliente</p>
-            </div>
-        </a>
+    <div class="carousel-wrapper">
+        <!-- Botão Anterior -->
+        <button class="carousel-nav prev" aria-label="Anterior">
+            <svg viewBox="0 0 24 24">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+            </svg>
+        </button>
 
-        <!-- Bloco 2 -->
-        <a href="/Coopase/Conta/Servicos" class="bloco-link">
-            <div class="bloco">
-                <h3>Cofre Área</h3>
-                <p>Área de serviços de contas de depósito</p>
-            </div>
-        </a>
+        <!-- Container dos Blocos -->
+        <div class="blocos-container" id="carousel">
+            <!-- Bloco 1 -->
+            <a href="/Coopase/Cliente/Servicos" class="bloco-link">
+                <div class="bloco">
+                    <h3>Área Cliente</h3>
+                    <p>Área de serviços do cliente</p>
+                </div>
+            </a>
 
-        <!-- Bloco 3 -->
-        <a href="/Coopase/Transacao/Servicos" class="bloco-link">
-            <div class="bloco">
-                <h3>Área Transação</h3>
-                <p>Transações das contas déposito</p>
-            </div>
-        </a>
+            <!-- Bloco 2 -->
+            <a href="/Coopase/Conta/Servicos" class="bloco-link">
+                <div class="bloco">
+                    <h3>Cofre Área</h3>
+                    <p>Área de serviços de contas</p>
+                </div>
+            </a>
 
-        <!-- Bloco 4 -->
-        <a href="#" class="bloco-link">
-            <div class="bloco">
-                <h3>Título 4</h3>
-                <p>Descrição breve</p>
-            </div>
-        </a>
+            <!-- Bloco 3 -->
+            <a href="/Coopase/Transacao/Servicos" class="bloco-link">
+                <div class="bloco">
+                    <h3>Área Transação</h3>
+                    <p>Transações das contas déposito</p>
+                </div>
+            </a>
+
+            <!-- Bloco 4 -->
+            <a href="/Coopase/Diaristas/Servicos" class="bloco-link">
+                <div class="bloco">
+                    <h3>Diáristas</h3>
+                    <p>Controle de jornada e pagamento</p>
+                </div>
+            </a>
+
+            <!-- Bloco 5 (exemplo adicional) -->
+            <a href="/Coopase/Relatorios/Servicos" class="bloco-link">
+                <div class="bloco">
+                    <h3>Relatórios</h3>
+                    <p>Relatórios e análises gerenciais</p>
+                </div>
+            </a>
+
+            <!-- Bloco 6 (exemplo adicional) -->
+            <a href="/Coopase/Configuracoes/Servicos" class="bloco-link">
+                <div class="bloco">
+                    <h3>Configurações</h3>
+                    <p>Configurações do sistema</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Botão Próximo -->
+        <button class="carousel-nav next" aria-label="Próximo">
+            <svg viewBox="0 0 24 24">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+            </svg>
+        </button>
+
+        <!-- Indicadores -->
+        <div class="carousel-dots" id="dots"></div>
     </div>
-
 
     <hr>
 
@@ -125,7 +161,8 @@
 
 </container>
 
-<script src="Index.js" defer></script> <!-- defer = executa após o HTML -->
+<script src="/TelaInicial/Index.js" defer></script> <!-- defer = executa após o HTML -->
+<script src="/TelaInicial/Features/BlocosCarrousel.js" defer></script> <!-- defer = executa após o HTML -->
 
 </body>
 </html>

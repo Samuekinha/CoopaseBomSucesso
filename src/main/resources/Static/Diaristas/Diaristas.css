@@ -1,3 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F0E8D8;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/*3. Títulos*/
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
 /*4. Tabela do consultar, editar e deletar*/
 .main-table {
     width: 100%;
@@ -124,6 +146,66 @@
 }
 
 /* Estilo para os blocos de serviço */
+.bloco-link {
+    position: relative;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.bloco {
+    position: relative;
+    padding: 15px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.bloco-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    background-color: transparent;
+    border-radius: 0 4px 4px 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 1;
+}
+
+.bloco-link[data-action="Cadastrar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #0d6efd;
+}
+
+.bloco-link[data-action="Consultar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #6c757d;
+}
+
+.bloco-link[data-action="Inativar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #fd7e14;
+}
+
+.bloco-link:hover .bloco {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.bloco-link:not(.selected) .bloco {
+    opacity: 0.85;
+    transform: scale(0.98);
+}
+
+.bloco-link .bloco {
+    transition: all 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
 
 /* NOVO CSS PARA O LAYOUT DE CADASTRO */
 .cadastro-container {
@@ -176,6 +258,44 @@
     .form-main-column .form-control {
         max-width: 100%;
     }
+}
+
+.divisoria-vertical {
+    height: 3px;
+    margin: 20px 0;
+    opacity: 0.8;
+}
+
+#clear-view-trigger {
+    cursor: pointer;
+    height: 25px;
+    margin: 5px 0;
+    width: 100%;
+    border: none;
+    opacity: 0.8;
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.2);
+    transition: all 0.4s ease;
+    position: relative;
+    background: linear-gradient(
+        90deg,
+        rgba(8, 51, 120, 0.9) 0%,
+        rgba(13, 71, 161, 0.8) 25%,
+        #2196F3 50%,
+        rgba(13, 71, 161, 0.8) 75%,
+        rgba(8, 51, 120, 0.9) 100%
+    );
+}
+
+#clear-view-trigger:hover {
+    background: linear-gradient(
+        90deg,
+        rgba(6, 41, 98, 0.9) 0%,
+        rgba(10, 58, 132, 0.8) 25%,
+        #1a7de8 50%,
+        rgba(10, 58, 132, 0.8) 75%,
+        rgba(6, 41, 98, 0.9) 100%
+    );
+    box-shadow: 0 2px 12px rgba(13, 110, 253, 0.4);
 }
 
 /* Estilos para as opções de transação */

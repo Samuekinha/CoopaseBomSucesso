@@ -1,0 +1,157 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    padding: 40px 0;
+}
+
+/* Container do Carousel */
+.carousel-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 60px; /* Espaço para os botões */
+}
+
+/* Container dos blocos - mantém o estilo original */
+.blocos-container {
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+    overflow-x: auto; /* Permite scroll horizontal se necessário */
+    scroll-behavior: smooth;
+    position: relative;
+    flex-wrap: nowrap; /* IMPORTANTE: Força os itens a ficarem em uma única linha */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE e Edge */
+    padding: 10px 0; /* Padding vertical para não cortar sombras */
+    width: 100%;
+}
+
+/* Esconde a scrollbar do Chrome, Safari e Opera */
+.blocos-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Links e Blocos - mantém o estilo original */
+.bloco-link {
+    text-decoration: none;
+    color: inherit;
+    flex: 0 0 auto; /* Impede que os itens encolham */
+    width: 280px;
+    transition: transform 0.3s ease;
+}
+
+.bloco-link:hover {
+    transform: translateY(-5px);
+}
+
+.bloco {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.bloco:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.bloco h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.bloco p {
+    color: #7f8c8d;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Botões de navegação */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-nav:hover {
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-nav:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-nav.prev {
+    left: 0;
+}
+
+.carousel-nav.next {
+    right: 0;
+}
+
+.carousel-nav svg {
+    width: 20px;
+    height: 20px;
+    fill: #2c3e50;
+}
+
+/* Indicadores (dots) */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #d1d5db;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: #2c3e50;
+    width: 24px;
+    border-radius: 5px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .carousel-nav.prev {
+        left: 0;
+    }
+
+    .carousel-nav.next {
+        right: 0;
+    }
+
+    .bloco-link {
+        min-width: 240px;
+    }
+}

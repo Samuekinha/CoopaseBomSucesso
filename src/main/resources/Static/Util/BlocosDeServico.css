@@ -1,0 +1,89 @@
+/* ============ BLOCOS DE SERVIÇO DAS ÁREAS ============ */
+.blocos-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.bloco-link {
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+    overflow: visible; /* Importante para a borda animada aparecer */
+}
+
+.bloco {
+    position: relative;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Efeito de borda animada à ESQUERDA do bloco */
+.bloco-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    background-color: transparent;
+    border-radius: 0 4px 4px 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 1;
+}
+
+/* Cores e animação quando selecionado */
+.bloco-link[data-action="Cadastrar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #0d6efd;
+}
+
+.bloco-link[data-action="Editar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #198754;
+}
+
+.bloco-link[data-action="Consultar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #6c757d;
+}
+
+.bloco-link[data-action="Deletar"].selected::before {
+    width: 6px;
+    height: 80%;
+    background-color: #fd7e14;
+}
+
+/* Efeito hover */
+.bloco-link:hover .bloco {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Efeito de "compressão" quando não selecionado */
+.bloco-link:not(.selected) .bloco {
+    opacity: 0.85;
+    transform: scale(0.98);
+}
+
+/* Bloco selecionado fica destacado */
+.bloco-link.selected .bloco {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

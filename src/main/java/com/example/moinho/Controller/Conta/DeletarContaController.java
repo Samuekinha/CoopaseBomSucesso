@@ -37,7 +37,7 @@ public class DeletarContaController {
     }
 
     @PostMapping("/Inativar")
-    public String deletarConta(@RequestParam("ContaId") Long id,
+    public String deletarConta(@RequestParam("ContaDepositoId") Long id,
                                RedirectAttributes redirectAttributes) {
         deletarContaService.DeletarContaDeposito(id);
 
