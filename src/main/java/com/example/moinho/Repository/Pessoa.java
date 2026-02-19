@@ -35,6 +35,12 @@ public interface Pessoa extends JpaRepository<PessoaBase, Long> {
     List<PessoaFisica> findPorPapel(@Param("papel") Papel papel);
 
     @Query("""
+    SELECT p FROM PessoaFisica p
+    WHERE :papel NOT MEMBER OF p.papeis
+""")
+    List<PessoaFisica> findSemPapel(@Param("papel") Papel papel, Pageable pageable);
+
+    @Query("""
         SELECT p FROM PessoaFisica p
         JOIN p.papeis papel
         WHERE papel = :papel

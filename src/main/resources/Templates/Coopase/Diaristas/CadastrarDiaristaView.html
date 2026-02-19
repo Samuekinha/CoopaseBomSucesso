@@ -1,0 +1,53 @@
+<div th:fragment="Cadastrar" data-view="cadastrar-Diarista">
+  <h2 class="d-flex justify-content-center">Cadastrar Diarista</h2>
+
+  <div class="container">
+
+    <div class="row">
+      <div class="col-6">
+        <table class="tabela-de-cadastros">
+          <thead>
+          <tr id="tdc-head">
+            <th>N°</th>
+            <th>Nome</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="tdc-body" th:each="listaCadastro : ${listaCadastro}">
+            <td th:text="${listaCadastro.id}"></td>
+            <td th:text="${listaCadastro.nome}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+        <div class="col-6">
+          <div id="formWrapper" class="container" style="display: none;">
+          <form id="cadastrarDiarista" method="post" action="/Coopase/Diarista/Cadastrar">
+
+            <div class="nome-diarista"></div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="numeroDiarista">Número</label>
+                <input type="number" class="form-control" name="numeroDiarista" id="numeroDiarista" readonly>
+              </div>
+
+              <div class="form-group">
+                <label for="cpfDiarista">CPF</label>
+                <input type="text" class="form-control" name="cpfDiarista" id="cpfDiarista" readonly>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="btn btn-warning mt-4" id="btnAlterarStatus">Cadastrar</button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

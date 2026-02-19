@@ -86,4 +86,7 @@ public class ConsultarClienteService {
         return listaCompleta.size();
     }
 
+    public List<PessoaFisica> ConsultarClienteNaoDiarista() {
+        return pessoa.findSemPapel(Papel.DIARISTA, PageRequest.of(0,5));
+    }
 }

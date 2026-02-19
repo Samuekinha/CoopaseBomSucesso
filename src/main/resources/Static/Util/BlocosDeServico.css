@@ -20,7 +20,7 @@
 .bloco {
     position: relative;
     background-color: white;
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 20px;
     transition: all 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
