@@ -29,7 +29,7 @@ public class ServicosContaController {
                 consultarContaD.ConsultarValorTotalContas());
         model.addAttribute("formatador", new FormatadorUtil());
         model.addAttribute("fragmentToLoad", fragment);
-        return "/Coopase/Conta/ServicosConta"; // Sua página principal
+        return "Coopase/Conta/ServicosConta"; // Sua página principal
     }
 
 }

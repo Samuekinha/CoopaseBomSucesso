@@ -34,7 +34,7 @@ public class ConsultarContaController {
         model.addAttribute("ContasInativas",
                 consultarContaDeposito.consultarContasInativas());
 
-        return "/Coopase/Conta/ConsultarContaView";
+        return "Coopase/Conta/ConsultarContaView";
     }
 
     @GetMapping("/{id}")
@@ -56,7 +56,7 @@ public class ConsultarContaController {
 
     @GetMapping("/Consultar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Conta/ServicosConta";
+        return "Coopase/Conta/ServicosConta";
     }
 
 }

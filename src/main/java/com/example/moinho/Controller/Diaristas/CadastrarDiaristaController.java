@@ -1,7 +1,9 @@
 package com.example.moinho.Controller.Diaristas;
 
 import com.example.moinho.Dto.Diaristas.DiaristaRequestDTO;
+import com.example.moinho.Entity.Pessoa.PessoaFisica;
 import com.example.moinho.Service.ClienteService.ConsultarClienteService;
+import com.example.moinho.Service.Diaristas.CadastrarDiarista;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,14 +13,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/Coopase/Diaristas")
 public class CadastrarDiaristaController {
 
     private final ConsultarClienteService consultarCliente;
+    private final CadastrarDiarista cadastrarDiarista;
 
-    public CadastrarDiaristaController(ConsultarClienteService consultarCliente) {
+    public CadastrarDiaristaController(ConsultarClienteService consultarCliente,
+                           CadastrarDiarista cadastrarDiarista) {
         this.consultarCliente = consultarCliente;
+        this.cadastrarDiarista = cadastrarDiarista;
     }
 
     // Rotas para processar os formulários (POST)
@@ -26,7 +33,7 @@ public class CadastrarDiaristaController {
     public String cadastrarDiaristasView(Model model) {
         model.addAttribute("listaCadastro",
                 consultarCliente.ConsultarClienteNaoDiarista());
-        return "/Coopase/Diaristas/CadastrarDiaristaView";
+        return "Coopase/Diaristas/CadastrarDiaristaView";
     }
 
     @PostMapping("/Cadastrar")
@@ -38,7 +45,7 @@ public class CadastrarDiaristaController {
             return "redirect:/Coopase/Diaristas/Servicos";
         }
 
-        //cadastrarDiarista.criarTransacao(form, false);
+        cadastrarDiarista.cadastrarDiarista(form);
 
         redirectAttributes.addFlashAttribute("Sucesso", "Transação cadastrada com sucesso!");
         return "redirect:/Coopase/Diaristas/Servicos";

@@ -31,7 +31,7 @@ public class EditarClienteController {
 
         model.addAttribute("resultadoConsulta", consultarCliente.consultarCliente());
 
-        return "/Coopase/Cliente/EditarClienteView";
+        return "Coopase/Cliente/EditarClienteView";
     }
 
     @PostMapping("/Editar")
@@ -55,7 +55,7 @@ public class EditarClienteController {
 
     @GetMapping("/Editar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Cliente/ServicosCliente";
+        return "Coopase/Cliente/ServicosCliente";
     }
 
 }

@@ -25,7 +25,7 @@ public class CadastrarClienteController {
     // Rotas para processar os formulários (POST)
     @GetMapping("/CadastrarClienteView")
     public String viewCadastroCliente() {
-        return "/Coopase/Cliente/CadastrarClienteView";
+        return "Coopase/Cliente/CadastrarClienteView";
     }
 
     @PostMapping("/Cadastrar")

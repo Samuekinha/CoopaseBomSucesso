@@ -33,12 +33,12 @@ public class ConsultarTransacaoController {
         model.addAttribute("ListaTransacoesAtivas", listaTransacoesAtivas);
         model.addAttribute("ListaTransacoesInativas", listaTransacoesInativas);
 
-        return "/Coopase/Transacao/ConsultarTransacaoView";
+        return "Coopase/Transacao/ConsultarTransacaoView";
     }
 
     @GetMapping("/Consultar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Transacao/ServicosTransacao";
+        return "Coopase/Transacao/ServicosTransacao";
     }
 
 }

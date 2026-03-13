@@ -26,11 +26,10 @@ public class ServicosDiaristasController {
                            Model model) {
         // Define o fragmento padrão se action for nulo
         String fragment = (action != null) ? action : "Cadastrar";
-        System.out.println("entrou xrc");
 
         model.addAttribute("formatador", new FormatadorUtil());
         model.addAttribute("fragmentToLoad", fragment);
-        return "/Coopase/Diaristas/ServicosDiaristas"; // Sua página principal
+        return "Coopase/Diaristas/ServicosDiaristas"; // Sua página principal
     }
 
 }

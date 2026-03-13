@@ -84,14 +84,26 @@
     <h2>Lista de diáristas/trabalhadores</h2>
 
     <div class="row">
-        <div class="col-4">
-
-        </div>
-        <div class="col-4">
-
-        </div>
-        <div class="col-4">
-
+        <div class="table-wrapper">
+            <h3>Lista de Diaristas</h3>
+            <table class="tabela-de-cadastros" id="tdc">
+                <thead>
+                <tr id="tdc-head">
+                    <th>N°</th>
+                    <th>Nome</th>
+                    <th class="hidden">Cpf</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="tdc-body" th:each="listaDiarista : ${listaDiarista }">
+                    <td th:text="${listaDiarista.id}"></td>
+                    <td class="td-nome" th:text="${listaDiarista.nome}"></td>
+                    <td th:text="${listaDiarista.horasTotais}"></td>
+                    <td th:text="${listaDiarista.ValorPago}"></td>
+                    <td th:text="${listaDiarista.ValorAPagar}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

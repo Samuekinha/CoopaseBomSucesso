@@ -4,6 +4,7 @@ import com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO;
 import com.example.moinho.Entity.Transacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -36,56 +37,7 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     LEFT JOIN t.conta_principal cd
     LEFT JOIN t.conta_destino cd2
     LEFT JOIN t.operador op
+    WHERE (:ativa IS NULL OR t.ativa = :ativa)
+    ORDER BY t.data_transacao DESC
 """)
-    List<TransacaoResumoDTO> buscarResumo();
-
-
-    @Query("""
-    SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
-        t.id,
-        cd.nome_conta,
-        cd2.nome_conta,
-        op.nome,
-        t.tipo_transacao,
-        t.valor,
-        t.tipo_dinheiro,
-        t.data_transacao,
-        t.descricao,
-        t.saldo_anterior,
-        t.saldo_posterior,
-        t.ativa,
-        t.automatica
-    )
-    FROM Transacao t
-    LEFT JOIN t.conta_principal cd
-    LEFT JOIN t.conta_destino cd2
-    LEFT JOIN t.operador op
-    WHERE t.ativa = false
-""")
-    List<TransacaoResumoDTO> buscarResumoInativas();
-
-
-    @Query("""
-    SELECT new com.example.moinho.Dto.Transacao.Resumo.TransacaoResumoDTO(
-        t.id,
-        cd.nome_conta,
-        cd2.nome_conta,
-        op.nome,
-        t.tipo_transacao,
-        t.valor,
-        t.tipo_dinheiro,
-        t.data_transacao,
-        t.descricao,
-        t.saldo_anterior,
-        t.saldo_posterior,
-        t.ativa,
-        t.automatica
-    )
-    FROM Transacao t
-    LEFT JOIN t.conta_principal cd
-    LEFT JOIN t.conta_destino cd2
-    LEFT JOIN t.operador op
-    WHERE t.ativa = true
-""")
-    List<TransacaoResumoDTO> buscarResumoAtivas();
-}
+    List<TransacaoResumoDTO> buscarResumo(@Param("ativa") Boolean ativa);}

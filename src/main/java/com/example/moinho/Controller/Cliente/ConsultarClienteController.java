@@ -24,12 +24,12 @@ public class ConsultarClienteController {
     @GetMapping("/ConsultarClienteView")
     public String consultarClienteView(Model model) {
         model.addAttribute("resultadoConsulta", consultarClientes.consultarCliente());
-        return "/Coopase/Cliente/ConsultarClienteView";
+        return "Coopase/Cliente/ConsultarClienteView";
     }
 
     @GetMapping("/Consultar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Cliente/ServicosCliente";
+        return "Coopase/Cliente/ServicosCliente";
     }
 
     @GetMapping("/ConsultarPorPesquisa")
@@ -49,7 +49,7 @@ public class ConsultarClienteController {
                 deZaA);
 
         model.addAttribute("resultadoConsulta", resultados);
-        return "/Coopase/Cliente/Fragments/TabelaClientes :: corpoTabela";
+        return "Coopase/Cliente/Fragments/TabelaClientes :: corpoTabela";
     }
 
     private String emptyToNull(String valor) {

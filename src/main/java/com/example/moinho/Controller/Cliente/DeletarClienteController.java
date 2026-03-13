@@ -24,7 +24,7 @@ public class DeletarClienteController {
 
         model.addAttribute("resultadoConsulta", consultarCliente.consultarCliente());
 
-        return "/Coopase/Cliente/DeletarClienteView";
+        return "Coopase/Cliente/DeletarClienteView";
     }
 
     @PostMapping("/Deletar")
@@ -33,12 +33,12 @@ public class DeletarClienteController {
 
         String clienteValidadeResposta = deletarCliente.validaDeletarCliente(id);
 
-        return "/Coopase/Cliente/ServicosCliente";
+        return "Coopase/Cliente/ServicosCliente";
     }
 
     @GetMapping("/Deletar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Cliente/ServicosCliente";
+        return "Coopase/Cliente/ServicosCliente";
     }
 
 }

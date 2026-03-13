@@ -19,15 +19,15 @@ public class ConsultarTransacaoService {
     }
 
     public List<TransacaoResumoDTO> consultarTodasTransacao() {
-        return transacaoRepository.buscarResumo();
+        return transacaoRepository.buscarResumo(null);
     }
 
     public List<TransacaoResumoDTO> consultarTodasTransacaoAtivas() {
-        return transacaoRepository.buscarResumoAtivas();
+        return transacaoRepository.buscarResumo(true);
     }
 
     public List<TransacaoResumoDTO> consultarTodasTransacaoInativas() {
-        return transacaoRepository.buscarResumoInativas();
+        return transacaoRepository.buscarResumo(false);
     }
 
 }

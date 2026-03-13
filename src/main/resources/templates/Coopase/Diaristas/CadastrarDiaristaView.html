@@ -1,0 +1,85 @@
+<div th:fragment="Cadastrar" data-view="cadastrar-Diarista">
+  <div class="container">
+
+    <h2 class="text-center mb-4">Cadastrar Diarista</h2>
+
+    <div class="transaction-content">
+
+      <!-- Coluna da Tabela - no estilo transaction-table -->
+      <div class="table-wrapper">
+        <h3>Lista de pessoas</h3>
+        <table class="tabela-de-cadastros" id="tdc">
+          <thead>
+          <tr id="tdc-head">
+            <th>N°</th>
+            <th>Nome</th>
+            <th class="hidden">Cpf</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="tdc-body" th:each="listaCadastro : ${listaCadastro}">
+            <td th:text="${listaCadastro.id}"></td>
+            <td class="td-nome" th:text="${listaCadastro.nome}"></td>
+            <td class="hidden" th:text="${listaCadastro.cpf}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Coluna do Formulário -->
+      <div class="table-wrapper">
+        <div id="formWrapper">
+          <form id="cadastrarDiarista" method="post" action="/Coopase/Diarista/Cadastrar">
+
+            <!-- Bloco operator-info -->
+
+              <!-- Nome da diarista -->
+              <div class="nome-diarista-wrapper form-group mb-4">
+                <div class="operator-info p-4">
+
+                  <label for="diaristaNome">Nome</label>
+                  <input
+                          type="text"
+                          class="nome-diarista-input form-control"
+                          name="diaristaNome"
+                          id="diaristaNome"
+                          placeholder="Selecione uma diarista..."
+                          readonly>
+                </div>
+              </div>
+
+            <!-- Número -->
+            <div class="form-group mb-3">
+              <label for="diaristaId">Número</label>
+              <input type="number"
+                     class="form-control"
+                     name="diaristaId"
+                     id="diaristaId"
+                     readonly>
+            </div>
+
+            <!-- CPF -->
+            <div class="form-group mb-3">
+              <label for="diaristaCpf">CPF</label>
+              <input type="text"
+                     class="form-control"
+                     name="diaristaCpf"
+                     id="diaristaCpf"
+                     readonly>
+            </div>
+
+            <div class="text-center">
+              <button type="submit"
+                      class="btn btn-primary mt-4"
+                      id="btnAlterarStatus">
+                Cadastrar
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

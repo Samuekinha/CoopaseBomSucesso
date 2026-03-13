@@ -540,3 +540,7 @@
         border-width: 5px;
     }
 }
+
+td {
+    max-width: 325px;
+}

@@ -53,7 +53,7 @@ public class CadastrarTransacaoController {
             model.addAttribute("Operadores", List.of()); // Lista vazia em caso de erro
         }
 
-        return "/Coopase/Transacao/CadastrarTransacaoView";
+        return "Coopase/Transacao/CadastrarTransacaoView";
     }
 
     @PostMapping("/Cadastrar")

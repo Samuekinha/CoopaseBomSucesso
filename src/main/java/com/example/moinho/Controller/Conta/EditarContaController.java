@@ -37,7 +37,7 @@ public class EditarContaController {
         model.addAttribute("ContasInativas",
                 consultarContaDeposito.consultarContasInativas());
 
-        return "/Coopase/Conta/EditarContaView";
+        return "Coopase/Conta/EditarContaView";
     }
 
     @PostMapping("/Editar")

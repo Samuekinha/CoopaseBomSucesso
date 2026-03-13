@@ -38,7 +38,7 @@ public class InativarTransacaoController {
         model.addAttribute("ListaTransacoesAtivas", listaTransacoesAtivas);
         model.addAttribute("ListaTransacoesInativas", listaTransacoesInativas);
 
-        return "/Coopase/Transacao/InativarTransacaoView";
+        return "Coopase/Transacao/InativarTransacaoView";
     }
 
     @PostMapping("/Deletar")
@@ -49,12 +49,12 @@ public class InativarTransacaoController {
             inativarTransacaoService.inativarTransacao(transacaoId);
         }
 
-        return "/Coopase/Transacao/ServicosTransacao";
+        return "Coopase/Transacao/ServicosTransacao";
     }
 
     @GetMapping("/Inativar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Transacao/ServicosTransacao";
+        return "Coopase/Transacao/ServicosTransacao";
     }
 
 }

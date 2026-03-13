@@ -33,7 +33,7 @@ public class DeletarContaController {
         model.addAttribute("ContasInativas",
                 consultarContaDeposito.consultarContasInativas());
 
-        return "/Coopase/Conta/DeletarContaView";
+        return "Coopase/Conta/DeletarContaView";
     }
 
     @PostMapping("/Inativar")

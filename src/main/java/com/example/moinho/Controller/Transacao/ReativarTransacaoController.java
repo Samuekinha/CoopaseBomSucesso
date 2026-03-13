@@ -32,12 +32,12 @@ public class ReativarTransacaoController {
             reativarTransacaoService.reativarTransacao(transacaoId);
         }
 
-        return "/Coopase/Transacao/ServicosTransacao";
+        return "Coopase/Transacao/ServicosTransacao";
     }
 
     @GetMapping("/Reativar")
     public String redirecionamento(Model model) {
-        return "/Coopase/Transacao/ServicosTransacao";
+        return "Coopase/Transacao/ServicosTransacao";
     }
 
 }
